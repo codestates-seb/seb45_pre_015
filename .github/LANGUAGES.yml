@@ -1,4 +1,0 @@
-- name: "client-src"
-  language: "TypeScript"
-- name: "server-src"
-  language: "Java"
