@@ -32,9 +32,12 @@ public class MemberService {
   }
   
   //마이페이지 회원 닉네임 수정
-  public Member updateMember(Member member) {
+  public Member updateMember(Member member, Long memberId) {
+    member.setMemberId(memberId);
     Member findMember = findVerifiedMember(member.getMemberId());
-    findMember.setName(member.getName());
+
+    Optional.ofNullable(member.getName())
+            .ifPresent(name ->findMember.setName(name));
     
     return memberRepository.save(findMember);
   }
