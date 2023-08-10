@@ -1,31 +1,37 @@
 package com.preproject.seb_pre_15.answer.entity;
 
+import com.preproject.seb_pre_15.audit.Auditable;
+import com.preproject.seb_pre_15.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Getter
 @Setter
-public class Answer {
+public class Answer extends Auditable {
     @Id
     private Long answerId;
+
     @Column(nullable = false)
     private String title;
+
     @Column(nullable = false, length = 500)
     private String body;
+
     @Column(nullable = false)
     private Long view;
-    @Column
-    private String images;
+
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
+
     @Column
     private Long vote;
-    @Column
-    private Date createdAt;
-    @Column
-    private Date modifiedAt;
+
+    //    @Column
+//    private String images;
+
 }

@@ -8,7 +8,7 @@ import java.util.List;
 @Setter
 @Getter
 public class MemberResponseDto {
-    private Long member_id;
+    private Long memberId;
     private String name;
     private String email;
     private List<String> roles;

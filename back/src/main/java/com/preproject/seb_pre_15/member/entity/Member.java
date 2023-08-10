@@ -1,10 +1,13 @@
 package com.preproject.seb_pre_15.member.entity;
 
+import com.preproject.seb_pre_15.answer.entity.Answer;
 import com.preproject.seb_pre_15.audit.Auditable;
+import com.preproject.seb_pre_15.question.entity.Question;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,11 +28,11 @@ public class Member extends Auditable {
     @ElementCollection
     private List<String> roles;
 
-//    @OneToMany(mappedBy = "member")
-//    private List<Question> questions = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    private List<Question> questions = new ArrayList<>();
 
-//    @OneToMany
-//    private List<AnswerEntity> answers = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    private List<Answer> answers = new ArrayList<>();
 
 //    @Column
 //    private String img;

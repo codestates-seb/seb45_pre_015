@@ -8,5 +8,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
     MemberResponseDto memberToMemberResponseDto(Member member);
-    Member memberPatchDtoToMemberEntity(MemberPatchDto memberPatchDto);
+    Member memberPatchDtoToMember(MemberPatchDto memberPatchDto);
 }
