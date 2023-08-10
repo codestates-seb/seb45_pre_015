@@ -41,7 +41,7 @@ public class QuestionService {
   //멤버별 질문글 전체조회
 //  public Page<Question> findMemberQuestions(int page, int size, long memberId) {
 //    Pageable pageable = PageRequest.of(page, size);
-//    return questionRepository.findByMemberId(memberId, pageable);
+//    return questionRepository.findAllByMemberId(memberId, pageable);
 //  }
   
   //본문 조회 로직

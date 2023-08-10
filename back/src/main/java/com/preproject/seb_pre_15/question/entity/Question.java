@@ -1,6 +1,7 @@
 package com.preproject.seb_pre_15.question.entity;
 
 import com.preproject.seb_pre_15.answer.entity.Answer;
+import com.preproject.seb_pre_15.audit.Auditable;
 import com.preproject.seb_pre_15.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +13,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class Question {
+public class Question extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionId;
@@ -24,7 +25,7 @@ public class Question {
     private String body;
     
     @Column(nullable = false)
-    private Long view;
+    private Long view = (long) 0.00;
     
 //    @Column
 //    private String images;
@@ -33,11 +34,11 @@ public class Question {
 //    private Long vote;
     
     @ManyToOne
-    @JoinColumn(name = "memberId")
+    @JoinColumn(name = "member_id")
     private Member member;
     
-    @OneToMany(mappedBy = "answer")
-    private List<Answer> answers;
+//    @OneToMany(mappedBy = "answer")
+//    private List<Answer> answers;
     
 //    @OneToMany(mappedBy = "questionComment")
 //    private List<questionComment> questionComments;

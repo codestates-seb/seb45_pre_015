@@ -32,9 +32,9 @@ public class QuestionController {
   @PostMapping
   public ResponseEntity postQuestion(@Valid @RequestBody QuestionPostDto questionPostDto) {
     Question question = questionService.createQuestion(questionMepper.questionPostDtoToQuestion(questionPostDto));
-    URI location = UriCreator.createUri("questions", question.getQuestionId());
-    
-    return ResponseEntity.created(location).build();
+//    URI location = UriCreator.createUri("questions", question.getQuestionId());
+    QuestionResponseDto response = questionMepper.questionToQuestionResponseDto(question);
+    return new ResponseEntity<>(response,HttpStatus.CREATED);
   }
   
   @PatchMapping("/{question-id}")

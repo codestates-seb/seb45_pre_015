@@ -27,11 +27,11 @@ public class Member extends Auditable {
     @ElementCollection
     private List<String> roles;
 
-//    @OneToMany(mappedBy = "member")
-//    private List<Question> questions = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    private List<Question> questions = new ArrayList<>();
 
 //    @OneToMany
-//    private List<AnswerEntity> answers = new ArrayList<>();
+//    private List<Answer> answers = new ArrayList<>();
 
 //    @Column
 //    private String img;
