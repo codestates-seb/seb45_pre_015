@@ -8,9 +8,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class AnswerService {
   private final AnswerRepository answerRepository;
   
@@ -37,10 +39,10 @@ public class AnswerService {
         Sort.by("answerId").descending()));
   }
   //멤버별 답변글 전체조회
-  public Page<Answer> findMemberAnswers(int page, int size, long memberId) {
-    Pageable pageable = PageRequest.of(page, size);
-    return answerRepository.findByMemberId(memberId, pageable);
-  }
+//  public Page<Answer> findMemberAnswers(int page, int size, long memberId) {
+//    Pageable pageable = PageRequest.of(page, size);
+//    return answerRepository.findB(memberId, pageable);
+//  }
   
   //본문 조회 로직
   private Answer findVerifiedAnswerByQuery(long answerId) {

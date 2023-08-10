@@ -10,12 +10,13 @@ import java.util.List;
 @Getter
 @Setter
 public class Member {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
 
     @Column(nullable = false)
-    private String name;
+    private String name = "John"; // 추후 랜덤 생성 구현
 
     @Column(nullable = false)
     private String email;
@@ -24,12 +25,12 @@ public class Member {
     private List<String> roles;
 
 //    @OneToMany(mappedBy = "member")
-//    private List<QuestionEntity> questions = new ArrayList<>();
+//    private List<Question> questions = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "member")
+//    @OneToMany
 //    private List<AnswerEntity> answers = new ArrayList<>();
 
-    @Column
-    private String img;
+//    @Column
+//    private String img;
 
 }

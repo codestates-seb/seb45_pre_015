@@ -6,6 +6,7 @@ import com.preproject.seb_pre_15.auth.filter.JwtVerificationFilter;
 import com.preproject.seb_pre_15.auth.handler.OAuth2memberSuccessHandler;
 import com.preproject.seb_pre_15.auth.jwt.JwtTokenizer;
 import com.preproject.seb_pre_15.auth.utils.CustomAuthorityUtils;
+import com.preproject.seb_pre_15.member.service.MemberService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,11 +29,12 @@ public class SecurityConfiguration {
     // MemberService 구현후 DI받아서 OAuth2memberSuccessHandler생성자에 추가
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
+    private final MemberService memberService;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer,
-                                 CustomAuthorityUtils authorityUtils) {
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, MemberService memberService) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
+        this.memberService = memberService;
     }
 
     @Bean//개발환경
@@ -51,7 +53,7 @@ public class SecurityConfiguration {
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
-                .oauth2Login(oauth2 -> oauth2.successHandler(new OAuth2memberSuccessHandler(jwtTokenizer,authorityUtils)));
+                .oauth2Login(oauth2 -> oauth2.successHandler(new OAuth2memberSuccessHandler(jwtTokenizer,authorityUtils,memberService)));
         return http.build();
     }
 

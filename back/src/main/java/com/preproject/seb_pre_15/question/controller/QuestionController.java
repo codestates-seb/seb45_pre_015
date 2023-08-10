@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class QuestionController {
-    @PostMapping
-    public ResponseEntity createQuestion(){
-
-        return ResponseEntity.ok();
-    }
+//    @PostMapping
+//    public ResponseEntity createQuestion(){
+//
+//        return ResponseEntity.ok();
+//    }
 
 }
