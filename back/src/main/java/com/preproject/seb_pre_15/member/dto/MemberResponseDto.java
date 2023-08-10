@@ -11,7 +11,7 @@ public class MemberResponseDto {
     private Long member_id;
     private String name;
     private String email;
-    private String roles;
+    private List<String> roles;
 //    private List<QuestionResponseDto> questions;
 //    private List<AnswerResponseDto> answers;
 //    private String img;

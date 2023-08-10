@@ -1,10 +1,13 @@
 package com.preproject.seb_pre_15.member.service;
 
+import com.preproject.seb_pre_15.member.entity.Member;
 import com.preproject.seb_pre_15.member.repository.MemberRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Service
 public class MemberService {
   private final MemberRepository memberRepository;
   

@@ -1,12 +1,9 @@
 package com.preproject.seb_pre_15.member.entity;
 
-import com.preproject.seb_pre_15.answer.entity.AnswerEntity;
-import com.preproject.seb_pre_15.question.entity.QuestionEntity;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,11 +23,11 @@ public class Member {
     @ElementCollection
     private List<String> roles;
 
-    @OneToMany
-    private List<QuestionEntity> questions = new ArrayList<>();
+//    @OneToMany(mappedBy = "member")
+//    private List<QuestionEntity> questions = new ArrayList<>();
 
-    @OneToMany
-    private List<AnswerEntity> answers = new ArrayList<>();
+//    @OneToMany(mappedBy = "member")
+//    private List<AnswerEntity> answers = new ArrayList<>();
 
     @Column
     private String img;
