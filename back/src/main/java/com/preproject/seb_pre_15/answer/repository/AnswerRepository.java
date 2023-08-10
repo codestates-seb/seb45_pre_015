@@ -7,5 +7,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
-  Page<Answer> findByMemberId(Long memberId, Pageable pageable);
+//  Page<Answer> findByMemberId(Long memberId, Pageable pageable);
 }
