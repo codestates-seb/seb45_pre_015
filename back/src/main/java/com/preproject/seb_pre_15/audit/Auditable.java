@@ -1,4 +1,4 @@
-package com.preproject.audit;
+package com.preproject.seb_pre_15.audit;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
