@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface QuestionMepper {
+public interface QuestionMapper {
   QuestionResponseDto questionToQuestionResponseDto(Question question);
   Question questionPatchDtoToQuestion(QuestionPatchDto questionPatchDto);
   Question questionPostDtoToQuestion(QuestionPostDto questionPatchDto);
