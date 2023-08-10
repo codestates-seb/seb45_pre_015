@@ -1,6 +1,5 @@
 package com.preproject.seb_pre_15.member.entity;
 
-import com.preproject.seb_pre_15.answer.entity.Answer;
 import com.preproject.seb_pre_15.audit.Auditable;
 import com.preproject.seb_pre_15.question.entity.Question;
 import lombok.Getter;
@@ -31,8 +30,8 @@ public class Member extends Auditable {
     @OneToMany(mappedBy = "member")
     private List<Question> questions = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member")
-    private List<Answer> answers = new ArrayList<>();
+//    @OneToMany
+//    private List<Answer> answers = new ArrayList<>();
 
 //    @Column
 //    private String img;

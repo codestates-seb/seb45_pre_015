@@ -94,7 +94,7 @@ const Header: React.FC = () => {
             <Link to="/login">Log in</Link>
           </button>
           <button className="px-2 py-1 mx-1 text-white border rounded hover:bg-buttonPrimaryHover bg-buttonPrimary border-secondary-300">
-            <Link to="/signup">Sign up</Link>
+            <Link to="http://localhost:8080/oauth2/authorization/google">Sign up</Link>
           </button>
         </>
       );
