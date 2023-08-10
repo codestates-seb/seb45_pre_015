@@ -53,4 +53,9 @@ public class QuestionService {
     
     return findQuestion;
   }
+  
+  public void deleteQuestion(long coffeeId) {
+    Question question = findVerifiedQuestionByQuery(coffeeId);
+    questionRepository.delete(question);
+  }
 }

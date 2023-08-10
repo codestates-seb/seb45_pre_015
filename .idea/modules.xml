@@ -2,8 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.preproject.seb_pre_15.iml" filepath="$PROJECT_DIR$/.idea/modules/com.preproject.seb_pre_15.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.preproject.seb_pre_15.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.preproject.seb_pre_15.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.preproject.seb_pre_15.test.iml" filepath="$PROJECT_DIR$/.idea/modules/com.preproject.seb_pre_15.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/seb45_pre_015.iml" filepath="$PROJECT_DIR$/.idea/seb45_pre_015.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/seb_pre_15.iml" filepath="$PROJECT_DIR$/.idea/modules/seb_pre_15.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/seb_pre_15.main.iml" filepath="$PROJECT_DIR$/.idea/modules/seb_pre_15.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/seb_pre_15.test.iml" filepath="$PROJECT_DIR$/.idea/modules/seb_pre_15.test.iml" />
     </modules>
   </component>
 </project>
