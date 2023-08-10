@@ -2,12 +2,14 @@ package com.preproject.seb_pre_15.question.dto;
 
 import com.preproject.seb_pre_15.answer.entity.Answer;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
 
 @Setter
+@Getter
 public class QuestionResponseDto {
   private long questionId;
   

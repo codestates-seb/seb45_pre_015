@@ -4,7 +4,8 @@ import com.preproject.seb_pre_15.question.dto.QuestionPatchDto;
 import com.preproject.seb_pre_15.question.dto.QuestionPostDto;
 import com.preproject.seb_pre_15.question.dto.QuestionResponseDto;
 import com.preproject.seb_pre_15.question.entity.Question;
-import com.preproject.seb_pre_15.question.mapper.QuestionMepper;
+import com.preproject.seb_pre_15.question.mapper.QuestionMapper;
+
 import com.preproject.seb_pre_15.question.service.QuestionService;
 import com.preproject.seb_pre_15.utils.UriCreator;
 import org.springframework.data.domain.Page;
@@ -23,17 +24,17 @@ import java.util.List;
 @Validated
 public class QuestionController {
   private final QuestionService questionService;
-  private final QuestionMepper questionMepper;
-  public QuestionController(QuestionService questionService, QuestionMepper questionMepper) {
+  private final QuestionMapper questionMapper;
+  public QuestionController(QuestionService questionService, QuestionMapper questionMepper) {
     this.questionService = questionService;
-    this.questionMepper = questionMepper;
+    this.questionMapper = questionMepper;
   }
   
   @PostMapping
   public ResponseEntity postQuestion(@Valid @RequestBody QuestionPostDto questionPostDto) {
-    Question question = questionService.createQuestion(questionMepper.questionPostDtoToQuestion(questionPostDto));
+    Question question = questionService.createQuestion(questionMapper.questionPostDtoToQuestion(questionPostDto));
 //    URI location = UriCreator.createUri("questions", question.getQuestionId());
-    QuestionResponseDto response = questionMepper.questionToQuestionResponseDto(question);
+    QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
     return new ResponseEntity<>(response,HttpStatus.CREATED);
   }
   
@@ -41,15 +42,15 @@ public class QuestionController {
   public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive long questionId,
                                     @Valid @RequestBody QuestionPatchDto questionPatchDto) {
     questionPatchDto.setQuestionId(questionId);
-    Question question = questionService.updateQuestion(questionMepper.questionPatchDtoToQuestion(questionPatchDto));
-    QuestionResponseDto response = questionMepper.questionToQuestionResponseDto(question);
+    Question question = questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(questionPatchDto));
+    QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
   
   @GetMapping("/{question-id}")
   public ResponseEntity getQuestion(@PathVariable("question-id") @Positive long questionId) {
     Question question = questionService.findQuestion(questionId);
-    QuestionResponseDto response = questionMepper.questionToQuestionResponseDto(question);
+    QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
     
     return new ResponseEntity<>(response,HttpStatus.OK);
   }
@@ -59,7 +60,7 @@ public class QuestionController {
                                   @Positive @RequestParam int size) {
     Page<Question> pageOrders = questionService.findQuestions(page - 1, size);
     List<Question> questions = pageOrders.getContent();
-    List<QuestionResponseDto> response = questionMepper.questionToQuestionResponseDtos(questions);
+    List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
     
     return new ResponseEntity<>(response,HttpStatus.OK);
   }
