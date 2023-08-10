@@ -4,6 +4,8 @@ package com.preproject.seb_pre_15.auth.handler;
 
 import com.preproject.seb_pre_15.auth.jwt.JwtTokenizer;
 import com.preproject.seb_pre_15.auth.utils.CustomAuthorityUtils;
+import com.preproject.seb_pre_15.member.entity.Member;
+import com.preproject.seb_pre_15.member.service.MemberService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -25,21 +27,20 @@ public class OAuth2memberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
-//    private final MemberService memberService;
+    private final MemberService memberService;
 
-    public OAuth2memberSuccessHandler(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils) {
+    public OAuth2memberSuccessHandler(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, MemberService memberService) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
-
+        this.memberService = memberService;
     }
-
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         var oAuth2User = (OAuth2User) authentication.getPrincipal();
         String email = String.valueOf(oAuth2User.getAttributes().get("email"));
         List<String> authorities = authorityUtils.createRoles(email);
-//        saveMember(email, authorities);
+        saveMember(email, authorities);
         redirect(request,response,email,authorities);
     }
 
@@ -91,11 +92,12 @@ public class OAuth2memberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return refreshToken;
     }
 
-//    private void saveMember(String email, List<String> authorities) {
-//        if (!memberService.existsEmail(email)) {
-//            Member member = new Member(email);
-//            member.setRoles(authorities)
-//            memberService.createMember(member);
-//        }
-//    }
+    private void saveMember(String email, List<String> authorities) {
+        if (!memberService.existsEmail(email)) {
+            Member member = new Member();
+            member.setEmail(email);
+            member.setRoles(authorities);
+            memberService.createMember(member);
+        }
+    }
 }
