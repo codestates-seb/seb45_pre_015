@@ -1,10 +1,15 @@
 package com.preproject.seb_pre_15.member.service;
 
+import com.preproject.seb_pre_15.exception.BusinessLogicException;
+import com.preproject.seb_pre_15.exception.ExceptionCode;
+import com.preproject.seb_pre_15.member.entity.Member;
 import com.preproject.seb_pre_15.member.repository.MemberRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Service
 public class MemberService {
   private final MemberRepository memberRepository;
   
@@ -29,7 +34,7 @@ public class MemberService {
   //마이페이지 회원 닉네임 수정
   public Member updateMember(Member member) {
     Member findMember = findVerifiedMember(member.getMemberId());
-    findMember.getname = member.getname;
+    findMember.setName(member.getName());
     
     return memberRepository.save(findMember);
   }
@@ -50,6 +55,11 @@ public class MemberService {
     Member findMember = findVerifiedMember(memberId);
     
     memberRepository.delete(findMember);
+  }
+
+  public boolean existsEmail(String email) {
+    Optional<Member> member = memberRepository.findByEmail(email);
+    return member.isPresent();
   }
   
 }
