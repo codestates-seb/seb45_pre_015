@@ -1,7 +1,7 @@
 package com.preproject.seb_pre_15.auth.config;
 
 
-import com.preproject.seb_pre_15.auth.filter.JwtExceptionFilter;
+//import com.preproject.seb_pre_15.auth.filter.JwtExceptionFilter;
 import com.preproject.seb_pre_15.auth.filter.JwtVerificationFilter;
 import com.preproject.seb_pre_15.auth.handler.OAuth2memberSuccessHandler;
 import com.preproject.seb_pre_15.auth.jwt.JwtTokenizer;
@@ -92,8 +92,8 @@ public class SecurityConfiguration {
         @Override
         public void configure(HttpSecurity builder) throws Exception {
             JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer,authorityUtils);
-            JwtExceptionFilter jwtExceptionFilter = new JwtExceptionFilter();
-            builder.addFilterBefore(jwtExceptionFilter, jwtVerificationFilter.getClass());
+//            JwtExceptionFilter jwtExceptionFilter = new JwtExceptionFilter();
+//            builder.addFilterBefore(jwtExceptionFilter, jwtVerificationFilter.getClass());
             builder.addFilterAfter(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class);
         }
     }
