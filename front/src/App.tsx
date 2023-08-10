@@ -10,7 +10,7 @@ const App:React.FC = () => {
       <Header />
       <main className="flex flex-auto min-h-[calc(100vh-180px)]">
         <Routes>
-        <Route path="/" element={<Main />} />
+        
         </Routes>
       </main>
       <Footer />

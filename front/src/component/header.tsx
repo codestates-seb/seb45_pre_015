@@ -1,3 +1,4 @@
+import { link } from 'fs';
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 //아이콘등 추후 추가바람
@@ -35,7 +36,7 @@ const Header: React.FC = () => {
       
       if (sessionStorage.getItem('access_token') && !isLoginPath) {
         setIsLogin(true);
-        getUserProfile();
+        //getUserProfile();
         setUserProfileImageLink(`/mypage/${sessionStorage.getItem('accountId')}`);
       } else {
         setIsLogin(false);
@@ -51,17 +52,17 @@ const Header: React.FC = () => {
       setIsFocus(true);
     };
   
-    const getUserProfile = async () => {
-      try {
-        const data = await fetchUserInfo(); //나중에 받아와야되는거
-        setUserProfileImage(data.profile);
+    // const getUserProfile = async () => {
+    //   try {
+    //     const data = await fetchUserInfo(); //나중에 받아와야되는거
+    //     setUserProfileImage(data.profile);
   
-        sessionStorage.setItem('userEmail', data.email);
-        sessionStorage.setItem('accountId', data.accountId);
-      } catch (error) {
+    //     sessionStorage.setItem('userEmail', data.email);
+    //     sessionStorage.setItem('accountId', data.accountId);
+    //   } catch (error) {
         
-      }
-    };
+    //   }
+    // };
   
     const LoginGNB: React.FC = () => {
       return (
@@ -89,7 +90,7 @@ const Header: React.FC = () => {
     const LogoutGNB: React.FC = () => {
       return (
         <>
-          <button className="px-3 py-1 mx-2 border rounded text-blue hover:bg-buttonSecondaryHover bg-buttonSecondary border-secondary-200">
+          <button className="login-btn">
             <Link to="/login">Log in</Link>
           </button>
           <button className="px-2 py-1 mx-1 text-white border rounded hover:bg-buttonPrimaryHover bg-buttonPrimary border-secondary-300">
@@ -106,7 +107,7 @@ const Header: React.FC = () => {
     const [isFocus, setIsFocus] = useState<boolean>(false);
   
     return (
-      <div className="sticky top-0 z-20 flex-col w-full drop-shadow h-[60px] flex-nowrap">
+      <div className='sticky top-0 z-20 flex-col w-full drop-shadow h-[60px] flex-nowrap'>
         <div className="h-1 bg-primary-300"></div>
         <div className="flex justify-center px-2 py-3 bg-soGray-headerbg">
           <div className="items-center mx-2 my-1">
@@ -121,7 +122,7 @@ const Header: React.FC = () => {
             <input
               type="text"
               value={searchText}
-              className="w-[calc(100%-40px)] focus:outline-none focus-visible:outline-none"
+              className="search-bar"
               placeholder="Search..."
               onChange={handleSearch}
               onFocus={onChangeSearch}
