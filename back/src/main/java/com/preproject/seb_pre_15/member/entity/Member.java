@@ -1,6 +1,8 @@
 package com.preproject.seb_pre_15.member.entity;
 
+import com.preproject.seb_pre_15.answer.entity.Answer;
 import com.preproject.seb_pre_15.audit.Auditable;
+import com.preproject.seb_pre_15.comment.answerComment.entity.AnswerComment;
 import com.preproject.seb_pre_15.question.entity.Question;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +10,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -27,8 +30,19 @@ public class Member extends Auditable {
     @ElementCollection
     private List<String> roles;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member",cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Question> questions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member",cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<Answer> answers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<AnswerComment> answerComments = new ArrayList<>();
+
+    public void addAnswerComment(AnswerComment answerComment){
+        if (answerComment.getMember() != this) answerComment.setMember(this);
+        answerComments.add(answerComment);
+    }
 
 //    @OneToMany
 //    private List<Answer> answers = new ArrayList<>();

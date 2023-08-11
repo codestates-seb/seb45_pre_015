@@ -1,6 +1,7 @@
 package com.preproject.seb_pre_15.answer.entity;
 
 import com.preproject.seb_pre_15.audit.Auditable;
+import com.preproject.seb_pre_15.comment.answerComment.entity.AnswerComment;
 import com.preproject.seb_pre_15.member.entity.Member;
 import com.preproject.seb_pre_15.question.entity.Question;
 import lombok.Getter;
@@ -9,6 +10,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -32,8 +36,8 @@ public class Answer extends Auditable {
     @Column(nullable = false)
     private Long view = 0L;
 
-//    @OneToMany(mappedBy = "answer")
-//    private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "answer", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<AnswerComment> answerComments = new ArrayList<>();
 
     @Column
     private Long vote;
@@ -54,4 +58,9 @@ public class Answer extends Auditable {
     //더미 생성용 생성자
     
 
+
+    public void addAnswerComment(AnswerComment answerComment){
+        if (answerComment.getAnswer() != this) answerComment.setAnswer(this);
+        answerComments.add(answerComment);
+    }
 }
