@@ -1,4 +1,4 @@
-package com.preproject.seb_pre_15.question.dummy;
+package com.preproject.seb_pre_15.dummy;
 
 import com.preproject.seb_pre_15.member.entity.Member;
 import com.preproject.seb_pre_15.member.repository.MemberRepository;
