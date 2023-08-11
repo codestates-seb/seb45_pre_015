@@ -83,10 +83,19 @@ public class QuestionController {
   
   //선택 질문 글 삭제
   @DeleteMapping("/questions/{question-id}")
-  public ResponseEntity qustionDelete(@PathVariable("questionId") @Positive Long questionId){
+  public ResponseEntity qustionDelete(@PathVariable("question-id") @Positive Long questionId){
     questionService.deleteQuestion(questionId);
     
     return new ResponseEntity<>("success delete question", HttpStatus.NO_CONTENT);
   }
   
+  //질문글 검색 기능
+  @GetMapping("/questions/search_word")
+  public ResponseEntity getQuestionSearch(@RequestParam(value = "searchWord" ) String searchWord) {
+    Page<Question> pageOrders = questionService.findSearchWordQuestions(searchWord);
+    List<Question> questions = pageOrders.getContent();
+    List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
+    
+    return new ResponseEntity<>(response,HttpStatus.OK);
+  }
 }
