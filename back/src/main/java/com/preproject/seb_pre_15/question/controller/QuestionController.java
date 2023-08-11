@@ -55,8 +55,19 @@ public class QuestionController {
     return new ResponseEntity<>(response,HttpStatus.OK);
   }
   
+  //맴버별 질문글, 5개씩 출력됩니다
+  @GetMapping("/{member_id}/questions")
+  public ResponseEntity getMemberQuestion(
+      @PathVariable("member_id") long memberId) {
+    Page<Question> pageOrders = questionService.findMemberQuestions(memberId);
+    List<Question> questions = pageOrders.getContent();
+    List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
+
+    return new ResponseEntity<>(response,HttpStatus.OK);
+  }
+  
   @GetMapping
-  public ResponseEntity getOrders(@Positive @RequestParam int page,
+  public ResponseEntity getQuestions(@Positive @RequestParam int page,
                                   @Positive @RequestParam int size) {
     Page<Question> pageOrders = questionService.findQuestions(page - 1, size);
     List<Question> questions = pageOrders.getContent();
