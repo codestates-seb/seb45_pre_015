@@ -55,6 +55,18 @@ public class QuestionController {
     return new ResponseEntity<>(response,HttpStatus.OK);
   }
   
+  @GetMapping("/{member_id}/{question-id}")
+  public ResponseEntity getMemberQuestion(
+      @Positive @RequestParam int page,
+      @Positive @RequestParam int size,
+      @PathVariable("member_id") long memberId) {
+    Page<Question> pageOrders = questionService.findMemberQuestions(page - 1, size, memberId);
+    List<Question> questions = pageOrders.getContent();
+    List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
+    
+    return new ResponseEntity<>(response,HttpStatus.OK);
+  }
+  
   @GetMapping
   public ResponseEntity getOrders(@Positive @RequestParam int page,
                                   @Positive @RequestParam int size) {

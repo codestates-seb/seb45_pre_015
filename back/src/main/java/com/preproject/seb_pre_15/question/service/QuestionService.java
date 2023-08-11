@@ -2,14 +2,14 @@ package com.preproject.seb_pre_15.question.service;
 
 import com.preproject.seb_pre_15.exception.BusinessLogicException;
 import com.preproject.seb_pre_15.exception.ExceptionCode;
+import com.preproject.seb_pre_15.member.entity.Member;
 import com.preproject.seb_pre_15.question.entity.Question;
 import com.preproject.seb_pre_15.question.repository.QuestionRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,10 +39,17 @@ public class QuestionService {
         Sort.by("QuestionId").descending()));
   }
   //멤버별 질문글 전체조회
-//  public Page<Question> findMemberQuestions(int page, int size, long memberId) {
-//    Pageable pageable = PageRequest.of(page, size);
-//    return questionRepository.findAllByMemberId(memberId, pageable);
-//  }
+  public Page<Question> findMemberQuestions(int page, int size, long memberId) {
+    Pageable pageable = PageRequest.of(page, size, Sort.by("questionId").descending());
+    Optional<Question> optionalPage = questionRepository.findByAllMemberId(memberId, pageable);
+    
+    return (Page<Question>) optionalPage.orElseThrow(() ->
+        new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
+  }
+  
+  
+  
+  
   
   //본문 조회 로직
   private Question findVerifiedQuestionByQuery(long questionId) {
