@@ -7,9 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface QuestionRepository extends JpaRepository<Question, Long> {
-
-
-//    @Query(value = "SELECT q fROM Question q where q.")
-//    Page<Question> findAllByMemberId(Long memberId, Pageable pageable);
+  Page<Question> findByMemberMemberId(long memberId, Pageable pageable);
+//
+//    @Query("SELECT q FROM Question q WHERE q.member.memberId = :memberId")
+//    Page<Question> findByMemberIdQuestions(long memberId, Pageable pageable);
 }
