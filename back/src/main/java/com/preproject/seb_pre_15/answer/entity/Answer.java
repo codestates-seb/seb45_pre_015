@@ -40,5 +40,18 @@ public class Answer extends Auditable {
 
     @Column
     private String images;
+    
+    public Answer(String body, Member member, Question question) {
+        this.body = body;
+        this.member = member;
+        this.question = question;
+    }
+    
+    public Answer() {
+    
+    }
+    
+    //더미 생성용 생성자
+    
 
 }

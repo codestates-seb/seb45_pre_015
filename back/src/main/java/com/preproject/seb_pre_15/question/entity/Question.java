@@ -43,4 +43,15 @@ public class Question extends Auditable {
     
 //    @OneToMany(mappedBy = "questionComment")
 //    private List<questionComment> questionComments;
+    
+    //더미 생성용 생성자
+    public Question(String title, String body, Member member) {
+        this.title = title;
+        this.body = body;
+        this.member = member;
+    }
+    
+    public Question() {
+    
+    }
 }

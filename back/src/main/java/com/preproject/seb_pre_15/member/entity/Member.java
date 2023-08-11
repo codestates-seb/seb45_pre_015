@@ -35,5 +35,13 @@ public class Member extends Auditable {
 
 //    @Column
 //    private String img;
-
+    
+    //더미 생성용 생성자
+    public Member(String email) {
+        this.email = email;
+    }
+    
+    public Member() {
+    
+    }
 }
