@@ -55,11 +55,13 @@ public class AnswerService {
     answerRepository.delete(answer);
   }
   //멤버별 답변글 전체조회
-//  public Page<Answer> findMemberAnswers(int page, int size, long memberId) {
-//    Pageable pageable = PageRequest.of(page, size);
-//    return answerRepository.findB(memberId, pageable);
+  public Page<Answer> findMemberAnswers(Long memberId) {
+    Pageable pageable = PageRequest.of(0, 5, Sort.by("answerId").descending());
+    Page<Answer> optionalPage = answerRepository.findByMemberMemberId(memberId, pageable);
 
-//  }
+    return optionalPage;
+
+  }
   //본문 조회 로직
 
   private Answer findVerifiedAnswerByQuery(long answerId) {
