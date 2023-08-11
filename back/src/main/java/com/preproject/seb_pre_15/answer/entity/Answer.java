@@ -15,7 +15,7 @@ import java.util.Date;
 @Setter
 public class Answer extends Auditable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Long answerId;
 
     @Column(nullable = false, length = 500)
