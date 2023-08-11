@@ -69,7 +69,7 @@ public class QuestionController {
     return new ResponseEntity<>(response,HttpStatus.OK);
   }
   
-  //맴버별 질문 글 조회, 5개씩 출력됩니다
+  //맴버별 질문 글 조회, 5개씩 출력됩니다.
   @GetMapping("/{member_id}/questions")
   public ResponseEntity getMemberQuestion(
       @PathVariable("member_id") long memberId) {
