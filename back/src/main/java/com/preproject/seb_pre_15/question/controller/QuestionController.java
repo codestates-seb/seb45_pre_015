@@ -70,7 +70,7 @@ public class QuestionController {
   public ResponseEntity qustionDelete(@PathVariable("questionId") @Positive Long questionId){
     questionService.deleteQuestion(questionId);
     
-    return new ResponseEntity<>("success delete member",HttpStatus.OK);
+    return new ResponseEntity<>("success delete question", HttpStatus.NO_CONTENT);
   }
   
 }

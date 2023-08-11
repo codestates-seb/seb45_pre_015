@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,8 +38,8 @@ public class Question extends Auditable {
     @JoinColumn(name = "member_id")
     private Member member;
     
-//    @OneToMany(mappedBy = "answer")
-//    private List<Answer> answers;
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers = new ArrayList<>();
     
 //    @OneToMany(mappedBy = "questionComment")
 //    private List<questionComment> questionComments;

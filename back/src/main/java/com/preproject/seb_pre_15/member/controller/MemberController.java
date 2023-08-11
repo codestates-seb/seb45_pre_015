@@ -44,7 +44,7 @@ public class MemberController {
     public ResponseEntity memberDelete(@PathVariable("memberId") @Positive Long memberId){
         memberService.deleteMember(memberId);
 
-        return new ResponseEntity<>("success delete member",HttpStatus.OK);
+        return new ResponseEntity<>("success delete member", HttpStatus.NO_CONTENT);
     }
 
 
