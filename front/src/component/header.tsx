@@ -1,6 +1,7 @@
 import { link } from 'fs';
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import Sidebar from './Sidebar';
 //아이콘등 추후 추가바람
 
 const Header: React.FC = () => {
@@ -9,6 +10,10 @@ const Header: React.FC = () => {
     const [userProfileImageLink, setUserProfileImageLink] = useState<string>('');
     const [searchText, setSearchText] = useState<string>('');
     const search = useRef<HTMLInputElement | null>(null);
+    const [menu, setMenu] = useState(false);
+    const handleClick = () => {
+      setMenu((prevMenu) => !prevMenu);
+    };
     const navigator = useNavigate();
   
     useEffect(() => {
@@ -107,12 +112,25 @@ const Header: React.FC = () => {
     const [isFocus, setIsFocus] = useState<boolean>(false);
   
     return (
-      <div className='sticky top-0 z-20 flex-col w-full drop-shadow h-[60px] flex-nowrap'>
+      <div className='sticky top-0 z-20 flex-col w-full drop-shadow h-[60px] flex-nowrap'>        
         <div className="h-1 bg-primary-300"></div>
         <div className="flex justify-center px-2 py-3 bg-soGray-headerbg">
+        <div>
+        <img
+          src="icon.png"
+          alt=""
+          className="h-10 mr-76 p-2"
+          onClick={handleClick}
+        />
+        {menu === true ? (
+          <div className="absolute left-0 w-1/5 max-h-[calc(100vh - 56px)] p-0 overflow-y-auto">
+          <Sidebar/>
+          </div>
+        ) : null}
+      </div>         
           <div className="items-center mx-2 my-1">
             <Link to="/" onClick={onClickRemove}>
-              
+              <p className='mx-0 w-150 h-30 mt-n4'>stack overflow</p>              
             </Link>
           </div>
           <div className="flex items-center px-2 py-1 mx-2 mr-10 bg-white border rounded-md grow border-soGray-light focus:ring-secondary-300">
