@@ -41,14 +41,14 @@ public class AnswerController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("answers/{answerId}")
+    @GetMapping("/{questionId}/answers/{answerId}")
     public ResponseEntity getAnswer(@PathVariable("answerId") @Positive Long answerId){
         Answer answer = answerService.findAnswer(answerId);
         AnswerResponseDto response = mapper.answerToAnswerResponseDto(answer);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("answers")
+    @GetMapping("/answers")
     public ResponseEntity getAnswers(@Positive @RequestParam int page,
                                      @Positive @RequestParam int size){
         Page<Answer> pageAnswers = answerService.findAnswers(page-1, size);
@@ -69,6 +69,4 @@ public class AnswerController {
         answerService.deleteAnswer(answerId);
         return new ResponseEntity<>("success delete answer",HttpStatus.NO_CONTENT);
     }
-
-
 }
