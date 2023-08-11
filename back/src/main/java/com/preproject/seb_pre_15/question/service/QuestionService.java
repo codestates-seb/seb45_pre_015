@@ -38,26 +38,22 @@ public class QuestionService {
     return questionRepository.findAll(PageRequest.of(page, size,
         Sort.by("QuestionId").descending()));
   }
+  
   //멤버별 질문글 전체조회
-  public Page<Question> findMemberQuestions(int page, int size, long memberId) {
-    Pageable pageable = PageRequest.of(page, size, Sort.by("questionId").descending());
-    Optional<Question> optionalPage = questionRepository.findByAllMemberId(memberId, pageable);
+  public Page<Question> findMemberQuestions(long memberId) {
+    Pageable pageable = PageRequest.of(0, 5, Sort.by("QuestionId").descending());
+    Page<Question> optionalPage = questionRepository.findByMemberMemberId(memberId, pageable);
     
-    return (Page<Question>) optionalPage.orElseThrow(() ->
-        new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
+    return optionalPage;
   }
   
-  
-  
-  
-  
-  //본문 조회 로직
+    //본문 조회 로직
   private Question findVerifiedQuestionByQuery(long questionId) {
     Optional<Question> optionalQuestion = questionRepository.findById(questionId);
     Question findQuestion =
         optionalQuestion.orElseThrow(() ->
             new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
-    
+    //마이페이지 게시글 검색용 에러 로그 분리필요
     return findQuestion;
   }
   

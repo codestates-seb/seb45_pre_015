@@ -1,4 +1,4 @@
-package com.preproject.seb_pre_15.dummy;
+package com.preproject.seb_pre_15.question.dummy;
 
 import com.preproject.seb_pre_15.member.entity.Member;
 import com.preproject.seb_pre_15.member.repository.MemberRepository;
@@ -39,13 +39,19 @@ public class DummyDataLoader implements CommandLineRunner {
     question2.setTitle("Sample Title 2");
     question2.setBody("Sample Body 2");
     question2.setView(5L);
-    question2.setMember(member2);
+    question2.setMember(member1);
 
     Question question3 = new Question();
     question3.setTitle("Sample Title 3");
     question3.setBody("Sample Body 3");
     question3.setView(5L);
-    question3.setMember(member3);
+    question3.setMember(member2);
+    
+    Question question4 = new Question();
+    question4.setTitle("Sample Title 3");
+    question4.setBody("Sample Body 3");
+    question4.setView(5L);
+    question4.setMember(member3);
 
     // 더미 데이터 저장
     memberRepository.save(member1);
@@ -54,5 +60,6 @@ public class DummyDataLoader implements CommandLineRunner {
     questionRepository.save(question1);
     questionRepository.save(question2);
     questionRepository.save(question3);
+    questionRepository.save(question4);
   }
 }
