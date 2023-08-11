@@ -1,5 +1,7 @@
 package com.preproject.seb_pre_15.question.dummy;
 
+import com.preproject.seb_pre_15.answer.entity.Answer;
+import com.preproject.seb_pre_15.answer.repository.AnswerRepository;
 import com.preproject.seb_pre_15.member.entity.Member;
 import com.preproject.seb_pre_15.member.repository.MemberRepository;
 import com.preproject.seb_pre_15.question.entity.Question;
@@ -13,53 +15,64 @@ public class DummyDataLoader implements CommandLineRunner {
 
   private final QuestionRepository questionRepository;
   private final MemberRepository memberRepository;
+  private final AnswerRepository answerRepository;
 
   @Autowired
-  public DummyDataLoader(QuestionRepository questionRepository, MemberRepository memberRepository) {
+  public DummyDataLoader(QuestionRepository questionRepository, MemberRepository memberRepository, AnswerRepository answerRepository) {
     this.questionRepository = questionRepository;
     this.memberRepository = memberRepository;
+    this.answerRepository = answerRepository;
   }
 
   @Override
   public void run(String... args) throws Exception {
-    Member member1 = new Member();
-    member1.setEmail("hgd@gmail.com");
-    Member member2 = new Member();
-    member2.setEmail("hgd2@gmail.com");
-    Member member3 = new Member();
-    member3.setEmail("hgd3@gmail.com");
     // 더미 데이터 생성
-    Question question1 = new Question();
-    question1.setTitle("Sample Title 1");
-    question1.setBody("Sample Body 1");
-    question1.setView(10L);
-    question1.setMember(member1);
-
-    Question question2 = new Question();
-    question2.setTitle("Sample Title 2");
-    question2.setBody("Sample Body 2");
-    question2.setView(5L);
-    question2.setMember(member1);
-
-    Question question3 = new Question();
-    question3.setTitle("Sample Title 3");
-    question3.setBody("Sample Body 3");
-    question3.setView(5L);
-    question3.setMember(member2);
+    Member member1 = new Member("hgd@gmail.com");
+    Member member2 = new Member("hgd2@gmail.com");
+    Member member3 = new Member("hgd3@gmail.com");
     
-    Question question4 = new Question();
-    question4.setTitle("Sample Title 3");
-    question4.setBody("Sample Body 3");
-    question4.setView(5L);
-    question4.setMember(member3);
-
+    Question question1 = new Question("Sample Title 1", "Sample Body 1", member1);
+    Question question2= new Question("Sample Title 2", "Sample Body 2", member2);
+    Question question3 = new Question("Sample Title 3", "Sample Body 3", member3);
+    Question question4 = new Question("리트리버", "멍멍", member3);
+    Question question5 = new Question("불독", "멍멍멍멍", member3);
+    Question question6 = new Question("진돗개", "왈왈", member3);
+    Question question7 = new Question("페르시안", "야옹야옹야옹", member3);
+    Question question8 = new Question("숏헤어", "야옹야옹야옹야옹야옹야옹야옹야옹야옹", member3);
+    Question question9 = new Question("샴", "야옹야옹야~~~~옹", member3);
+    Question question10 = new Question("러시안블루", "미역", member3);
+    
+    Answer answer1 = new Answer("첫번째 질문에 대한 답변", question1.getMember(), question1);
+    Answer answer2 = new Answer("첫번째 질문에 대한 답변", question1.getMember(), question1);
+    Answer answer3 = new Answer("첫번째 질문에 대한 답변", question1.getMember(), question1);
+    Answer answer4 = new Answer("정글리안", question2.getMember(), question2);
+    Answer answer5 = new Answer("펄", question2.getMember(), question2);
+    Answer answer6 = new Answer("골든", question2.getMember(), question2);
+    Answer answer7 = new Answer("다섯번째 질문/멤버3 작성", question5.getMember(), question5);
+    
+    
     // 더미 데이터 저장
     memberRepository.save(member1);
     memberRepository.save(member2);
     memberRepository.save(member3);
+    
     questionRepository.save(question1);
     questionRepository.save(question2);
     questionRepository.save(question3);
     questionRepository.save(question4);
+    questionRepository.save(question5);
+    questionRepository.save(question6);
+    questionRepository.save(question7);
+    questionRepository.save(question8);
+    questionRepository.save(question9);
+    questionRepository.save(question10);
+    
+    answerRepository.save(answer1);
+    answerRepository.save(answer2);
+    answerRepository.save(answer3);
+    answerRepository.save(answer4);
+    answerRepository.save(answer5);
+    answerRepository.save(answer6);
+    answerRepository.save(answer7);
   }
 }
