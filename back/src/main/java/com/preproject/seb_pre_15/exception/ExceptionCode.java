@@ -9,7 +9,9 @@ public enum ExceptionCode {
     ANSWER_NOT_FOUND(404, "Answer not found"),
     ID_DOESNT_MATCH(403, "Id doesnt Match"),
     NOT_IMPLEMENTATION(501, "Not Implementation"),
-    NO_MORE_LIKE(403, "Like only once");
+    NO_MORE_LIKE(403, "Like only once"),
+
+    COMMENT_NOT_EXIST(404, "Comment doesnt exist");
 
     @Getter
     private int status;

@@ -9,11 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 public class MemberPatchDto {
-    private long memberId;
-
     @NotNull
     private String name;
 
-    @NotNull
-    private List<String> roles;
 }
