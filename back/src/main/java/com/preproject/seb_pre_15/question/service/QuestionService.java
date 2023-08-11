@@ -57,8 +57,8 @@ public class QuestionService {
     return findQuestion;
   }
   
-  public void deleteQuestion(long coffeeId) {
-    Question question = findVerifiedQuestionByQuery(coffeeId);
+  public void deleteQuestion(long questionId) {
+    Question question = findVerifiedQuestionByQuery(questionId);
     questionRepository.delete(question);
   }
   //질문 글 검색 기능, 10개씩 출력됩니다
