@@ -41,10 +41,10 @@ public class QuestionService {
   
   //멤버별 질문글 전체조회
   public Page<Question> findMemberQuestions(long memberId) {
-    Pageable pageable = PageRequest.of(0, 5, Sort.by("QuestionId").descending());
-    Page<Question> optionalPage = questionRepository.findByMemberMemberId(memberId, pageable);
+    Pageable pageable = PageRequest.of(0, 5, Sort.by("questionId").descending());
+    Page<Question> findQuestions = questionRepository.findByMemberMemberId(memberId, pageable);
     
-    return optionalPage;
+    return findQuestions;
   }
   
     //본문 조회 로직
@@ -60,5 +60,12 @@ public class QuestionService {
   public void deleteQuestion(long questionId) {
     Question question = findVerifiedQuestionByQuery(questionId);
     questionRepository.delete(question);
+  }
+  //질문 글 검색 기능, 10개씩 출력됩니다
+  public Page<Question> findSearchWordQuestions(String searchWord) {
+    Pageable pageable = PageRequest.of(0, 10, Sort.by("questionId").descending());
+    Page<Question> findQuestions = questionRepository.findBySearchWordQuestion(searchWord, pageable);
+    
+    return findQuestions;
   }
 }
