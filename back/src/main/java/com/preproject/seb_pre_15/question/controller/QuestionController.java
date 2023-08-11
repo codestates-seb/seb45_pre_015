@@ -21,7 +21,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/questions")
+@RequestMapping
 @Validated
 public class QuestionController {
   private final QuestionService questionService;
@@ -31,7 +31,8 @@ public class QuestionController {
     this.questionMapper = questionMepper;
   }
   
-  @PostMapping
+  //질문 글 등록
+  @PostMapping("/questions")
   public ResponseEntity postQuestion(@Valid @RequestBody QuestionPostDto questionPostDto) {
     Question question = questionService.createQuestion(questionMapper.questionPostDtoToQuestion(questionPostDto));
 //    URI location = UriCreator.createUri("questions", question.getQuestionId());
@@ -39,7 +40,8 @@ public class QuestionController {
     return new ResponseEntity<>(response,HttpStatus.CREATED);
   }
   
-  @PatchMapping("/{question-id}")
+  //질문 글 수정
+  @PatchMapping("/questions/{question-id}")
   public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive long questionId,
                                     @Valid @RequestBody QuestionPatchDto questionPatchDto) {
     questionPatchDto.setQuestionId(questionId);
@@ -48,7 +50,19 @@ public class QuestionController {
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
   
-  @GetMapping("/{question-id}")
+  //전체 질문 글 조회
+  @GetMapping("/questions")
+  public ResponseEntity getQuestions(@Positive @RequestParam int page,
+                                  @Positive @RequestParam int size) {
+    Page<Question> pageOrders = questionService.findQuestions(page - 1, size);
+    List<Question> questions = pageOrders.getContent();
+    List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
+    
+    return new ResponseEntity<>(response,HttpStatus.OK);
+  }
+  
+  //선택 질문 글 조회
+  @GetMapping("/questions/{question-id}")
   public ResponseEntity getQuestion(@PathVariable("question-id") @Positive long questionId) {
     Question question = questionService.findQuestion(questionId);
     QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
@@ -56,7 +70,7 @@ public class QuestionController {
     return new ResponseEntity<>(response,HttpStatus.OK);
   }
   
-  //맴버별 질문글, 5개씩 출력됩니다
+  //맴버별 질문 글 조회, 5개씩 출력됩니다
   @GetMapping("/{member_id}/questions")
   public ResponseEntity getMemberQuestion(
       @PathVariable("member_id") long memberId) {
@@ -67,17 +81,8 @@ public class QuestionController {
     return new ResponseEntity<>(response,HttpStatus.OK);
   }
   
-  @GetMapping
-  public ResponseEntity getQuestions(@Positive @RequestParam int page,
-                                  @Positive @RequestParam int size) {
-    Page<Question> pageOrders = questionService.findQuestions(page - 1, size);
-    List<Question> questions = pageOrders.getContent();
-    List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
-    
-    return new ResponseEntity<>(response,HttpStatus.OK);
-  }
-  
-  @DeleteMapping("/{question-id}")
+  //선택 질문 글 삭제
+  @DeleteMapping("/questions/{question-id}")
   public ResponseEntity qustionDelete(@PathVariable("questionId") @Positive Long questionId){
     questionService.deleteQuestion(questionId);
     
