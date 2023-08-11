@@ -10,6 +10,7 @@ import com.preproject.seb_pre_15.question.service.QuestionService;
 import com.preproject.seb_pre_15.utils.UriCreator;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -80,7 +81,7 @@ public class QuestionController {
   public ResponseEntity qustionDelete(@PathVariable("questionId") @Positive Long questionId){
     questionService.deleteQuestion(questionId);
     
-    return new ResponseEntity<>("success delete member",HttpStatus.OK);
+    return new ResponseEntity<>("success delete question", HttpStatus.NO_CONTENT);
   }
   
 }
