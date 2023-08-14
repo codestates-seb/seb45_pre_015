@@ -23,14 +23,14 @@ public class QuestionService {
     this.questionRepository = questionRepository;
   }
   //질문글 등록
-  public Question createQuestion(Question Question){
+  public Question createQuestion(Question question){
     
-    return questionRepository.save(Question);
+    return questionRepository.save(question);
   }
   //질문글 수정
-  public Question updateQuestion(Question Question){
+  public Question updateQuestion(Question question){
     
-    return questionRepository.save(Question);
+    return questionRepository.save(question);
   }
  
   //Answer 조회용 Question 조회
@@ -102,4 +102,31 @@ public class QuestionService {
     
     return findQuestions;
   }
+  
+  
+  public Question updateQuestionVote(HttpServletRequest request, HttpServletResponse response, Question question) {
+    Question findQuestion = findVerifiedQuestionByQuery(question.getQuestionId());
+    
+    if (shouldUpdateQuestionVote(request, findQuestion)) {// 쿠키 조회, 없으면 조회수 증가 + 쿠키 생성
+      findQuestion.setVote(question.getVote());
+      
+      Cookie votedCookie = new Cookie("voted_question_" + findQuestion.getQuestionId(), "true");
+      votedCookie.setMaxAge(86400); // 쿠키 만료시간 하루로 설정
+      response.addCookie(votedCookie);
+      }
+    return questionRepository.save(findQuestion);
+  }
+
+  private boolean shouldUpdateQuestionVote(HttpServletRequest request, Question question) {
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null) {
+      for (Cookie cookie : cookies) {
+        if (cookie.getName().equals("voted_question_" + question.getQuestionId())) {
+          return false; //배열 값 중에 질문글 쿠키가 있다면 추천수를 증감하지 않습니다
+        }
+      }
+    }
+    return true; //배열에서 없으면 true 리턴 -> 조회수 증가
+  }
 }
+
