@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface AnswerCommentRepository extends JpaRepository<AnswerComment, Long> {
-    @Query(value = "select a from AnswerComment a where a.member.memberId = :memberId")
+    @Query(value = "select a from QuestionComment a where a.member.memberId = :memberId")
     Page<AnswerComment> findAllByMemberId(long memberId, Pageable pageable);
 
 }

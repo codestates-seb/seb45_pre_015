@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class JwtVerificationFilter extends OncePerRequestFilter {
 
@@ -30,6 +31,8 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String authorization = request.getHeader("Authorization");
+        System.out.println("++++++++++++++++++++++++++++++++++++++"+authorization+"++++++++++++++++++++++++++++++++++++++");
+
         return authorization == null || !authorization.startsWith("Bearer");
     }
 
@@ -39,7 +42,10 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         Map<String, Object> claims = verifyJws(request);
         setAuthenticationToContext(claims);
-        
+        System.out.println("+++++++++++++++++++++++++++internal+++++++++++"+claims+"++++++++++++++++++++++++++++++++++++++");
+
+        System.out.println((SecurityContextHolder.getContext().getAuthentication()));
+
         filterChain.doFilter(request,response);
 
     }
@@ -48,7 +54,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         String username = (String) claims.get("username");
         List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles"));
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(username,authorities);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(username,null,authorities);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
