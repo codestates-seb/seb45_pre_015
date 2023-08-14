@@ -94,7 +94,7 @@ public class QuestionController {
   
   //질문글 검색 기능
   @GetMapping("/questions/search_word")
-  public ResponseEntity getQuestionSearch(@RequestParam(value = "search_word" ) String searchWord) {
+  public ResponseEntity getQuestionSearch(@RequestParam(value = "search-word" ) String searchWord) {
     Page<Question> pageOrders = questionService.findSearchWordQuestions(searchWord);
     List<Question> questions = pageOrders.getContent();
     List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
