@@ -8,6 +8,9 @@ import com.preproject.seb_pre_15.question.repository.QuestionRepository;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,9 +32,40 @@ public class QuestionService {
     
     return questionRepository.save(Question);
   }
-  //질문글 쿼리 조회(게시판 -> 본문)
-  public Question findQuestion(long QuestionId){
-    return findVerifiedQuestionByQuery(QuestionId);
+ 
+  //Answer 조회용 Question 조회
+  public Question findQuestion(long questionId) {
+    return findVerifiedQuestionByQuery(questionId);
+  }
+  //질문글 조회(게시판 -> 본문), 해당 질문글 조회수 증가
+  public Question findQuestion(long questionId, HttpServletRequest request, HttpServletResponse response) {
+    Question findQuestion = findVerifiedQuestionByQuery(questionId);
+    
+    return questionRepository.save(addQuestionView(request, response, findQuestion));
+  }
+  //조회수 증가, 조회글 쿠키 생성 로직
+  private Question addQuestionView(HttpServletRequest request, HttpServletResponse response, Question findQuestion){
+    if (shouldUpdateQuestionView(request, findQuestion)) {// 쿠키 조회, 없으면 조회수 증가 + 쿠키 생성
+      findQuestion.setView(findQuestion.getView() + 1);
+      
+      Cookie viewedCookie = new Cookie("viewed_question_" + findQuestion.getQuestionId(), "true");
+      viewedCookie.setMaxAge(86400); // 쿠키 만료시간 하루로 설정
+      response.addCookie(viewedCookie);
+    }
+    return findQuestion;
+  }
+  
+  //쿠키 조회 로직
+  private boolean shouldUpdateQuestionView(HttpServletRequest request, Question question) {
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null) {
+      for (Cookie cookie : cookies) {
+        if (cookie.getName().equals("viewed_question_" + question.getQuestionId())) {
+          return false; //배열 값 중에 질문글 쿠키가 있다면 조회수 로직을 올리지 않습니다
+        }
+      }
+    }
+    return true; //배열에서 없으면 true 리턴 -> 조회수 증가
   }
   //질문글 전체조회(게시판 조회)
   public Page<Question> findQuestions(int page, int size) {

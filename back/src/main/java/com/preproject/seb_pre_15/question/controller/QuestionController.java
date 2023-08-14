@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
@@ -61,13 +63,14 @@ public class QuestionController {
     return new ResponseEntity<>(response,HttpStatus.OK);
   }
   
-  //선택 질문 글 조회
+  //선택 질문 글 조회 + 쿠키 조회 및 조회수 증가
   @GetMapping("/questions/{question-id}")
-  public ResponseEntity getQuestion(@PathVariable("question-id") @Positive long questionId) {
-    Question question = questionService.findQuestion(questionId);
-    QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
+  public ResponseEntity getQuestion(HttpServletRequest request, HttpServletResponse response,
+                                    @PathVariable("question-id") @Positive long questionId ) {
+    Question question = questionService.findQuestion(questionId, request, response);
+    QuestionResponseDto responseDto = questionMapper.questionToQuestionResponseDto(question);
     
-    return new ResponseEntity<>(response,HttpStatus.OK);
+    return new ResponseEntity<>(responseDto,HttpStatus.OK);
   }
   
   //맴버별 질문 글 조회, 5개씩 출력됩니다
@@ -82,7 +85,7 @@ public class QuestionController {
   }
   
   //선택 질문 글 삭제
-  @DeleteMapping("/questions/{question-id}")
+  @DeleteMapping("/questions/{question_id}")
   public ResponseEntity questionDelete(@PathVariable("question-id") @Positive Long questionId){
     questionService.deleteQuestion(questionId);
     
@@ -91,7 +94,7 @@ public class QuestionController {
   
   //질문글 검색 기능
   @GetMapping("/questions/search_word")
-  public ResponseEntity getQuestionSearch(@RequestParam(value = "searchWord" ) String searchWord) {
+  public ResponseEntity getQuestionSearch(@RequestParam(value = "search_word" ) String searchWord) {
     Page<Question> pageOrders = questionService.findSearchWordQuestions(searchWord);
     List<Question> questions = pageOrders.getContent();
     List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
