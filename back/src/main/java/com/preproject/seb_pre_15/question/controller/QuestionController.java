@@ -71,8 +71,9 @@ public class QuestionController {
   }
   
   //맴버별 질문 글 조회, 5개씩 출력됩니다
-  @GetMapping("/{member-id}/questions")
-  public ResponseEntity getMemberQuestion(@PathVariable("member-id") long memberId) {
+  @GetMapping("/{member_id}/questions")
+  public ResponseEntity getMemberQuestion(
+      @PathVariable("member_id") long memberId) {
     Page<Question> pageOrders = questionService.findMemberQuestions(memberId);
     List<Question> questions = pageOrders.getContent();
     List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
@@ -89,7 +90,7 @@ public class QuestionController {
   }
   
   //질문글 검색 기능
-  @GetMapping("/questions/search-word")
+  @GetMapping("/questions/search_word")
   public ResponseEntity getQuestionSearch(@RequestParam(value = "searchWord" ) String searchWord) {
     Page<Question> pageOrders = questionService.findSearchWordQuestions(searchWord);
     List<Question> questions = pageOrders.getContent();
