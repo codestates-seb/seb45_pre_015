@@ -1,6 +1,5 @@
 import React, { useState, useRef, ChangeEvent, FormEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import identicon1 from '../../images/identicon1.jpeg';
 import { fetchSignup } from '../util/fetchsignup';
 
 const SignupInfo: React.FC = () => {
