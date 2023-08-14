@@ -9,6 +9,7 @@ import com.preproject.seb_pre_15.auth.utils.CustomAuthorityUtils;
 import com.preproject.seb_pre_15.member.service.MemberService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -26,7 +27,7 @@ public class SecurityConfiguration {
 
 
     //TODO:
-    // MemberService 구현후 DI받아서 OAuth2memberSuccessHandler생성자에 추가
+
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
     private final MemberService memberService;
@@ -52,7 +53,25 @@ public class SecurityConfiguration {
                 .and()
                 .apply(new CustomFilterConfigurer())
                 .and()
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+                .authorizeHttpRequests(authorize -> authorize
+                        .antMatchers("/members/**").hasRole("USER")
+                        .antMatchers(HttpMethod.GET,"/*/members").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.POST,"/**/questions").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH,"/**/questions/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE,"/**/questions/**").hasRole("USER")
+                        .antMatchers(HttpMethod.POST,"/**/answers").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH,"/**/answers/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE,"/**/answers/**").hasRole("USER")
+                        .antMatchers(HttpMethod.POST,"/**/answer-comment").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH,"/**/answer-comment/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE,"/**/answer-comment/**").hasRole("USER")
+                        .antMatchers(HttpMethod.POST,"/**/question-comment").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH,"/**/question-comment/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE,"/**/question-comment/**").hasRole("USER")
+                        .anyRequest().permitAll()
+                )
+
+
                 .oauth2Login(oauth2 -> oauth2.successHandler(new OAuth2memberSuccessHandler(jwtTokenizer,authorityUtils,memberService)));
         return http.build();
     }
