@@ -28,9 +28,9 @@ public class AnswerService {
 //    this.answerRepository = answerRepository;
 //  }
   //답변글 등록
-  public Answer createAnswer(Answer answer,  Long QuestionId, Long memberId){
-    Question question = questionService.findQuestion(QuestionId);
-    Member member = memberService.findMember(memberId);
+  public Answer createAnswer(Answer answer){
+    Question question = questionService.findQuestion(answer.getQuestion().getQuestionId());
+    Member member = memberService.findMember(answer.getMember().getMemberId());
     answer.setMember(member);
     answer.setQuestion(question);
     return answerRepository.save(answer);

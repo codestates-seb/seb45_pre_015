@@ -23,15 +23,17 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberMapper memberMapper;
 
-    @GetMapping("{memberId}")
-    public ResponseEntity memberDetails(@PathVariable("memberId") @Positive Long memberId){
+    // 회원 정보
+    @GetMapping("{member-id}")
+    public ResponseEntity memberDetails(@PathVariable("member-id") @Positive Long memberId){
         Member member = memberService.findMember(memberId);
         MemberResponseDto response = memberMapper.memberToMemberResponseDto(member);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PatchMapping("{memberId}")
-    public ResponseEntity memberUpdate(@PathVariable("memberId") @Positive Long memberId,
+    // 회원 수정
+    @PatchMapping("{member-id}")
+    public ResponseEntity memberUpdate(@PathVariable("member-id") @Positive Long memberId,
                                        @Valid @RequestBody MemberPatchDto memberPatchDto){
 
         Member member = memberService.updateMember(memberMapper.memberPatchDtoToMember(memberPatchDto),memberId);
@@ -40,8 +42,9 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("{memberId}")
-    public ResponseEntity memberDelete(@PathVariable("memberId") @Positive Long memberId){
+    // 회원 삭제
+    @DeleteMapping("{member-id}")
+    public ResponseEntity memberDelete(@PathVariable("member-id") @Positive Long memberId){
         memberService.deleteMember(memberId);
 
         return new ResponseEntity<>("success delete member", HttpStatus.NO_CONTENT);

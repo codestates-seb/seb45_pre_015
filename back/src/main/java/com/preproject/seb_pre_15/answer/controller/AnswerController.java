@@ -6,6 +6,7 @@ import com.preproject.seb_pre_15.answer.dto.AnswerResponseDto;
 import com.preproject.seb_pre_15.answer.entity.Answer;
 import com.preproject.seb_pre_15.answer.mapper.AnswerMapper;
 import com.preproject.seb_pre_15.answer.service.AnswerService;
+import com.preproject.seb_pre_15.argumentresolver.LoginMemberId;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
@@ -26,29 +27,34 @@ public class AnswerController {
     private final AnswerMapper mapper;
 
 
-    @PostMapping("/{memberId}/{questionId}/answers")
+    // 답변 생성
+    @PostMapping("/answers")
     public ResponseEntity createAnswer(@RequestBody AnswerPostDto answerPostDto,
-                                       @PathVariable("memberId") @Positive Long memberId,
-                                       @PathVariable("questionId") @Positive Long questionId){
-        Answer answer = answerService.createAnswer(mapper.answerPostDtoToAnswer(answerPostDto), questionId, memberId);
+                                       @LoginMemberId Long memberId){
+        answerPostDto.setMemberId(memberId);
+        Answer answer = answerService.createAnswer(mapper.answerPostDtoToAnswer(answerPostDto));
         AnswerResponseDto response = mapper.answerToAnswerResponseDto(answer);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-    @PatchMapping("/{memberId}/{questionId}/answers/{answerId}")
+
+    // 해당 답변 수정
+    @PatchMapping("/answers/{answer-id}")
     public ResponseEntity updateAnswer(@RequestBody AnswerPatchDto answerPatchDto,
-                                       @PathVariable("answerId") @Positive Long answerId){
+                                       @PathVariable("answer-id") @Positive Long answerId){
         Answer answer = answerService.updateAnswer(mapper.answerPatchDtoToAnswer(answerPatchDto), answerId);
         AnswerResponseDto response = mapper.answerToAnswerResponseDto(answer);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/{questionId}/answers/{answerId}")
-    public ResponseEntity getAnswer(@PathVariable("answerId") @Positive Long answerId){
+    // 해당 답변 조회
+    @GetMapping("/answers/{answer-id}")
+    public ResponseEntity getAnswer(@PathVariable("answer-id") @Positive Long answerId){
         Answer answer = answerService.findAnswer(answerId);
         AnswerResponseDto response = mapper.answerToAnswerResponseDto(answer);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    // 모든 답변 조회
     @GetMapping("/answers")
     public ResponseEntity getAnswers(@Positive @RequestParam int page,
                                      @Positive @RequestParam int size){
@@ -57,16 +63,19 @@ public class AnswerController {
         List<AnswerResponseDto> response = mapper.answersToAnswerResponseDtos(answers);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    @GetMapping("/{memberId}/answers")
-    public ResponseEntity getMemberAnswers(@PathVariable("memberId") @Positive Long memberId){
+
+    // 멤버 별 답변 조회
+    @GetMapping("/{member-id}/answers")
+    public ResponseEntity getMemberAnswers(@PathVariable("member-id") @Positive Long memberId){
         Page<Answer> pageAnswers = answerService.findMemberAnswers(memberId);
         List<Answer> answers = pageAnswers.getContent();
         List<AnswerResponseDto> response = mapper.answersToAnswerResponseDtos(answers);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{memberId}/{answerId}")
-    public ResponseEntity deleteAnswer(@PathVariable("answerId") @Positive Long answerId){
+    // 해당 답변 삭제
+    @DeleteMapping("/answers/{answer-id}")
+    public ResponseEntity deleteAnswer(@PathVariable("answer-id") @Positive Long answerId){
         answerService.deleteAnswer(answerId);
         return new ResponseEntity<>("success delete answer",HttpStatus.NO_CONTENT);
     }
