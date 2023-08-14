@@ -85,7 +85,7 @@ public class QuestionController {
   }
   
   //선택 질문 글 삭제
-  @DeleteMapping("/questions/{question_id}")
+  @DeleteMapping("/questions/{question-id}")
   public ResponseEntity questionDelete(@PathVariable("question-id") @Positive Long questionId){
     questionService.deleteQuestion(questionId);
     
