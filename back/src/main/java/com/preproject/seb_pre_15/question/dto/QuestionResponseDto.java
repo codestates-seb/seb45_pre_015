@@ -17,6 +17,10 @@ public class QuestionResponseDto {
   
   private String body;
   
+  private Long view;
+
+  private Long vote;
+  
 //  private Long memberId;
 //
 //  private List<Answer> answers;
