@@ -11,8 +11,8 @@ const Login:React.FC = () => {
             </div> 
             <div className='mx-auto d-flex flex__fl-grow1 fd-column gs8 gsy mb16 wmx3 ml-20'>
             <ExLoginButtons onSubmit={function (): void {
-                  throw new Error('Function not implemented.');
-              } }/>
+                      throw new Error('Function not implemented.');
+                  } }/>
               </div>         
             <Logincomponent/>
         </div>

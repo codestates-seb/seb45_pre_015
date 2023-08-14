@@ -1,5 +1,6 @@
 import React, { useState, useEffect, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { fetchLogin } from '../util/fetchlogin';
 
 const LoginInfo: React.FC = () => {
   const navigate = useNavigate();
@@ -66,11 +67,11 @@ const LoginInfo: React.FC = () => {
       navigate('/');
     };
 
-//     const login = await fetchLogin(loginData);
-//     if (login.status === 200) {
-//       goHome();
-//       window.location.reload();
-//     }
+    const login = await fetchLogin(loginData);
+    if (login.status === 200) {
+      goHome();
+      window.location.reload();
+    }
   };
 
   return (
