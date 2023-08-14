@@ -19,7 +19,7 @@ public class QuestionResponseDto {
   
   private Long view;
 
-//    private Long vote;
+  private Long vote;
   
 //  private Long memberId;
 //
