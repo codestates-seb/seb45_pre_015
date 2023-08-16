@@ -76,12 +76,19 @@ public class QuestionService {
   //질문글 전체조회(게시판 조회)
   public Page<Question> findQuestions(int page, int size) {
     return questionRepository.findAll(PageRequest.of(page, size,
-        Sort.by("QuestionId").descending()));
+        Sort.by(Sort.Direction.DESC, "vote").descending()));
+  }
+  
+  //질문글 Top10 조회(게시판 조회)
+  public Page<Question> findTopQuestions() {
+    return questionRepository.findAll(PageRequest.of(0, 10,
+        Sort.by("vote").descending()));
   }
   
   //멤버별 질문글 전체조회
-  public Page<Question> findMemberQuestions(long memberId) {
-    Pageable pageable = PageRequest.of(0, 5, Sort.by("questionId").descending());
+  //조회되는 엔티티 값에 따라 page값을 설정해야 합니다, 예로 게시글이 총 30개가 있으면 page의 범위는 0~5까지가 됩니다)
+  public Page<Question> findMemberQuestions(int page,long memberId) {
+    Pageable pageable = PageRequest.of(page, 5, Sort.by("questionId").descending());
     Page<Question> findQuestions = questionRepository.findByMemberMemberId(memberId, pageable);
     
     return findQuestions;
@@ -110,7 +117,7 @@ public class QuestionService {
     return findQuestions;
   }
   
-  // 투표수 증감 로직
+  //투표수 증감 및 쿠키 생성 로직
   @Transactional
   public Question updateQuestionVote(HttpServletRequest request, HttpServletResponse response, Question question, String voteType) {
     Question findQuestion = findVerifiedQuestionByQuery(question.getQuestionId());
@@ -126,10 +133,9 @@ public class QuestionService {
       votedCookie.setMaxAge(86400);
       response.addCookie(votedCookie);
     }
-    
     return questionRepository.save(findQuestion);
   }
-  
+  //투표 쿠키 조회 및 기존 투표 수정 로직
   private boolean shouldUpdateQuestionVote(HttpServletRequest request, HttpServletResponse response, Question findQuestion, Question question, String voteType) {
     Cookie[] cookies = request.getCookies();
     if (cookies != null) {

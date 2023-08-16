@@ -6,6 +6,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AnswerResponseDto {
+    
     private Long answerId;
+    
     private String body;
+    
+    private Long vote;
 }

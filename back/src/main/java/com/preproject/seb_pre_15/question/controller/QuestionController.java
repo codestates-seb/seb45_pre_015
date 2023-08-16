@@ -75,10 +75,11 @@ public class QuestionController {
   }
   
   //맴버별 질문 글 조회, 5개씩 출력됩니다
+  //게시글이 총 30개가 있으면 page의 범위는 0~5까지가 됩니다)
   @GetMapping("/{member-id}/questions")
-  public ResponseEntity getMemberQuestion(
+  public ResponseEntity getMemberQuestion(@Positive @RequestParam int page,
       @PathVariable("member-id") long memberId) {
-    Page<Question> pageOrders = questionService.findMemberQuestions(memberId);
+    Page<Question> pageOrders = questionService.findMemberQuestions(page, memberId);
     List<Question> questions = pageOrders.getContent();
     List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
 
@@ -103,6 +104,16 @@ public class QuestionController {
     return new ResponseEntity<>(response,HttpStatus.OK);
   }
   
+  //질문글 Top10 조회(게시판 조회)
+  @GetMapping("/questions/top10")
+  public ResponseEntity getQuestions() {
+    Page<Question> pageOrders = questionService.findTopQuestions();
+    List<Question> questions = pageOrders.getContent();
+    List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
+    
+    return new ResponseEntity<>(response,HttpStatus.OK);
+  }
+  
   //추천수 증가 로직
   @PatchMapping("/questions/{question-id}/votes-up")
   public ResponseEntity patchQuestionVoteUp(HttpServletRequest request, HttpServletResponse response,
@@ -117,8 +128,8 @@ public class QuestionController {
   // 추천수 감소 로직
   @PatchMapping("/questions/{question-id}/votes-down")
   public ResponseEntity patchQuestionVoteDown(HttpServletRequest request, HttpServletResponse response,
-                                          @PathVariable("question-id") @Positive long questionId,
-                                          @Valid @RequestBody QuestionVotePatchDto questionVotePatchDto) {
+                                            @PathVariable("question-id") @Positive long questionId,
+                                            @Valid @RequestBody QuestionVotePatchDto questionVotePatchDto) {
     questionVotePatchDto.setQuestionId(questionId);
     Question question = questionMapper.questionVotePatchDtoToQuestion(questionVotePatchDto);
     question = questionService.updateQuestionVote(request, response, question, "down");

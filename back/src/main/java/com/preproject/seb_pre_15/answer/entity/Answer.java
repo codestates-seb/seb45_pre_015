@@ -9,10 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -26,7 +23,7 @@ public class Answer extends Auditable {
     private String body;
 
     @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne
@@ -40,25 +37,21 @@ public class Answer extends Auditable {
     private List<AnswerComment> answerComments = new ArrayList<>();
 
     @Column
-    private Long vote;
+    private Long vote = 0L;
 
     @Column
     private String images;
     
-    public Answer(String body, Member member, Question question) {
+    public Answer(String body, Member member, Question question, long vote) {
         this.body = body;
         this.member = member;
         this.question = question;
+        this.vote = vote;
     }
     
-    public Answer() {
-    
-    }
+    public Answer() {}
     
     //더미 생성용 생성자
-    
-
-
     public void addAnswerComment(AnswerComment answerComment){
         if (answerComment.getAnswer() != this) answerComment.setAnswer(this);
         answerComments.add(answerComment);

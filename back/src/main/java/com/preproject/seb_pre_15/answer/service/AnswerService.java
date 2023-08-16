@@ -14,7 +14,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @Service
@@ -71,5 +75,47 @@ public class AnswerService {
             new BusinessLogicException(ExceptionCode.ANSWER_NOT_FOUND));
 
     return findAnswer;
+  }
+  
+  // 투표수 증감 로직
+  @Transactional
+  public Answer updateAnswerVote(HttpServletRequest request, HttpServletResponse response, Answer answer, String voteType) {
+    Answer findAnswer = findVerifiedAnswerByQuery(answer.getAnswerId());
+    //어뷰징 방지 로직
+    if (Math.abs(findAnswer.getVote() - answer.getVote()) != 1) {
+      throw new BusinessLogicException(ExceptionCode.INVALID_VOTE);
+    }
+    //쿠키가 없으면 생성하고 투표수 반영
+    if (shouldUpdateAnswerVote(request, response, findAnswer, answer, voteType)) {
+      findAnswer.setVote(answer.getVote());
+      
+      Cookie votedCookie = new Cookie("voted_answer_" + findAnswer.getAnswerId(), voteType);
+      votedCookie.setMaxAge(86400);
+      response.addCookie(votedCookie);
+    }
+    
+    return answerRepository.save(findAnswer);
+  }
+  
+  private boolean shouldUpdateAnswerVote(HttpServletRequest request, HttpServletResponse response, Answer findAnswer, Answer answer, String voteType) {
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null) {
+      for (Cookie cookie : cookies) {
+        if (cookie.getName().equals("voted_answer_" + findAnswer.getAnswerId())) {
+          //쿠키가 있지만 이전 쿠키 타입이 다르면 값을 변경하고 투표수 반영
+          if (cookie.getValue().equals("down") && voteType.equals("up")) {
+            cookie.setValue("up");
+            response.addCookie(cookie);
+            findAnswer.setVote(answer.getVote());
+          } else if (cookie.getValue().equals("up") && voteType.equals("down")) {
+            cookie.setValue("down");
+            response.addCookie(cookie);
+            findAnswer.setVote(answer.getVote());
+          }
+          return false;
+        }
+      }
+    }
+    return true;
   }
 }
