@@ -88,7 +88,7 @@ public class QuestionService {
   //멤버별 질문글 전체조회
   //조회되는 엔티티 값에 따라 page값을 설정해야 합니다, 예로 게시글이 총 30개가 있으면 page의 범위는 0~5까지가 됩니다)
   public Page<Question> findMemberQuestions(int page,long memberId) {
-    Pageable pageable = PageRequest.of(page, 5, Sort.by("questionId").descending());
+    Pageable pageable = PageRequest.of(page, 15, Sort.by("questionId").descending());
     Page<Question> findQuestions = questionRepository.findByMemberMemberId(memberId, pageable);
     
     return findQuestions;
@@ -109,9 +109,9 @@ public class QuestionService {
     questionRepository.delete(question);
   }
   
-  //질문 글 검색 기능, 10개씩 출력됩니다
-  public Page<Question> findSearchWordQuestions(String searchWord) {
-    Pageable pageable = PageRequest.of(0, 10, Sort.by("questionId").descending());
+  //질문 글 검색 기능, 15개씩 출력됩니다
+  public Page<Question> findSearchWordQuestions(String searchWord, int page) {
+    Pageable pageable = PageRequest.of(page, 15, Sort.by("questionId").descending());
     Page<Question> findQuestions = questionRepository.findBySearchWordQuestion(searchWord, pageable);
     
     return findQuestions;
@@ -121,12 +121,13 @@ public class QuestionService {
   @Transactional
   public Question updateQuestionVote(HttpServletRequest request, HttpServletResponse response, Question question, String voteType) {
     Question findQuestion = findVerifiedQuestionByQuery(question.getQuestionId());
-    //어뷰징 방지 로직
-    if (Math.abs(findQuestion.getVote() - question.getVote()) != 1) {
-      throw new BusinessLogicException(ExceptionCode.INVALID_VOTE);
-    }
+    
     //쿠키가 없으면 생성하고 투표수 반영
     if (shouldUpdateQuestionVote(request, response, findQuestion, question, voteType)) {
+      //어뷰징 방지 로직
+      if (Math.abs(findQuestion.getVote() - question.getVote()) != 1) {
+        throw new BusinessLogicException(ExceptionCode.INVALID_VOTE);
+      }
       findQuestion.setVote(question.getVote());
       
       Cookie votedCookie = new Cookie("voted_question_" + findQuestion.getQuestionId(), voteType);
@@ -141,16 +142,20 @@ public class QuestionService {
     if (cookies != null) {
       for (Cookie cookie : cookies) {
         if (cookie.getName().equals("voted_question_" + findQuestion.getQuestionId())) {
-          //쿠키가 있지만 이전 쿠키 타입이 다르면 값을 변경하고 투표수 반영
-          if (cookie.getValue().equals("down") && voteType.equals("up")) {
-            cookie.setValue("up");
-            response.addCookie(cookie);
-            findQuestion.setVote(question.getVote());
-          } else if (cookie.getValue().equals("up") && voteType.equals("down")) {
-            cookie.setValue("down");
-            response.addCookie(cookie);
-            findQuestion.setVote(question.getVote());
+          //어뷰징 방지 로직
+          if (Math.abs(findQuestion.getVote() - question.getVote()) != 2) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_VOTE);
           }
+          //쿠키가 있지만 이전 쿠키 타입이 다르면 값을 변경하고 투표수 반영
+            if (cookie.getValue().equals("down") && voteType.equals("up")) {
+              cookie.setValue("up");
+              response.addCookie(cookie);
+              findQuestion.setVote(question.getVote());
+            } else if (cookie.getValue().equals("up") && voteType.equals("down")) {
+              cookie.setValue("down");
+              response.addCookie(cookie);
+              findQuestion.setVote(question.getVote());
+            }
           return false;
         }
       }

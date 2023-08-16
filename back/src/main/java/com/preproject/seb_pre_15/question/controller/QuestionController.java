@@ -29,9 +29,9 @@ import java.util.List;
 public class QuestionController {
   private final QuestionService questionService;
   private final QuestionMapper questionMapper;
-  public QuestionController(QuestionService questionService, QuestionMapper questionMepper) {
+  public QuestionController(QuestionService questionService, QuestionMapper questionMapper) {
     this.questionService = questionService;
-    this.questionMapper = questionMepper;
+    this.questionMapper = questionMapper;
   }
   
   //질문 글 등록
@@ -74,8 +74,7 @@ public class QuestionController {
     return new ResponseEntity<>(responseDto,HttpStatus.OK);
   }
   
-  //맴버별 질문 글 조회, 5개씩 출력됩니다
-  //게시글이 총 30개가 있으면 page의 범위는 0~5까지가 됩니다)
+  //맴버별 질문 글 조회, 15개씩 출력됩니다
   @GetMapping("/{member-id}/questions")
   public ResponseEntity getMemberQuestion(@Positive @RequestParam int page,
       @PathVariable("member-id") long memberId) {
@@ -96,8 +95,9 @@ public class QuestionController {
   
   //질문글 검색 기능
   @GetMapping("/questions/search-word")
-  public ResponseEntity getQuestionSearch(@RequestParam(value = "search-word" ) String searchWord) {
-    Page<Question> pageOrders = questionService.findSearchWordQuestions(searchWord);
+  public ResponseEntity getQuestionSearch(@RequestParam(value = "search-word" ) String searchWord,
+                                          @Positive int page) {
+    Page<Question> pageOrders = questionService.findSearchWordQuestions(searchWord, page);
     List<Question> questions = pageOrders.getContent();
     List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
     

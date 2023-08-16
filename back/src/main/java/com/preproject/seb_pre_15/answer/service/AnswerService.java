@@ -59,8 +59,8 @@ public class AnswerService {
     answerRepository.delete(answer);
   }
   //멤버별 답변글 전체조회
-  public Page<Answer> findMemberAnswers(Long memberId) {
-    Pageable pageable = PageRequest.of(0, 5, Sort.by("answerId").descending());
+  public Page<Answer> findMemberAnswers(Long memberId, int page) {
+    Pageable pageable = PageRequest.of(page, 15, Sort.by("answerId").descending());
     Page<Answer> optionalPage = answerRepository.findByMemberMemberId(memberId, pageable);
 
     return optionalPage;
@@ -81,12 +81,13 @@ public class AnswerService {
   @Transactional
   public Answer updateAnswerVote(HttpServletRequest request, HttpServletResponse response, Answer answer, String voteType) {
     Answer findAnswer = findVerifiedAnswerByQuery(answer.getAnswerId());
-    //어뷰징 방지 로직
-    if (Math.abs(findAnswer.getVote() - answer.getVote()) != 1) {
-      throw new BusinessLogicException(ExceptionCode.INVALID_VOTE);
-    }
+    
     //쿠키가 없으면 생성하고 투표수 반영
     if (shouldUpdateAnswerVote(request, response, findAnswer, answer, voteType)) {
+      //어뷰징 방지 로직
+      if (Math.abs(findAnswer.getVote() - answer.getVote()) != 1) {
+        throw new BusinessLogicException(ExceptionCode.INVALID_VOTE);
+      }
       findAnswer.setVote(answer.getVote());
       
       Cookie votedCookie = new Cookie("voted_answer_" + findAnswer.getAnswerId(), voteType);
@@ -102,6 +103,10 @@ public class AnswerService {
     if (cookies != null) {
       for (Cookie cookie : cookies) {
         if (cookie.getName().equals("voted_answer_" + findAnswer.getAnswerId())) {
+          //어뷰징 방지 로직
+          if (Math.abs(findAnswer.getVote() - answer.getVote()) != 2) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_VOTE);
+          }
           //쿠키가 있지만 이전 쿠키 타입이 다르면 값을 변경하고 투표수 반영
           if (cookie.getValue().equals("down") && voteType.equals("up")) {
             cookie.setValue("up");

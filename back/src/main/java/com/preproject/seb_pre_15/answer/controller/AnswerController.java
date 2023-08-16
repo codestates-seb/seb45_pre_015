@@ -60,8 +60,9 @@ public class AnswerController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @GetMapping("/{memberId}/answers")
-    public ResponseEntity getMemberAnswers(@PathVariable("memberId") @Positive Long memberId){
-        Page<Answer> pageAnswers = answerService.findMemberAnswers(memberId);
+    public ResponseEntity getMemberAnswers(@Positive @RequestParam int page,
+                                           @PathVariable("memberId") @Positive Long memberId){
+        Page<Answer> pageAnswers = answerService.findMemberAnswers(memberId, page);
         List<Answer> answers = pageAnswers.getContent();
         List<AnswerResponseDto> response = answerMapper.answersToAnswerResponseDtos(answers);
         return new ResponseEntity<>(response, HttpStatus.OK);
