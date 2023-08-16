@@ -3,6 +3,7 @@ package com.preproject.seb_pre_15.auth.config;
 
 //import com.preproject.seb_pre_15.auth.filter.JwtExceptionFilter;
 import com.preproject.seb_pre_15.auth.filter.JwtVerificationFilter;
+import com.preproject.seb_pre_15.auth.handler.MemberAuthenticationEntryPoint;
 import com.preproject.seb_pre_15.auth.handler.OAuth2memberSuccessHandler;
 import com.preproject.seb_pre_15.auth.jwt.JwtTokenizer;
 import com.preproject.seb_pre_15.auth.utils.CustomAuthorityUtils;
@@ -50,6 +51,7 @@ public class SecurityConfiguration {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .exceptionHandling()
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint(jwtTokenizer,authorityUtils))
                 .and()
                 .apply(new CustomFilterConfigurer())
                 .and()
@@ -70,9 +72,9 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.DELETE,"/**/question-comment/**").hasRole("USER")
                         .anyRequest().permitAll()
                 )
-
-
-                .oauth2Login(oauth2 -> oauth2.successHandler(new OAuth2memberSuccessHandler(jwtTokenizer,authorityUtils,memberService)));
+                .oauth2Login(oauth2 -> oauth2.successHandler(new OAuth2memberSuccessHandler(jwtTokenizer,authorityUtils,memberService)))
+                .logout()
+                .logoutSuccessUrl("/logout");
         return http.build();
     }
 
