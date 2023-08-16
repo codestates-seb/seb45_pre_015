@@ -1,7 +1,7 @@
-import { link } from 'fs';
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
+import { fetchUserInfo } from '../util/fetchlogin';
 //아이콘등 추후 추가바람
 
 const Header: React.FC = () => {
@@ -10,7 +10,7 @@ const Header: React.FC = () => {
     const [userProfileImageLink, setUserProfileImageLink] = useState<string>('');
     const [searchText, setSearchText] = useState<string>('');
     const search = useRef<HTMLInputElement | null>(null);
-    const [menu, setMenu] = useState(false);
+    const [menu, setMenu] = useState<boolean>(false);
     const handleClick = () => {
       setMenu((prevMenu) => !prevMenu);
     };
@@ -41,7 +41,7 @@ const Header: React.FC = () => {
       
       if (sessionStorage.getItem('access_token') && !isLoginPath) {
         setIsLogin(true);
-        //getUserProfile();
+        getUserProfile();
         setUserProfileImageLink(`/mypage/${sessionStorage.getItem('accountId')}`);
       } else {
         setIsLogin(false);
@@ -57,17 +57,17 @@ const Header: React.FC = () => {
       setIsFocus(true);
     };
   
-    // const getUserProfile = async () => {
-    //   try {
-    //     const data = await fetchUserInfo(); //나중에 받아와야되는거
-    //     setUserProfileImage(data.profile);
+    const getUserProfile = async () => {
+      try {
+        const data = await fetchUserInfo(); //나중에 받아와야되는거
+        setUserProfileImage(data.profile);
   
-    //     sessionStorage.setItem('userEmail', data.email);
-    //     sessionStorage.setItem('accountId', data.accountId);
-    //   } catch (error) {
+        sessionStorage.setItem('userEmail', data.email);
+        sessionStorage.setItem('accountId', data.accountId);
+      } catch (error) {
         
-    //   }
-    // };
+      }
+    };
   
     const LoginGNB: React.FC = () => {
       return (
@@ -99,7 +99,7 @@ const Header: React.FC = () => {
             <Link to="/login">Log in</Link>
           </button>
           <button className="px-2 py-1 mx-1 text-white border rounded hover:bg-buttonPrimaryHover bg-buttonPrimary border-secondary-300">
-            <Link to="http://localhost:8080/oauth2/authorization/google">Sign up</Link>
+            <Link to="/signup">Sign up</Link>
           </button>
         </>
       );
