@@ -8,7 +8,6 @@ const LoginInfo: React.FC = () => {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const [isValidate, setIsValidate] = useState(false);
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
