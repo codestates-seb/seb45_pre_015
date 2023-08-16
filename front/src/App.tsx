@@ -5,7 +5,6 @@ import Header from './component/header';
 import Footer from './component/footer';
 import Login from './page/Login';
 import Signup from './page/Signup';
-import {fetchLogin} from "./util/fetchlogin";
 
 const App:React.FC = () => {
   return (
