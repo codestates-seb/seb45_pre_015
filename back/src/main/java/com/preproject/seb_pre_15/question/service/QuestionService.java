@@ -7,6 +7,7 @@ import com.preproject.seb_pre_15.question.entity.Question;
 import com.preproject.seb_pre_15.question.repository.QuestionRepository;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -22,29 +23,33 @@ public class QuestionService {
   public QuestionService(QuestionRepository questionRepository) {
     this.questionRepository = questionRepository;
   }
+  
   //질문글 등록
-  public Question createQuestion(Question Question){
+  public Question createQuestion(Question question) {
     
-    return questionRepository.save(Question);
+    return questionRepository.save(question);
   }
+  
   //질문글 수정
-  public Question updateQuestion(Question Question){
+  public Question updateQuestion(Question question) {
     
-    return questionRepository.save(Question);
+    return questionRepository.save(question);
   }
- 
+  
   //Answer 조회용 Question 조회
   public Question findQuestion(long questionId) {
     return findVerifiedQuestionByQuery(questionId);
   }
+  
   //질문글 조회(게시판 -> 본문), 해당 질문글 조회수 증가
   public Question findQuestion(long questionId, HttpServletRequest request, HttpServletResponse response) {
     Question findQuestion = findVerifiedQuestionByQuery(questionId);
     
     return questionRepository.save(addQuestionView(request, response, findQuestion));
   }
+  
   //조회수 증가, 조회글 쿠키 생성 로직
-  private Question addQuestionView(HttpServletRequest request, HttpServletResponse response, Question findQuestion){
+  private Question addQuestionView(HttpServletRequest request, HttpServletResponse response, Question findQuestion) {
     if (shouldUpdateQuestionView(request, findQuestion)) {// 쿠키 조회, 없으면 조회수 증가 + 쿠키 생성
       findQuestion.setView(findQuestion.getView() + 1);
       
@@ -67,6 +72,7 @@ public class QuestionService {
     }
     return true; //배열에서 없으면 true 리턴 -> 조회수 증가
   }
+  
   //질문글 전체조회(게시판 조회)
   public Page<Question> findQuestions(int page, int size) {
     return questionRepository.findAll(PageRequest.of(page, size,
@@ -81,7 +87,7 @@ public class QuestionService {
     return findQuestions;
   }
   
-    //본문 조회 로직
+  //본문 조회 로직
   private Question findVerifiedQuestionByQuery(long questionId) {
     Optional<Question> optionalQuestion = questionRepository.findById(questionId);
     Question findQuestion =
@@ -95,6 +101,7 @@ public class QuestionService {
     Question question = findVerifiedQuestionByQuery(questionId);
     questionRepository.delete(question);
   }
+  
   //질문 글 검색 기능, 10개씩 출력됩니다
   public Page<Question> findSearchWordQuestions(String searchWord) {
     Pageable pageable = PageRequest.of(0, 10, Sort.by("questionId").descending());
@@ -102,4 +109,48 @@ public class QuestionService {
     
     return findQuestions;
   }
+  
+  // 투표수 증감 로직
+  @Transactional
+  public Question updateQuestionVote(HttpServletRequest request, HttpServletResponse response, Question question, String voteType) {
+    Question findQuestion = findVerifiedQuestionByQuery(question.getQuestionId());
+    //어뷰징 방지 로직
+    if (Math.abs(findQuestion.getVote() - question.getVote()) != 1) {
+      throw new BusinessLogicException(ExceptionCode.INVALID_VOTE);
+    }
+    //쿠키가 없으면 생성하고 투표수 반영
+    if (shouldUpdateQuestionVote(request, response, findQuestion, question, voteType)) {
+      findQuestion.setVote(question.getVote());
+      
+      Cookie votedCookie = new Cookie("voted_question_" + findQuestion.getQuestionId(), voteType);
+      votedCookie.setMaxAge(86400);
+      response.addCookie(votedCookie);
+    }
+    
+    return questionRepository.save(findQuestion);
+  }
+  
+  private boolean shouldUpdateQuestionVote(HttpServletRequest request, HttpServletResponse response, Question findQuestion, Question question, String voteType) {
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null) {
+      for (Cookie cookie : cookies) {
+        if (cookie.getName().equals("voted_question_" + findQuestion.getQuestionId())) {
+          //쿠키가 있지만 이전 쿠키 타입이 다르면 값을 변경하고 투표수 반영
+          if (cookie.getValue().equals("down") && voteType.equals("up")) {
+            cookie.setValue("up");
+            response.addCookie(cookie);
+            findQuestion.setVote(question.getVote());
+          } else if (cookie.getValue().equals("up") && voteType.equals("down")) {
+            cookie.setValue("down");
+            response.addCookie(cookie);
+            findQuestion.setVote(question.getVote());
+          }
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+  
 }
+

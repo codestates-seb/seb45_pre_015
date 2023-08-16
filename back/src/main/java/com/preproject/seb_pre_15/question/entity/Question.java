@@ -30,11 +30,11 @@ public class Question extends Auditable {
     @Column(nullable = false)
     private Long view = (long) 0.00;
     
+    @Column
+    private Long vote = (long) 0.00;
+    
 //    @Column
 //    private String images;
-//
-//    @Column
-//    private Long vote;
     
     @ManyToOne
     @JoinColumn(name = "member_id")
