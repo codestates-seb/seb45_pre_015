@@ -3,6 +3,7 @@ package com.preproject.seb_pre_15.answer.mapper;
 import com.preproject.seb_pre_15.answer.dto.AnswerPatchDto;
 import com.preproject.seb_pre_15.answer.dto.AnswerPostDto;
 import com.preproject.seb_pre_15.answer.dto.AnswerResponseDto;
+import com.preproject.seb_pre_15.answer.dto.AnswerVotePatchDto;
 import com.preproject.seb_pre_15.answer.entity.Answer;
 import org.mapstruct.Mapper;
 
@@ -14,4 +15,5 @@ public interface AnswerMapper {
     Answer answerPatchDtoToAnswer(AnswerPatchDto answerPatchDto);
     AnswerResponseDto answerToAnswerResponseDto(Answer answer);
     List<AnswerResponseDto> answersToAnswerResponseDtos(List<Answer> answers);
+    Answer answerVotePatchDtoToAnswer(AnswerVotePatchDto answerVotePatchDto);
 }
