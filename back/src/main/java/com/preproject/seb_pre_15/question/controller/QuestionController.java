@@ -103,14 +103,25 @@ public class QuestionController {
     return new ResponseEntity<>(response,HttpStatus.OK);
   }
   
-  //추천수 반영 로직
-  @PatchMapping("/questions/{question-id}/votes")
-  public ResponseEntity patchQuestionVote(HttpServletRequest request, HttpServletResponse response,
+  //추천수 증가 로직
+  @PatchMapping("/questions/{question-id}/votes-up")
+  public ResponseEntity patchQuestionVoteUp(HttpServletRequest request, HttpServletResponse response,
                                           @PathVariable("question-id") @Positive long questionId,
                                           @Valid @RequestBody QuestionVotePatchDto questionVotePatchDto) {
     questionVotePatchDto.setQuestionId(questionId);
     Question question = questionMapper.questionVotePatchDtoToQuestion(questionVotePatchDto);
-    question = questionService.updateQuestionVote(request, response, question);
+    question = questionService.updateQuestionVote(request, response, question, "up");
+    QuestionResponseDto responseDto = questionMapper.questionToQuestionResponseDto(question);
+    return new ResponseEntity<>(responseDto, HttpStatus.OK);
+  }
+  // 추천수 감소 로직
+  @PatchMapping("/questions/{question-id}/votes-down")
+  public ResponseEntity patchQuestionVoteDown(HttpServletRequest request, HttpServletResponse response,
+                                          @PathVariable("question-id") @Positive long questionId,
+                                          @Valid @RequestBody QuestionVotePatchDto questionVotePatchDto) {
+    questionVotePatchDto.setQuestionId(questionId);
+    Question question = questionMapper.questionVotePatchDtoToQuestion(questionVotePatchDto);
+    question = questionService.updateQuestionVote(request, response, question, "down");
     QuestionResponseDto responseDto = questionMapper.questionToQuestionResponseDto(question);
     return new ResponseEntity<>(responseDto, HttpStatus.OK);
   }
