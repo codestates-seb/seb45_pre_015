@@ -42,6 +42,8 @@ public class Answer extends Auditable {
     @Column
     private String images;
     
+    
+    //더미 생성용 생성자
     public Answer(String body, Member member, Question question, long vote) {
         this.body = body;
         this.member = member;
@@ -50,8 +52,6 @@ public class Answer extends Auditable {
     }
     
     public Answer() {}
-    
-    //더미 생성용 생성자
     public void addAnswerComment(AnswerComment answerComment){
         if (answerComment.getAnswer() != this) answerComment.setAnswer(this);
         answerComments.add(answerComment);
