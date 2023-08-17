@@ -1,4 +1,5 @@
 import { showToast } from '../component/Toast';
+import {useState} from "react";
 
 export const fetchLogin = async (data: string): Promise<Response> => {
   try {
@@ -40,21 +41,31 @@ export const fetchLogin = async (data: string): Promise<Response> => {
 
 export const fetchUserInfo = async (): Promise<any> => {
   try {
-    const response = await fetch(`/members/mypage`, {
+    const response = await fetch(`http://localhost:8080/members/mypage`, {
       method: 'GET',
+      mode: 'cors',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
         Accept: 'application/json',
-        authorization: sessionStorage.getItem('access_token') ?? '',
+        Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
+        Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? ''
       },
-    });
+      redirect: "follow",
+      // })
+    })
 
-    if (!response.ok) {
-      throw new Error('Could not fetch the data for that resource');
-    }
+      if (!response.ok) {
+        throw new Error('Could not fetch the data for that resource');
+      }
 
+      if (response.headers.get("Authorization")!== null) {
+
+        const accessToken = response.headers.get("Authorization");
+        sessionStorage.setItem('access_token', accessToken ?? '');
+      }
     return response.json();
-  } catch (error: any) {
+
+    } catch (error: any) {
     console.error(error.message);
     throw error;
   }
@@ -63,6 +74,8 @@ export const fetchUserInfo = async (): Promise<any> => {
 export const checkIfLogined = async (): Promise<void> => {
   try {
     const data = await fetchUserInfo();
+    sessionStorage.setItem( "memberEmail",data.email);
+    sessionStorage.setItem( "accountId", data.memberId);
 
     if (!data) {
       console.log('Please log in.');

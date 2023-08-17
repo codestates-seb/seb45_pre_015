@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,17 +24,24 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberMapper memberMapper;
 
-    // 회원 정보
-    @GetMapping("{member-id}")
-    public ResponseEntity memberDetails(@PathVariable("member-id") @Positive Long memberId){
+    @GetMapping("{memberId}")
+    public ResponseEntity memberDetails(@PathVariable("memberId") @Positive Long memberId){
         Member member = memberService.findMember(memberId);
         MemberResponseDto response = memberMapper.memberToMemberResponseDto(member);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 회원 수정
-    @PatchMapping("{member-id}")
-    public ResponseEntity memberUpdate(@PathVariable("member-id") @Positive Long memberId,
+    @GetMapping("/mypage")
+    public ResponseEntity getMember(){
+        System.out.println("++++이부분에서 지금 접속한 사용자를 읽어옵니다.!!!+++++"+SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        String email = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        MemberResponseDto response= memberMapper.memberToMemberResponseDto(memberService.findMemberByEmail(email));
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @PatchMapping("{memberId}")
+    public ResponseEntity memberUpdate(@PathVariable("memberId") @Positive Long memberId,
                                        @Valid @RequestBody MemberPatchDto memberPatchDto){
 
         Member member = memberService.updateMember(memberMapper.memberPatchDtoToMember(memberPatchDto),memberId);
@@ -42,9 +50,8 @@ public class MemberController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 회원 삭제
-    @DeleteMapping("{member-id}")
-    public ResponseEntity memberDelete(@PathVariable("member-id") @Positive Long memberId){
+    @DeleteMapping("{memberId}")
+    public ResponseEntity memberDelete(@PathVariable("memberId") @Positive Long memberId){
         memberService.deleteMember(memberId);
 
         return new ResponseEntity<>("success delete member", HttpStatus.NO_CONTENT);

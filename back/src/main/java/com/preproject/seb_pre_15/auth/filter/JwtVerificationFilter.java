@@ -35,7 +35,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String authorization = request.getHeader("Authorization");
-        System.out.println("++++++++++++++++++++++++++++++++++++++"+authorization+"++++++++++++++++++++++++++++++++++++++");
+        System.out.println("+++++++++++++++++++AccessToken+++++++++++++++++++"+authorization+"++++++++++++++++++++++++++++++++++++++");
 
         return authorization == null || !authorization.startsWith("Bearer");
     }
@@ -57,9 +57,9 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         }
 
 
-        System.out.println((SecurityContextHolder.getContext().getAuthentication()));
 
         filterChain.doFilter(request,response);
+        System.out.println("doFilterInternal user::"+SecurityContextHolder.getContext().getAuthentication());
 
     }
 

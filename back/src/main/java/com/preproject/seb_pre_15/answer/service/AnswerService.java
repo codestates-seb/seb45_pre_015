@@ -40,7 +40,8 @@ public class AnswerService {
     return answerRepository.save(answer);
   }
   //답변글 수정
-  public Answer updateAnswer(Answer answer, Long answerId){
+  public Answer updateAnswer(Answer answer, long answerId, long memberId){
+    memberService.verifySameUser(memberId);
     Answer updateFindAnswer = findAnswer(answerId);
     updateFindAnswer.setBody(answer.getBody());
     return answerRepository.save(updateFindAnswer);
