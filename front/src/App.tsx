@@ -21,7 +21,6 @@ const App:React.FC = () => {
             <Route path="/mytokens" element={<MyTokens />} />
             <Route path="/myrefreshtoken" element={<MyRefreshToken />} />
         </Routes>
-          <h1> {sessionStorage.getItem("memberEmail")} </h1>
       </main>
       <Footer />
     </BrowserRouter>
