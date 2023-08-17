@@ -28,13 +28,13 @@ public class Question extends Auditable {
     private String body;
     
     @Column(nullable = false)
-    private Long view = (long) 0.00;
+    private Long view = 0L;
+    
+    @Column
+    private Long vote = 0L;
     
 //    @Column
 //    private String images;
-//
-//    @Column
-//    private Long vote;
     
     @ManyToOne
     @JoinColumn(name = "member_id")
@@ -52,13 +52,12 @@ public class Question extends Auditable {
     }
 
     //더미 생성용 생성자
-    public Question(String title, String body, Member member) {
+    public Question(String title, String body, Member member, long vote) {
         this.title = title;
         this.body = body;
         this.member = member;
+        this.vote = vote;
     }
 
-    public Question() {
-
-    }
+    public Question() {}
 }

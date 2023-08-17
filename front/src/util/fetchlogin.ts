@@ -1,8 +1,8 @@
-import axios from 'axios';
+import { showToast } from '../component/Toast';
 
 export const fetchLogin = async (data: string): Promise<Response> => {
   try {
-    const response = await fetch(`/auth/login`, {
+    const response = await fetch(``, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
@@ -10,23 +10,25 @@ export const fetchLogin = async (data: string): Promise<Response> => {
       },
       body: data,
     });
-
+    
     if (!response.ok) {
-      console.log(response);
       if (response.status === 401) {
-        console.error('Wrong Email or Password');
+        throw new Error('Wrong Email or Password');
       }
-      throw new Error('could not fetch the data for that resource');
+      throw new Error('Could not fetch the data for that resource');
     }
 
     if (response.status === 200) {
-      console.log('Login Success!');
-
       // 토큰 저장
-      const accessToken = response.headers.get('Authorization');
-      const refreshToken = response.headers.get('refresh');
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const accessToken = urlParams.get('access_token');
+      const refreshToken = urlParams.get('refresh_token');
       sessionStorage.setItem('access_token', accessToken ?? '');
       sessionStorage.setItem('refresh_token', refreshToken ?? '');
+      console.log('Login Success!');
+      const redirectUrl = `/header?access_token=${accessToken}&refresh_token=${refreshToken}`;
+      window.location.replace(redirectUrl);
     }
 
     return response;
@@ -36,10 +38,9 @@ export const fetchLogin = async (data: string): Promise<Response> => {
   }
 };
 
-// 조회
 export const fetchUserInfo = async (): Promise<any> => {
   try {
-    const response = await fetch(`/accounts/user`, {
+    const response = await fetch(`/members/mypage`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
@@ -49,7 +50,7 @@ export const fetchUserInfo = async (): Promise<any> => {
     });
 
     if (!response.ok) {
-      throw new Error('could not fetch the data for that resource');
+      throw new Error('Could not fetch the data for that resource');
     }
 
     return response.json();
@@ -64,12 +65,13 @@ export const checkIfLogined = async (): Promise<void> => {
     const data = await fetchUserInfo();
 
     if (!data) {
+      console.log('Please log in.');
+      showToast('Please log in.', 'danger');
       setTimeout(() => {
         window.location.href = '/login';
       }, 1500);
-      console.log('Please log in.');
     }
   } catch (error) {
-    console.error(error);
+    console.error('Error while checking login status:', error);
   }
 };

@@ -3,6 +3,7 @@ package com.preproject.seb_pre_15.question.controller;
 import com.preproject.seb_pre_15.question.dto.QuestionPatchDto;
 import com.preproject.seb_pre_15.question.dto.QuestionPostDto;
 import com.preproject.seb_pre_15.question.dto.QuestionResponseDto;
+import com.preproject.seb_pre_15.question.dto.QuestionVotePatchDto;
 import com.preproject.seb_pre_15.question.entity.Question;
 import com.preproject.seb_pre_15.question.mapper.QuestionMapper;
 
@@ -15,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
@@ -26,9 +29,9 @@ import java.util.List;
 public class QuestionController {
   private final QuestionService questionService;
   private final QuestionMapper questionMapper;
-  public QuestionController(QuestionService questionService, QuestionMapper questionMepper) {
+  public QuestionController(QuestionService questionService, QuestionMapper questionMapper) {
     this.questionService = questionService;
-    this.questionMapper = questionMepper;
+    this.questionMapper = questionMapper;
   }
   
   //질문 글 등록
@@ -61,20 +64,21 @@ public class QuestionController {
     return new ResponseEntity<>(response,HttpStatus.OK);
   }
   
-  //선택 질문 글 조회
+  //선택 질문 글 조회 + 쿠키 조회 및 조회수 증가
   @GetMapping("/questions/{question-id}")
-  public ResponseEntity getQuestion(@PathVariable("question-id") @Positive long questionId) {
-    Question question = questionService.findQuestion(questionId);
-    QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
+  public ResponseEntity getQuestion(HttpServletRequest request, HttpServletResponse response,
+                                    @PathVariable("question-id") @Positive long questionId ) {
+    Question question = questionService.findQuestion(questionId, request, response);
+    QuestionResponseDto responseDto = questionMapper.questionToQuestionResponseDto(question);
     
-    return new ResponseEntity<>(response,HttpStatus.OK);
+    return new ResponseEntity<>(responseDto,HttpStatus.OK);
   }
   
-  //맴버별 질문 글 조회, 5개씩 출력됩니다
+  //맴버별 질문 글 조회, 15개씩 출력됩니다
   @GetMapping("/{member-id}/questions")
-  public ResponseEntity getMemberQuestion(
+  public ResponseEntity getMemberQuestion(@Positive @RequestParam int page,
       @PathVariable("member-id") long memberId) {
-    Page<Question> pageOrders = questionService.findMemberQuestions(memberId);
+    Page<Question> pageOrders = questionService.findMemberQuestions(page, memberId);
     List<Question> questions = pageOrders.getContent();
     List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
 
@@ -90,12 +94,46 @@ public class QuestionController {
   }
   
   //질문글 검색 기능
-  @GetMapping("/questions/search_word")
-  public ResponseEntity getQuestionSearch(@RequestParam(value = "searchWord" ) String searchWord) {
-    Page<Question> pageOrders = questionService.findSearchWordQuestions(searchWord);
+  @GetMapping("/questions/search-word")
+  public ResponseEntity getQuestionSearch(@RequestParam(value = "search-word" ) String searchWord,
+                                          @Positive int page) {
+    Page<Question> pageOrders = questionService.findSearchWordQuestions(searchWord, page);
     List<Question> questions = pageOrders.getContent();
     List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
     
     return new ResponseEntity<>(response,HttpStatus.OK);
+  }
+  
+  //질문글 Top10 조회(게시판 조회)
+  @GetMapping("/questions/top10")
+  public ResponseEntity getQuestions() {
+    Page<Question> pageOrders = questionService.findTopQuestions();
+    List<Question> questions = pageOrders.getContent();
+    List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
+    
+    return new ResponseEntity<>(response,HttpStatus.OK);
+  }
+  
+  //추천수 증가 로직
+  @PatchMapping("/questions/{question-id}/votes-up")
+  public ResponseEntity patchQuestionVoteUp(HttpServletRequest request, HttpServletResponse response,
+                                          @PathVariable("question-id") @Positive long questionId,
+                                          @Valid @RequestBody QuestionVotePatchDto questionVotePatchDto) {
+    questionVotePatchDto.setQuestionId(questionId);
+    Question question = questionMapper.questionVotePatchDtoToQuestion(questionVotePatchDto);
+    question = questionService.updateQuestionVote(request, response, question, "up");
+    QuestionResponseDto responseDto = questionMapper.questionToQuestionResponseDto(question);
+    return new ResponseEntity<>(responseDto, HttpStatus.OK);
+  }
+  // 추천수 감소 로직
+  @PatchMapping("/questions/{question-id}/votes-down")
+  public ResponseEntity patchQuestionVoteDown(HttpServletRequest request, HttpServletResponse response,
+                                            @PathVariable("question-id") @Positive long questionId,
+                                            @Valid @RequestBody QuestionVotePatchDto questionVotePatchDto) {
+    questionVotePatchDto.setQuestionId(questionId);
+    Question question = questionMapper.questionVotePatchDtoToQuestion(questionVotePatchDto);
+    question = questionService.updateQuestionVote(request, response, question, "down");
+    QuestionResponseDto responseDto = questionMapper.questionToQuestionResponseDto(question);
+    return new ResponseEntity<>(responseDto, HttpStatus.OK);
   }
 }

@@ -9,7 +9,7 @@ public enum ExceptionCode {
     ANSWER_NOT_FOUND(404, "Answer not found"),
     ID_DOESNT_MATCH(403, "Id doesnt Match"),
     NOT_IMPLEMENTATION(501, "Not Implementation"),
-    NO_MORE_LIKE(403, "Like only once"),
+    INVALID_VOTE(403, "Invalid vote operation detected"),
 
     COMMENT_NOT_EXIST(404, "Comment doesnt exist");
 

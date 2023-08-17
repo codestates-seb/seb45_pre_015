@@ -3,6 +3,7 @@ package com.preproject.seb_pre_15.auth.config;
 
 //import com.preproject.seb_pre_15.auth.filter.JwtExceptionFilter;
 import com.preproject.seb_pre_15.auth.filter.JwtVerificationFilter;
+import com.preproject.seb_pre_15.auth.handler.MemberAuthenticationEntryPoint;
 import com.preproject.seb_pre_15.auth.handler.OAuth2memberSuccessHandler;
 import com.preproject.seb_pre_15.auth.jwt.JwtTokenizer;
 import com.preproject.seb_pre_15.auth.utils.CustomAuthorityUtils;
@@ -50,29 +51,30 @@ public class SecurityConfiguration {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .exceptionHandling()
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint(jwtTokenizer,authorityUtils))
                 .and()
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers("/members/**").hasRole("USER")
-                        .antMatchers(HttpMethod.GET,"/*/members").hasRole("ADMIN")
-                        .antMatchers(HttpMethod.POST,"/**/questions").hasRole("USER")
-                        .antMatchers(HttpMethod.PATCH,"/**/questions/**").hasRole("USER")
-                        .antMatchers(HttpMethod.DELETE,"/**/questions/**").hasRole("USER")
-                        .antMatchers(HttpMethod.POST,"/**/answers").hasRole("USER")
-                        .antMatchers(HttpMethod.PATCH,"/**/answers/**").hasRole("USER")
-                        .antMatchers(HttpMethod.DELETE,"/**/answers/**").hasRole("USER")
-                        .antMatchers(HttpMethod.POST,"/**/answer-comment").hasRole("USER")
-                        .antMatchers(HttpMethod.PATCH,"/**/answer-comment/**").hasRole("USER")
-                        .antMatchers(HttpMethod.DELETE,"/**/answer-comment/**").hasRole("USER")
-                        .antMatchers(HttpMethod.POST,"/**/question-comment").hasRole("USER")
-                        .antMatchers(HttpMethod.PATCH,"/**/question-comment/**").hasRole("USER")
-                        .antMatchers(HttpMethod.DELETE,"/**/question-comment/**").hasRole("USER")
+//                        .antMatchers(HttpMethod.GET,"/*/members").hasRole("ADMIN")
+//                        .antMatchers(HttpMethod.POST,"/**/questions").hasRole("USER")
+//                        .antMatchers(HttpMethod.PATCH,"/**/questions/**").hasRole("USER")
+//                        .antMatchers(HttpMethod.DELETE,"/**/questions/**").hasRole("USER")
+//                        .antMatchers(HttpMethod.POST,"/**/answers").hasRole("USER")
+//                        .antMatchers(HttpMethod.PATCH,"/**/answers/**").hasRole("USER")
+//                        .antMatchers(HttpMethod.DELETE,"/**/answers/**").hasRole("USER")
+//                        .antMatchers(HttpMethod.POST,"/**/answer-comment").hasRole("USER")
+//                        .antMatchers(HttpMethod.PATCH,"/**/answer-comment/**").hasRole("USER")
+//                        .antMatchers(HttpMethod.DELETE,"/**/answer-comment/**").hasRole("USER")
+//                        .antMatchers(HttpMethod.POST,"/**/question-comment").hasRole("USER")
+//                        .antMatchers(HttpMethod.PATCH,"/**/question-comment/**").hasRole("USER")
+//                        .antMatchers(HttpMethod.DELETE,"/**/question-comment/**").hasRole("USER")
                         .anyRequest().permitAll()
                 )
-
-
-                .oauth2Login(oauth2 -> oauth2.successHandler(new OAuth2memberSuccessHandler(jwtTokenizer,authorityUtils,memberService)));
+                .oauth2Login(oauth2 -> oauth2.successHandler(new OAuth2memberSuccessHandler(jwtTokenizer,authorityUtils,memberService)))
+                .logout()
+                .logoutSuccessUrl("/logout");
         return http.build();
     }
 

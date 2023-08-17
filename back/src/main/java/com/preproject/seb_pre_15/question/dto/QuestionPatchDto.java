@@ -11,8 +11,6 @@ public class QuestionPatchDto {
   private String title;
   
   private String body;
-  
-  private Long memberId;
 
 //  private String images;
 //
