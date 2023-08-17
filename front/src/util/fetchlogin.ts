@@ -1,4 +1,5 @@
 import { showToast } from '../component/Toast';
+import {useState} from "react";
 
 export const fetchLogin = async (data: string): Promise<Response> => {
   try {
@@ -10,7 +11,7 @@ export const fetchLogin = async (data: string): Promise<Response> => {
       },
       body: data,
     });
-
+    
     if (!response.ok) {
       if (response.status === 401) {
         throw new Error('Wrong Email or Password');
@@ -24,16 +25,11 @@ export const fetchLogin = async (data: string): Promise<Response> => {
       const urlParams = new URLSearchParams(window.location.search);
       const accessToken = urlParams.get('access_token');
       const refreshToken = urlParams.get('refresh_token');
-      // localStorage.setItem("access_token", accessToken);
-      // localStorage.setItem("refresh_token", refreshToken);
-      //
-      // const accessToken = response.headers.get('Authorization');
-      // const refreshToken = response.headers.get('refresh');
       sessionStorage.setItem('access_token', accessToken ?? '');
       sessionStorage.setItem('refresh_token', refreshToken ?? '');
       console.log('Login Success!');
-
-      window.location.replace('/header')
+      const redirectUrl = `/header?access_token=${accessToken}&refresh_token=${refreshToken}`;
+      window.location.replace(redirectUrl);
     }
 
     return response;
@@ -43,18 +39,20 @@ export const fetchLogin = async (data: string): Promise<Response> => {
   }
 };
 
-// 조회
 export const fetchUserInfo = async (): Promise<any> => {
   try {
-    const response = await fetch(`/members/mypage`, {
+    const response = await fetch(`http://localhost:8080/members/mypage`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
         Accept: 'application/json',
-        authorization: sessionStorage.getItem('access_token') ?? '',
-        //Refresh 토큰도 같이 헤더에 담아서 요청 보내주세요.
+        Authorization: "Bearer "+ sessionStorage.getItem('access_token') ?? '',
+        Refresh: "Bearer "+ sessionStorage.getItem('refresh_token') ?? ''
       },
     });
+
+
+
 
     if (!response.ok) {
       throw new Error('Could not fetch the data for that resource');
@@ -70,6 +68,8 @@ export const fetchUserInfo = async (): Promise<any> => {
 export const checkIfLogined = async (): Promise<void> => {
   try {
     const data = await fetchUserInfo();
+    sessionStorage.setItem( "memberEmail",data.email);
+    sessionStorage.setItem( "accountId", data.memberId);
 
     if (!data) {
       console.log('Please log in.');

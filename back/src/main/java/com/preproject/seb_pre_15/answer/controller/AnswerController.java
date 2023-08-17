@@ -28,18 +28,19 @@ public class AnswerController {
     private final AnswerService answerService;
     private final AnswerMapper answerMapper;
 
-    @PostMapping("/{memberId}/{questionId}/answers")
+    @PostMapping("/answers/{member-id}/{question-id}")
     public ResponseEntity createAnswer(@RequestBody AnswerPostDto answerPostDto,
-                                       @PathVariable("memberId") @Positive Long memberId,
-                                       @PathVariable("questionId") @Positive Long questionId){
+                                       @PathVariable("member-id") @Positive Long memberId,
+                                       @PathVariable("question-id") @Positive Long questionId){
         Answer answer = answerService.createAnswer(answerMapper.answerPostDtoToAnswer(answerPostDto), questionId, memberId);
         AnswerResponseDto response = answerMapper.answerToAnswerResponseDto(answer);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-    @PatchMapping("/{memberId}/{questionId}/answers/{answerId}")
+    @PatchMapping("/answers/{member-id}/{question-id}/{answer-id}")
     public ResponseEntity updateAnswer(@RequestBody AnswerPatchDto answerPatchDto,
-                                       @PathVariable("answerId") @Positive Long answerId){
-        Answer answer = answerService.updateAnswer(answerMapper.answerPatchDtoToAnswer(answerPatchDto), answerId);
+                                       @PathVariable("answer-id") @Positive Long answerId,
+                                       @PathVariable("member-id") @Positive Long memberId){
+        Answer answer = answerService.updateAnswer(answerMapper.answerPatchDtoToAnswer(answerPatchDto), answerId,memberId);
         AnswerResponseDto response = answerMapper.answerToAnswerResponseDto(answer);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

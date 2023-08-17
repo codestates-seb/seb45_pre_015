@@ -3,8 +3,10 @@ package com.preproject.seb_pre_15.question.service;
 import com.preproject.seb_pre_15.exception.BusinessLogicException;
 import com.preproject.seb_pre_15.exception.ExceptionCode;
 import com.preproject.seb_pre_15.member.entity.Member;
+import com.preproject.seb_pre_15.member.service.MemberService;
 import com.preproject.seb_pre_15.question.entity.Question;
 import com.preproject.seb_pre_15.question.repository.QuestionRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,13 +19,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class QuestionService {
   private final QuestionRepository questionRepository;
-  
-  public QuestionService(QuestionRepository questionRepository) {
-    this.questionRepository = questionRepository;
-  }
-  
+
+  private final MemberService memberService;
   //질문글 등록
   public Question createQuestion(Question question) {
     
@@ -31,7 +31,9 @@ public class QuestionService {
   }
   
   //질문글 수정
-  public Question updateQuestion(Question question) {
+  public Question updateQuestion(Question question,long memberId) {
+
+    memberService.verifySameUser(memberId);
     
     return questionRepository.save(question);
   }

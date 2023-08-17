@@ -5,7 +5,8 @@ import Header from './component/header';
 import Footer from './component/footer';
 import Login from './page/Login';
 import Signup from './page/Signup';
-import {fetchLogin} from "./util/fetchlogin";
+import MyTokens from "./page/MyTokens";
+import MyRefreshToken from "./page/MyRefreshToken";
 
 const App:React.FC = () => {
   return (
@@ -14,10 +15,13 @@ const App:React.FC = () => {
       <Header />
       <main className="flex flex-col flex-grow">
         <Routes>
-          <Route path="/" element={''} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+            <Route path="/" element={''} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/mytokens" element={<MyTokens />} />
+            <Route path="/myrefreshtoken" element={<MyRefreshToken />} />
         </Routes>
+          <h1> {sessionStorage.getItem("memberEmail")} </h1>
       </main>
       <Footer />
     </BrowserRouter>
