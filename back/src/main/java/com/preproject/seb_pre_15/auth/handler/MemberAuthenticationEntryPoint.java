@@ -62,7 +62,7 @@ public class MemberAuthenticationEntryPoint implements AuthenticationEntryPoint 
             setAuthenticationToContext(newClaims);
 
             System.out.println("++++++++++++Refreshed Token"+SecurityContextHolder.getContext().getAuthentication());
-            URI redirectUri = createURI(accessToken, newRefreshToken);
+//            URI redirectUri = createURI(accessToken, newRefreshToken);
 
 //            response.setHeader("Authorization", accessToken);
 //            response.setHeader("Refresh", newRefreshToken);
