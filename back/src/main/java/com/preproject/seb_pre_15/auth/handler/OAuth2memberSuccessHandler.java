@@ -9,6 +9,7 @@ import com.preproject.seb_pre_15.member.service.MemberService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -40,6 +41,7 @@ public class OAuth2memberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         var oAuth2User = (OAuth2User) authentication.getPrincipal();
         String email = String.valueOf(oAuth2User.getAttributes().get("email"));
         List<String> authorities = authorityUtils.createRoles(email);
+        System.out.println("++++++++++++++++++++++++++++++++++++++"+authorities+"++++++++++++++++++++++++++++++++++++++");
         saveMember(email, authorities);
         redirect(request,response,email,authorities);
     }
@@ -62,7 +64,8 @@ public class OAuth2memberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return UriComponentsBuilder.newInstance()
                 .scheme("http")
                 .host("localhost")
-                .path("receive-token.html")//redirect 받기 위한 주소
+                .port(3000)
+                .path("/mytokens")//redirect 받기 위한 주소
                 .queryParams(queryParams)
                 .build().toUri();
     }

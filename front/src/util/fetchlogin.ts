@@ -1,73 +1,84 @@
+import { showToast } from '../component/Toast';
+import {useState} from "react";
+
 export const fetchLogin = async (data: string): Promise<Response> => {
-    try {
-      const response = await fetch(`/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-          Accept: 'application/json',
-        },
-        body: data,
-      });
-  
-      if (!response.ok) {
-        console.log(response);
-        if (response.status === 401) {
-          console.error('Wrong Email or Password');
-        }
-        throw new Error('could not fetch the data for that resource');
+  try {
+    const response = await fetch(``, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Accept: 'application/json',
+      },
+      body: data,
+    });
+    
+    if (!response.ok) {
+      if (response.status === 401) {
+        throw new Error('Wrong Email or Password');
       }
-  
-      if (response.status === 200) {
-        console.log('Login Success!');
-  
-        // 토큰 저장
-        const accessToken = response.headers.get('Authorization');
-        const refreshToken = response.headers.get('refresh');
-        sessionStorage.setItem('access_token', accessToken ?? '');
-        sessionStorage.setItem('refresh_token', refreshToken ?? '');
-      }
-  
-      return response;
-    } catch (error:any) {
-      console.error(error.message);
-      throw error;
+      throw new Error('Could not fetch the data for that resource');
     }
-  };
-  
-  //조회
-  export const fetchUserInfo = async (): Promise<any> => {
-    try {
-      const response = await fetch(`/accounts/user`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-          Accept: 'application/json',
-          authorization: sessionStorage.getItem('access_token') ?? '',
-        },
-      });
-  
-      if (!response.ok) {
-        throw new Error('could not fetch the data for that resource');
-      }
-  
-      return response.json();
-    } catch (error:any) {
-      console.error(error.message);
-      throw error;
+
+    if (response.status === 200) {
+      // 토큰 저장
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const accessToken = urlParams.get('access_token');
+      const refreshToken = urlParams.get('refresh_token');
+      sessionStorage.setItem('access_token', accessToken ?? '');
+      sessionStorage.setItem('refresh_token', refreshToken ?? '');
+      console.log('Login Success!');
+      const redirectUrl = `/header?access_token=${accessToken}&refresh_token=${refreshToken}`;
+      window.location.replace(redirectUrl);
     }
-  };
-  
-  export const checkIfLogined = async (): Promise<void> => {
-    try {
-      const data = await fetchUserInfo();
-  
-      if (!data) {
-        setTimeout(() => {
-          window.location.href = '/login';
-        }, 1500);
-        console.log('Please log in.');
-      }
-    } catch (error) {
-      console.error(error);
+
+    return response;
+  } catch (error: any) {
+    console.error(error.message);
+    throw error;
+  }
+};
+
+export const fetchUserInfo = async (): Promise<any> => {
+  try {
+    const response = await fetch(`http://localhost:8080/members/mypage`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Accept: 'application/json',
+        Authorization: "Bearer "+ sessionStorage.getItem('access_token') ?? '',
+        Refresh: "Bearer "+ sessionStorage.getItem('refresh_token') ?? ''
+      },
+    });
+
+
+
+
+    if (!response.ok) {
+      throw new Error('Could not fetch the data for that resource');
     }
-  };
+
+    return response.json();
+  } catch (error: any) {
+    console.error(error.message);
+    throw error;
+  }
+};
+
+export const checkIfLogined = async (): Promise<void> => {
+  try {
+    const data = await fetchUserInfo();
+    sessionStorage.setItem( "memberEmail",data.email);
+    sessionStorage.setItem( "accountId", data.memberId);
+
+    if (!data) {
+      console.log('Please log in.');
+      showToast('Please log in.', 'danger');
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 1500);
+    }
+  } catch (error) {
+    console.error('Error while checking login status:', error);
+  }
+};

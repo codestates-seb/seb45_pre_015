@@ -7,24 +7,25 @@ import Login from './page/Login';
 import Ask from './page/ask';
 import Question from './page/question';
 import QuestionList from './question/questionlist';
+import Signup from './page/Signup';
+import MyTokens from "./page/MyTokens";
+import MyRefreshToken from "./page/MyRefreshToken";
 
 const App:React.FC = () => {
   return (
     <BrowserRouter>
       <Header />
-      <main className="flex flex-auto min-h-[calc(100vh-180px)]">
-      <Link to="/ask"><button>QuestionAsk</button></Link>
-        .......
-        <Link to="/question"><button>Question</button></Link>
-        ......
-        <Link to ="/allquestion"><button>AllQuestions</button></Link>
+      <main className="flex flex-col flex-grow">
         <Routes>
-          <Route path="/" element={''} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/ask" element={<Ask />} />
-          <Route path="/question" element={<Question />} />
-          <Route path="/allquestion" element={<QuestionList />}></Route>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/" element={<QuestionList />} />
+            <Route path="/ask" element={<Ask />} />
+            <Route path="/question" element={<Question />} />
+            <Route path="/mytokens" element={<MyTokens />} />
+            <Route path="/myrefreshtoken" element={<MyRefreshToken />} />
         </Routes>
+          <h1> {sessionStorage.getItem("memberEmail")} </h1>
       </main>
       <Footer />
     </BrowserRouter>
