@@ -54,7 +54,9 @@ public class AnswerCommentService {
         return answerCommentToSave;
     }
 
-    public AnswerComment updateAnswerComment(AnswerComment answerComment, long answerCommentId){
+    public AnswerComment updateAnswerComment(AnswerComment answerComment, long answerCommentId, long memberId){
+
+        memberService.verifySameUser(memberId);
 
         AnswerComment findComment = verifyExistComment(answerCommentId);
         Optional.ofNullable(answerComment.getBody())

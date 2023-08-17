@@ -44,11 +44,13 @@ public class QuestionController {
   }
   
   //질문 글 수정
-  @PatchMapping("/questions/{question-id}")
+  //권한 설정을 위해 API 주소 변경
+  @PatchMapping("/questions/{member-id}/{question-id}")
   public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive long questionId,
+                                      @PathVariable("member-id") @Positive long memberId,
                                     @Valid @RequestBody QuestionPatchDto questionPatchDto) {
     questionPatchDto.setQuestionId(questionId);
-    Question question = questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(questionPatchDto));
+    Question question = questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(questionPatchDto), memberId);
     QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
