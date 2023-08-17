@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -34,8 +35,7 @@ public class AnswerController {
     @PostMapping("/answers")
     public ResponseEntity createAnswer(@RequestBody AnswerPostDto answerPostDto,
                                        @LoginMemberId Long memberId){
-        System.out.println(memberId+"1111111111111111");
-        Answer answer = answerService.createAnswer(answerMapper.answerPostDtoToAnswer(answerPostDto));
+        Answer answer = answerService.createAnswer(answerMapper.answerPostDtoToAnswer(answerPostDto, memberId));
         AnswerResponseDto response = answerMapper.answerToAnswerResponseDto(answer);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -43,8 +43,9 @@ public class AnswerController {
     // 해당 답변 수정
     @PatchMapping("/answers/{answer-id}")
     public ResponseEntity updateAnswer(@RequestBody AnswerPatchDto answerPatchDto,
-                                       @PathVariable("answer-id") @Positive Long answerId){
-        Answer answer = answerService.updateAnswer(answerMapper.answerPatchDtoToAnswer(answerPatchDto), answerId);
+                                       @PathVariable("answer-id") @Positive Long answerId,
+                                       @LoginMemberId Long memberId){
+        Answer answer = answerService.updateAnswer(answerMapper.answerPatchDtoToAnswer(answerPatchDto), answerId, memberId);
         AnswerResponseDto response = answerMapper.answerToAnswerResponseDto(answer);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

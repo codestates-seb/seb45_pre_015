@@ -13,9 +13,12 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AnswerMapper {
-    default Answer answerPostDtoToAnswer(AnswerPostDto answerPostDto){
+    default Answer answerPostDtoToAnswer(AnswerPostDto answerPostDto, Long memberId){
         Answer answer = new Answer();
         answer.setBody(answerPostDto.getBody());
+        Member member = new Member();
+        member.setMemberId(memberId);
+        answer.setMember(member);
         Question question = new Question();
         question.setQuestionId(answerPostDto.getQuestionId());
         answer.setQuestion(question);
