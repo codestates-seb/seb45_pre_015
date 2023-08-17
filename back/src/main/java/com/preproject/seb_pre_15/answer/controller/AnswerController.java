@@ -3,9 +3,11 @@ package com.preproject.seb_pre_15.answer.controller;
 import com.preproject.seb_pre_15.answer.dto.AnswerPatchDto;
 import com.preproject.seb_pre_15.answer.dto.AnswerPostDto;
 import com.preproject.seb_pre_15.answer.dto.AnswerResponseDto;
+import com.preproject.seb_pre_15.answer.dto.AnswerVotePatchDto;
 import com.preproject.seb_pre_15.answer.entity.Answer;
 import com.preproject.seb_pre_15.answer.mapper.AnswerMapper;
 import com.preproject.seb_pre_15.answer.service.AnswerService;
+import com.preproject.seb_pre_15.argumentresolver.LoginMemberId;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
@@ -14,6 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
@@ -64,8 +69,9 @@ public class AnswerController {
 
     // 멤버 별 답변 조회
     @GetMapping("/{member-id}/answers")
-    public ResponseEntity getMemberAnswers(@PathVariable("member-id") @Positive Long memberId){
-        Page<Answer> pageAnswers = answerService.findMemberAnswers(memberId);
+    public ResponseEntity getMemberAnswers(@Positive @RequestParam int page,
+            @PathVariable("member-id") @Positive Long memberId){
+        Page<Answer> pageAnswers = answerService.findMemberAnswers(memberId, page);
         List<Answer> answers = pageAnswers.getContent();
         List<AnswerResponseDto> response = answerMapper.answersToAnswerResponseDtos(answers);
         return new ResponseEntity<>(response, HttpStatus.OK);
