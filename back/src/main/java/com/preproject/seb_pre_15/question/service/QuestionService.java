@@ -81,7 +81,7 @@ public class QuestionService {
         Sort.by(Sort.Direction.DESC, "vote").descending()));
   }
   
-  //질문글 Top10 조회(게시판 조회)
+  //질문글 Top10 조회(게시판 조회)    e
   public Page<Question> findTopQuestions() {
     return questionRepository.findAll(PageRequest.of(0, 10,
         Sort.by("vote").descending()));
