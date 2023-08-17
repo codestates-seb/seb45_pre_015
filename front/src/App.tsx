@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Header from './component/header';
@@ -6,12 +6,21 @@ import Footer from './component/footer';
 import Login from './page/Login';
 import Signup from './page/Signup';
 
-const App:React.FC = () => {
+const App: React.FC = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <BrowserRouter>
-    
-      <Header />
-      <main className="flex flex-col flex-grow">
+      <Header onSidebarToggle={toggleSidebar} />
+      <main
+        className={`flex flex-col flex-grow transition-all ${
+          isSidebarOpen ? 'ml-64' : 'ml-0'
+        }`}
+      >
         <Routes>
           <Route path="/" element={''} />
           <Route path="/login" element={<Login />} />
@@ -21,6 +30,6 @@ const App:React.FC = () => {
       <Footer />
     </BrowserRouter>
   );
-}
+};
 
 export default App;

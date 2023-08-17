@@ -27,8 +27,7 @@ export const fetchLogin = async (data: string): Promise<Response> => {
       sessionStorage.setItem('access_token', accessToken ?? '');
       sessionStorage.setItem('refresh_token', refreshToken ?? '');
       console.log('Login Success!');
-      const redirectUrl = `/header?access_token=${accessToken}&refresh_token=${refreshToken}`;
-      window.location.replace(redirectUrl);
+      window.location.replace('/');
     }
 
     return response;
