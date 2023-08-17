@@ -4,6 +4,7 @@ import com.preproject.seb_pre_15.exception.BusinessLogicException;
 import com.preproject.seb_pre_15.exception.ExceptionCode;
 import com.preproject.seb_pre_15.member.entity.Member;
 import com.preproject.seb_pre_15.member.repository.MemberRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,9 +31,17 @@ public class MemberService {
   public Member findMember(long memberId) {
     return findVerifiedMember(memberId);
   }
+
+  @Transactional(readOnly = true)
+  public Member findMemberByEmail(String memberEmail) {
+    return memberRepository.findByEmail(memberEmail).get();
+  }
   
   //마이페이지 회원 닉네임 수정
   public Member updateMember(Member member, Long memberId) {
+
+    verifySameUser(memberId);
+
     member.setMemberId(memberId);
     Member findMember = findVerifiedMember(member.getMemberId());
 
@@ -41,7 +50,13 @@ public class MemberService {
     
     return memberRepository.save(findMember);
   }
-  
+
+  public void verifySameUser(Long memberId) {
+    String currentUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+    String userAttemptToUpdate = findVerifiedMember(memberId).getEmail();
+    if (!currentUser.equals(userAttemptToUpdate)) throw new BusinessLogicException(ExceptionCode.ID_DOESNT_MATCH);
+  }
+
   //회원정보 조회 실패시 예외 발생
   @Transactional(readOnly = true)
   public Member findVerifiedMember(long memberId) {

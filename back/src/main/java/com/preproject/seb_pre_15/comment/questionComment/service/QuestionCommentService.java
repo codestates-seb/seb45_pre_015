@@ -59,7 +59,9 @@ public class QuestionCommentService {
         return questionCommentToSave;
     }
 
-    public QuestionComment updateQuestionComment(QuestionComment questionComment, long questionCommentId){
+    public QuestionComment updateQuestionComment(QuestionComment questionComment, long questionCommentId, long memberId){
+
+        memberService.verifySameUser(memberId);
 
         QuestionComment findComment = verifyExistComment(questionCommentId);
         Optional.ofNullable(questionComment.getBody())

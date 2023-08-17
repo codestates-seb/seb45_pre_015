@@ -1,9 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import {useNavigate, Link, redirect} from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { fetchUserInfo, checkIfLogined } from '../util/fetchlogin';
 
 const Header: React.FC = () => {
+
+  // const urlParams = new URLSearchParams(window.location.search);
+  // const accessToken = urlParams.get('access_token');
+  // const refreshToken = urlParams.get('refresh_token');
+  // sessionStorage.setItem('access_token', accessToken ?? '');
+  // sessionStorage.setItem('refresh_token', refreshToken ?? '');
+
+
+
+
   const [isLogin, setIsLogin] = useState<boolean>(false);
   const [userProfileImage, setUserProfileImage] = useState<string>('');
   const [userProfileImageLink, setUserProfileImageLink] = useState<string>('');
@@ -43,6 +53,7 @@ const Header: React.FC = () => {
       if (sessionStorage.getItem('access_token') && !isLoginPath) {
         setIsLogin(true);
         getUserProfile();
+        // setUserProfileImageLink(`/mypage/${sessionStorage.getItem('accountId')}`);
         setUserProfileImageLink(`/mypage/${sessionStorage.getItem('accountId')}`);
       } else {
         setIsLogin(false);
