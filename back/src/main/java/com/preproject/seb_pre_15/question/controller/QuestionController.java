@@ -29,9 +29,9 @@ import java.util.List;
 public class QuestionController {
   private final QuestionService questionService;
   private final QuestionMapper questionMapper;
-  public QuestionController(QuestionService questionService, QuestionMapper questionMepper) {
+  public QuestionController(QuestionService questionService, QuestionMapper questionMapper) {
     this.questionService = questionService;
-    this.questionMapper = questionMepper;
+    this.questionMapper = questionMapper;
   }
   
   //질문 글 등록
@@ -44,11 +44,13 @@ public class QuestionController {
   }
   
   //질문 글 수정
-  @PatchMapping("/questions/{question-id}")
+  //권한 설정을 위해 API 주소 변경
+  @PatchMapping("/questions/{member-id}/{question-id}")
   public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive long questionId,
+                                      @PathVariable("member-id") @Positive long memberId,
                                     @Valid @RequestBody QuestionPatchDto questionPatchDto) {
     questionPatchDto.setQuestionId(questionId);
-    Question question = questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(questionPatchDto));
+    Question question = questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(questionPatchDto), memberId);
     QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
@@ -74,11 +76,11 @@ public class QuestionController {
     return new ResponseEntity<>(responseDto,HttpStatus.OK);
   }
   
-  //맴버별 질문 글 조회, 5개씩 출력됩니다
+  //맴버별 질문 글 조회, 15개씩 출력됩니다
   @GetMapping("/{member-id}/questions")
-  public ResponseEntity getMemberQuestion(
+  public ResponseEntity getMemberQuestion(@Positive @RequestParam int page,
       @PathVariable("member-id") long memberId) {
-    Page<Question> pageOrders = questionService.findMemberQuestions(memberId);
+    Page<Question> pageOrders = questionService.findMemberQuestions(page, memberId);
     List<Question> questions = pageOrders.getContent();
     List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
 
@@ -95,8 +97,19 @@ public class QuestionController {
   
   //질문글 검색 기능
   @GetMapping("/questions/search-word")
-  public ResponseEntity getQuestionSearch(@RequestParam(value = "search-word" ) String searchWord) {
-    Page<Question> pageOrders = questionService.findSearchWordQuestions(searchWord);
+  public ResponseEntity getQuestionSearch(@RequestParam(value = "search-word" ) String searchWord,
+                                          @Positive int page) {
+    Page<Question> pageOrders = questionService.findSearchWordQuestions(searchWord, page);
+    List<Question> questions = pageOrders.getContent();
+    List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
+    
+    return new ResponseEntity<>(response,HttpStatus.OK);
+  }
+  
+  //질문글 Top10 조회(게시판 조회)
+  @GetMapping("/questions/top10")
+  public ResponseEntity getQuestions() {
+    Page<Question> pageOrders = questionService.findTopQuestions();
     List<Question> questions = pageOrders.getContent();
     List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
     
@@ -117,8 +130,8 @@ public class QuestionController {
   // 추천수 감소 로직
   @PatchMapping("/questions/{question-id}/votes-down")
   public ResponseEntity patchQuestionVoteDown(HttpServletRequest request, HttpServletResponse response,
-                                          @PathVariable("question-id") @Positive long questionId,
-                                          @Valid @RequestBody QuestionVotePatchDto questionVotePatchDto) {
+                                            @PathVariable("question-id") @Positive long questionId,
+                                            @Valid @RequestBody QuestionVotePatchDto questionVotePatchDto) {
     questionVotePatchDto.setQuestionId(questionId);
     Question question = questionMapper.questionVotePatchDtoToQuestion(questionVotePatchDto);
     question = questionService.updateQuestionVote(request, response, question, "down");

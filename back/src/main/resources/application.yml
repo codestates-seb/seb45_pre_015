@@ -41,5 +41,5 @@ mail:
 jwt:
   key:
     secret: ${JWT_SECRET_KEY}
-  access-token-expiration-minutes: 100000 #테스트를 위해 설정 추후 30으로 수정
-  refresh-token-expiration-minutes: 100000 #추후 450으로 수정
+  access-token-expiration-minutes: 30 #테스트를 위해 설정 추후 30으로 수정
+  refresh-token-expiration-minutes: 450 #추후 450으로 수정

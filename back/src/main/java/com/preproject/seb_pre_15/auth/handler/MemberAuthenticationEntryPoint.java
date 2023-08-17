@@ -1,6 +1,6 @@
 package com.preproject.seb_pre_15.auth.handler;
 
-import com.preproject.seb_pre_15.auth.filter.JwtVerificationFilter;
+
 import com.preproject.seb_pre_15.auth.jwt.JwtTokenizer;
 import com.preproject.seb_pre_15.auth.utils.CustomAuthorityUtils;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,25 +48,31 @@ public class MemberAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
 
             Map<String, Object> claims = verifyJws(request);
+            Map<String, Object>  newClaims = new HashMap<>();
             String username = (String) claims.get("sub");
             List<String> roles = authorityUtils.createRoles(username);
-            claims.put("roles", roles);
+            newClaims.put("username",username);
+            newClaims.put("roles", roles);
 
             Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
             String base64EncodedSecretKey = jwtTokenizer.encodedBasedSecretKey(jwtTokenizer.getSecretKey());
-            String accessToken = jwtTokenizer.generateAccessToken(claims,username,expiration, base64EncodedSecretKey);
+            String accessToken = jwtTokenizer.generateAccessToken(newClaims,username,expiration, base64EncodedSecretKey);
             String newRefreshToken = refreshToken.replace("Bearer ", "");
 
-            setAuthenticationToContext(claims);
+            setAuthenticationToContext(newClaims);
 
-            System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+            System.out.println("++++++++++++Refreshed Token"+SecurityContextHolder.getContext().getAuthentication());
             URI redirectUri = createURI(accessToken, newRefreshToken);
-            response.setStatus(HttpServletResponse.SC_FOUND);
-            response.sendRedirect(redirectUri.toString());
 
-            System.out.println(redirectUri);
+//            response.setHeader("Authorization", accessToken);
+//            response.setHeader("Refresh", newRefreshToken);
+//            response.setStatus(HttpServletResponse.SC_FOUND);
+//            response.setHeader("Location", redirectUri.toString());
+//            response.setHeader("Location", "http://localhost:3000/");
             System.out.println("+++++++++++++++++++++++++++new token generated+++++++++++++++++++++++++++++");
-            System.out.println(accessToken+ "  " + newRefreshToken);
+            response.setHeader("Authorization",accessToken);
+
+
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Set the unauthorized status code
             response.getWriter().write("Token expired or invalid"); // Set the error message
@@ -75,13 +82,13 @@ public class MemberAuthenticationEntryPoint implements AuthenticationEntryPoint 
     }
 
     private void setAuthenticationToContext(Map<String, Object> claims) {
-        String username = (String) claims.get("sub");
+        String username = (String) claims.get("username");
         List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles"));
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(username,null,authorities);
 
 
-        System.out.println(username);
+        System.out.println("username:"+username);
 
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -97,7 +104,8 @@ public class MemberAuthenticationEntryPoint implements AuthenticationEntryPoint 
         return UriComponentsBuilder.newInstance()
                 .scheme("http")
                 .host("localhost")
-                .path("/receive-token.html")//redirect 받기 위한 주소
+                .port(3000)
+                .path("/mytokens")//redirect 받기 위한 주소
                 .queryParams(queryParams)
                 .build().toUri();
     }

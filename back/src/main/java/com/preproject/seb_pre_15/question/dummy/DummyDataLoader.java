@@ -31,24 +31,24 @@ public class DummyDataLoader implements CommandLineRunner {
     Member member2 = new Member("hgd2@gmail.com");
     Member member3 = new Member("hgd3@gmail.com");
     
-    Question question1 = new Question("Sample Title 1", "Sample Body 1", member1);
-    Question question2= new Question("Sample Title 2", "Sample Body 2", member2);
-    Question question3 = new Question("Sample Title 3", "Sample Body 3", member3);
-    Question question4 = new Question("리트리버", "멍멍", member3);
-    Question question5 = new Question("불독", "멍멍멍멍", member3);
-    Question question6 = new Question("진돗개", "왈왈", member3);
-    Question question7 = new Question("페르시안", "야옹야옹야옹", member3);
-    Question question8 = new Question("숏헤어", "야옹야옹야옹야옹야옹야옹야옹야옹야옹", member3);
-    Question question9 = new Question("샴", "야옹야옹야~~~~옹", member3);
-    Question question10 = new Question("러시안블루", "미역", member3);
+    Question question1 = new Question("Sample Title 1", "Sample Body 1", member1,1);
+    Question question2= new Question("Sample Title 2", "Sample Body 2", member2,5);
+    Question question3 = new Question("Sample Title 3", "Sample Body 3", member3,0);
+    Question question4 = new Question("리트리버", "멍멍", member3,300);
+    Question question5 = new Question("불독", "멍멍멍멍", member3, 20);
+    Question question6 = new Question("진돗개", "왈왈", member3,-1);
+    Question question7 = new Question("페르시안", "야옹야옹야옹", member3, -20);
+    Question question8 = new Question("숏헤어", "야옹야옹야옹야옹야옹야옹야옹야옹야옹", member3, 11);
+    Question question9 = new Question("샴", "야옹야옹야~~~~옹", member3, 0);
+    Question question10 = new Question("러시안블루", "미역", member3, 0);
     
-    Answer answer1 = new Answer("첫번째 질문에 대한 답변", question1.getMember(), question1);
-    Answer answer2 = new Answer("첫번째 질문에 대한 답변", question1.getMember(), question1);
-    Answer answer3 = new Answer("첫번째 질문에 대한 답변", question1.getMember(), question1);
-    Answer answer4 = new Answer("정글리안", question2.getMember(), question2);
-    Answer answer5 = new Answer("펄", question2.getMember(), question2);
-    Answer answer6 = new Answer("골든", question2.getMember(), question2);
-    Answer answer7 = new Answer("다섯번째 질문/멤버3 작성", question5.getMember(), question5);
+    Answer answer1 = new Answer("첫번째 질문에 대한 답변", question1.getMember(), question1, 1);
+    Answer answer2 = new Answer("첫번째 질문에 대한 답변", question1.getMember(), question1, 2);
+    Answer answer3 = new Answer("첫번째 질문에 대한 답변", question1.getMember(), question1, 10);
+    Answer answer4 = new Answer("정글리안", question2.getMember(), question2, 5);
+    Answer answer5 = new Answer("펄", question2.getMember(), question2, 100);
+    Answer answer6 = new Answer("골든", question2.getMember(), question2, 0);
+    Answer answer7 = new Answer("다섯번째 질문/멤버3 작성", question5.getMember(), question5, -20);
     
     
     // 더미 데이터 저장

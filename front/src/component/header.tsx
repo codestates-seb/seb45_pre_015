@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import {useNavigate, Link, redirect} from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { fetchUserInfo, checkIfLogined } from '../util/fetchlogin';
 import './header.css'
@@ -54,6 +54,7 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle }) => {
       if (sessionStorage.getItem('access_token') && !isLoginPath) {
         setIsLogin(true);
         getUserProfile();
+        // setUserProfileImageLink(`/mypage/${sessionStorage.getItem('accountId')}`);
         setUserProfileImageLink(`/mypage/${sessionStorage.getItem('accountId')}`);
       } else {
         setIsLogin(false);

@@ -20,6 +20,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -74,7 +75,7 @@ public class SecurityConfiguration {
                 )
                 .oauth2Login(oauth2 -> oauth2.successHandler(new OAuth2memberSuccessHandler(jwtTokenizer,authorityUtils,memberService)))
                 .logout()
-                .logoutSuccessUrl("/logout");
+                .logoutSuccessUrl("/");
         return http.build();
     }
 
@@ -99,11 +100,22 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOriginPatterns(Arrays.asList("{url}"));
-        configuration.setAllowedOrigins(Arrays.asList("*"));
+////        configuration.setAllowedOriginPatterns(Arrays.asList("{url}"));
+//        configuration.setAllowedOrigins(Arrays.asList("*"));
+//        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE"));
+////        configuration.setAllowCredentials(Boolean.valueOf(true));
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//        configuration.addAllowedOriginPattern("*");
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://localhost:8080"));
+        configuration.setAllowCredentials(true);
+//        configuration.addAllowedMethod("*");
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE"));
-//        configuration.setAllowCredentials(Boolean.valueOf(true));
-
+        configuration.addAllowedHeader("*");
+        configuration.addExposedHeader("*");
+        configuration.setMaxAge(3000L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

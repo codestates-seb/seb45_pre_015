@@ -4,6 +4,7 @@ const Footer = () => {
       <div className="flex-col">
         <div className="flex px-4 pt-8 align-top h-[120px] text-soGray-light bg-soGray-footerbg">
           <div className="flex mx-5">어떤이미지넣는곳</div>
+          <h1> {sessionStorage.getItem("memberEmail")} </h1>
           <div className="mt-2 mb-10 grow">
             <div className="font-bold">STACK OVERFLOW</div>
             <div className="mt-4 text-xxs">
