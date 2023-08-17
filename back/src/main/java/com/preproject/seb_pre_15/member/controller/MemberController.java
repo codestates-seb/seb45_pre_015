@@ -33,7 +33,7 @@ public class MemberController {
 
     @GetMapping("/mypage")
     public ResponseEntity getMember(){
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        System.out.println("++++이부분에서 지금 접속한 사용자를 읽어옵니다.!!!+++++"+SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         String email = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         MemberResponseDto response= memberMapper.memberToMemberResponseDto(memberService.findMemberByEmail(email));

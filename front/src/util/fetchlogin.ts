@@ -43,23 +43,29 @@ export const fetchUserInfo = async (): Promise<any> => {
   try {
     const response = await fetch(`http://localhost:8080/members/mypage`, {
       method: 'GET',
+      mode: 'cors',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
         Accept: 'application/json',
-        Authorization: "Bearer "+ sessionStorage.getItem('access_token') ?? '',
-        Refresh: "Bearer "+ sessionStorage.getItem('refresh_token') ?? ''
+        Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
+        Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? ''
       },
-    });
+      redirect: "follow",
+      // })
+    })
 
+      if (!response.ok) {
+        throw new Error('Could not fetch the data for that resource');
+      }
 
+      if (response.headers.get("Authorization")!== null) {
 
-
-    if (!response.ok) {
-      throw new Error('Could not fetch the data for that resource');
-    }
-
+        const accessToken = response.headers.get("Authorization");
+        sessionStorage.setItem('access_token', accessToken ?? '');
+      }
     return response.json();
-  } catch (error: any) {
+
+    } catch (error: any) {
     console.error(error.message);
     throw error;
   }
