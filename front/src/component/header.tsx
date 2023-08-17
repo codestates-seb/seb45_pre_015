@@ -2,18 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import {useNavigate, Link, redirect} from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { fetchUserInfo, checkIfLogined } from '../util/fetchlogin';
+import './header.css'
 
-const Header: React.FC = () => {
+type HeaderProps = {
+  onSidebarToggle: () => void;
+};
 
-  // const urlParams = new URLSearchParams(window.location.search);
-  // const accessToken = urlParams.get('access_token');
-  // const refreshToken = urlParams.get('refresh_token');
-  // sessionStorage.setItem('access_token', accessToken ?? '');
-  // sessionStorage.setItem('refresh_token', refreshToken ?? '');
-
-
-
-
+const Header: React.FC<HeaderProps> = ({ onSidebarToggle }) => {
   const [isLogin, setIsLogin] = useState<boolean>(false);
   const [userProfileImage, setUserProfileImage] = useState<string>('');
   const [userProfileImageLink, setUserProfileImageLink] = useState<string>('');
@@ -24,6 +19,12 @@ const Header: React.FC = () => {
     setMenu((prevMenu) => !prevMenu);
   };
   const navigator = useNavigate();
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const accessToken = urlParams.get('access_token');
+  const refreshToken = urlParams.get('refresh_token');
+  sessionStorage.setItem('access_token', accessToken ?? '');
+  sessionStorage.setItem('refresh_token', refreshToken ?? '');
 
   useEffect(() => {
     checkLoginState();
@@ -138,9 +139,9 @@ const Header: React.FC = () => {
         onClick={handleClick}
       />
       {menu === true ? (
-        <div className="absolute left-0 w-1/5 max-h-[calc(100vh - 56px)] p-0 overflow-y-auto">
+        <div className={`sidebar-container ${menu ? 'active' : ''}`}>
         <Sidebar/>
-        </div>
+      </div>
       ) : null}
     </div>         
       <div className="items-center mx-2 my-1">
