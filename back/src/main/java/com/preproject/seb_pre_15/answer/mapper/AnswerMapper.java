@@ -15,9 +15,6 @@ public interface AnswerMapper {
     default Answer answerPostDtoToAnswer(AnswerPostDto answerPostDto){
         Answer answer = new Answer();
         answer.setBody(answerPostDto.getBody());
-        Member member = new Member();
-        member.setMemberId(answerPostDto.getMemberId());
-        answer.setMember(member);
         Question question = new Question();
         question.setQuestionId(answerPostDto.getQuestionId());
         answer.setQuestion(question);

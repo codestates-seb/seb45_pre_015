@@ -31,7 +31,7 @@ public class AnswerController {
     @PostMapping("/answers")
     public ResponseEntity createAnswer(@RequestBody AnswerPostDto answerPostDto,
                                        @LoginMemberId Long memberId){
-        answerPostDto.setMemberId(memberId);
+        System.out.println(memberId+"1111111111111111");
         Answer answer = answerService.createAnswer(mapper.answerPostDtoToAnswer(answerPostDto));
         AnswerResponseDto response = mapper.answerToAnswerResponseDto(answer);
         return new ResponseEntity<>(response, HttpStatus.CREATED);

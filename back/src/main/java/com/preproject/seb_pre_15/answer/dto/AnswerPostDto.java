@@ -12,7 +12,6 @@ import lombok.Setter;
 public class AnswerPostDto {
     @NotNull
     private String body;
-    private Long memberId;
     private Long questionId;
 
 }

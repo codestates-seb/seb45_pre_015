@@ -1,14 +1,29 @@
 package com.preproject.seb_pre_15.argumentresolver;
 
 import com.preproject.seb_pre_15.auth.dto.TokenPrincipalDto;
+import com.preproject.seb_pre_15.member.entity.Member;
+import com.preproject.seb_pre_15.member.repository.MemberRepository;
+import com.preproject.seb_pre_15.member.service.MemberService;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import java.util.Optional;
+
+@Component
 public class LoginUserIdArgumentResolver implements HandlerMethodArgumentResolver { // 컨트롤러 메서드의 파라미터 해석하여 값 전달
+    private final MemberRepository memberRepository;
+
+    public LoginUserIdArgumentResolver(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) { // 구현한 argument resolver가 특정 파라미터를 지원할지 여부 판단
@@ -20,6 +35,7 @@ public class LoginUserIdArgumentResolver implements HandlerMethodArgumentResolve
 
     @Override // 파라미터를 해석하여 값을 반환하는 역할
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+        System.out.println("11223344");
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal(); // 사용자 인증 정보
         // 익명이면 -1L 리턴
         if(principal == "anonymousUser"){
@@ -27,6 +43,12 @@ public class LoginUserIdArgumentResolver implements HandlerMethodArgumentResolve
         }
 
         TokenPrincipalDto castedPrincipal = (TokenPrincipalDto) principal;
-        return castedPrincipal.getId();
+        Optional<Member> member = memberRepository.findByEmail(castedPrincipal.getEmail());
+        System.out.println(member.get().getEmail()+"123123123");
+//        System.out.println(castedPrincipal.getId()+"아이디");
+//        System.out.println(castedPrincipal.getEmail()+"이메일");
+
+//        return castedPrincipal.getId();
+        return member.isPresent() ? member.get().getMemberId() : -1L;
     }
 }

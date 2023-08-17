@@ -71,9 +71,9 @@ public class QuestionController {
   }
   
   //맴버별 질문 글 조회, 5개씩 출력됩니다
-  @GetMapping("/{member_id}/questions")
+  @GetMapping("/{member-id}/questions")
   public ResponseEntity getMemberQuestion(
-      @PathVariable("member_id") long memberId) {
+      @PathVariable("member-id") long memberId) {
     Page<Question> pageOrders = questionService.findMemberQuestions(memberId);
     List<Question> questions = pageOrders.getContent();
     List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
