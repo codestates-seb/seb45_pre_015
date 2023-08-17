@@ -105,16 +105,16 @@ public class AnswerService {
       for (Cookie cookie : cookies) {
         if (cookie.getName().equals("voted_answer_" + findAnswer.getAnswerId())) {
           //어뷰징 방지 로직
-          if (Math.abs(findAnswer.getVote() - answer.getVote()) != 2) {
+          if (Math.abs(findAnswer.getVote() - answer.getVote()) != 1) {
             throw new BusinessLogicException(ExceptionCode.INVALID_VOTE);
           }
           //쿠키가 있지만 이전 쿠키 타입이 다르면 값을 변경하고 투표수 반영
           if (cookie.getValue().equals("down") && voteType.equals("up")) {
-            cookie.setValue("up");
+            cookie.setMaxAge(0);
             response.addCookie(cookie);
             findAnswer.setVote(answer.getVote());
           } else if (cookie.getValue().equals("up") && voteType.equals("down")) {
-            cookie.setValue("down");
+            cookie.setMaxAge(0);
             response.addCookie(cookie);
             findAnswer.setVote(answer.getVote());
           }
