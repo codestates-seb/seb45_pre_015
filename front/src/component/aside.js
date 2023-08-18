@@ -6,7 +6,7 @@ const AsideContainer = styled.ul`
     vertical-align: baseline;
     width: 80%;
     padding:30px 0 0 15px;
-
+    margin-left:50px;
 .list-head {
     background-color: hsl(47,83%,91%);
     padding: 10px;
@@ -26,7 +26,7 @@ const AsideContainer = styled.ul`
 
 `;
 
-function Aside() {
+function QuestionAside() {
     return (
         <AsideContainer>
             <li className='list-head'>The Overflow Blog</li>
@@ -39,4 +39,4 @@ function Aside() {
     )
 }
 
-export default Aside;
+export default QuestionAside;

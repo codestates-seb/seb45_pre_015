@@ -41,14 +41,17 @@ export const fetchLogin = async (data: string): Promise<Response> => {
 
 export const fetchUserInfo = async (): Promise<any> => {
   try {
-    const response = await fetch(`http://localhost:8080/members/mypage`, {
+    const response = await fetch(`https://659a-116-126-166-12.ngrok-free.app/members/mypage`, {
       method: 'GET',
       mode: 'cors',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
         Accept: 'application/json',
+        'ngrok-skip-browser-warning': '69420',
         Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
         Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? ''
+
+
       },
       redirect: "follow",
     })
@@ -75,6 +78,8 @@ export const checkIfLogined = async (): Promise<void> => {
     const data = await fetchUserInfo();
     sessionStorage.setItem( "memberEmail",data.email);
     sessionStorage.setItem( "accountId", data.memberId);
+    sessionStorage.setItem( "username", data.name);
+
 
     if (!data) {
       console.log('Please log in.');

@@ -4,16 +4,14 @@ import './App.css';
 import Header from './component/header';
 import Footer from './component/footer';
 import Login from './page/Login';
-
 import Ask from './page/ask';
 import Question from './page/question';
 
 import Mypage from './page/Mypage/Mypage'
 
 import Signup from './page/Signup';
-import MyTokens from "./page/MyTokens";
-import MyRefreshToken from "./page/MyRefreshToken";
 import Main from './page/main';
+import MyTokens from "./util/MyTokens";
 
 
 const App: React.FC = () => {
@@ -37,12 +35,9 @@ const App: React.FC = () => {
             <Route path="/" element={<Main />} />
             <Route path="/ask" element={<Ask />} />
             <Route path="/question" element={<Question />} />
-
             <Route path='/mypage' element={<Mypage />} />
 
             <Route path="/mytokens" element={<MyTokens />} />
-            <Route path="/myrefreshtoken" element={<MyRefreshToken />} />
-
         </Routes>
       </main>
       <Footer />

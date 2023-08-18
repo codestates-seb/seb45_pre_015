@@ -46,7 +46,9 @@ public class SecurityConfiguration {
                 .headers().frameOptions().sameOrigin() //h2 이용하기위한 설정
                 .and()
                 .csrf().disable()
-                .cors(withDefaults())
+//                .cors(withDefaults())
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .formLogin().disable()
@@ -57,7 +59,7 @@ public class SecurityConfiguration {
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
-//                        .antMatchers("/members/**").hasRole("USER")
+//                        .antMatchers("/members/**").hasAnyRole("ADMIN","USER")
 //                        .antMatchers(HttpMethod.GET,"/*/members").hasRole("ADMIN")
 //                        .antMatchers(HttpMethod.POST,"/**/questions").hasRole("USER")
 //                        .antMatchers(HttpMethod.PATCH,"/**/questions/**").hasRole("USER")
@@ -75,7 +77,7 @@ public class SecurityConfiguration {
                 )
                 .oauth2Login(oauth2 -> oauth2.successHandler(new OAuth2memberSuccessHandler(jwtTokenizer,authorityUtils,memberService)))
                 .logout()
-                .logoutSuccessUrl("/");
+                .logoutSuccessUrl("http://localhost:3000");
         return http.build();
     }
 
@@ -109,10 +111,10 @@ public class SecurityConfiguration {
 //        source.registerCorsConfiguration("/**", configuration);
 //        return source;
 //        configuration.addAllowedOriginPattern("*");
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://localhost:8080"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://localhost:8080", "https://659a-116-126-166-12.ngrok-free.app"));
         configuration.setAllowCredentials(true);
 //        configuration.addAllowedMethod("*");
-        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE","OPTION"));
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("*");
         configuration.setMaxAge(3000L);

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import axios from 'axios';
+import {fetchCreateQuestion} from "../util/fetchquestion";
 
 const AskFormAll = styled.div`
   display: flex;
@@ -115,25 +116,59 @@ const QuestionsEditor = styled.div`
       `;
 
 function QuestionAskForm() {
-  const [title, setTitle] = useState(''); // 사용자가 입력한 제목을 상태로 관리
-  const [body, setBody] = useState('');   // 본문을 상태로 관리
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
 
-  const apiUrl = 'https://localhost:8080'; // API의 기본 URL
+  const handlePostQuestion = async () => {
+    try {
+      const newQuestion = {
+        title: title,
+        content: body,
+      };
 
-  const handlePostQuestion = () => {
-    const questionData = {
-      title: title,
-      body: body
-    };
-
-    axios.post(apiUrl, questionData)
-      .then(response => {
-        alert('질문이 성공적으로 등록되었습니다:', response.data);
-      })
-      .catch(error => {
-        alert('질문 등록 중 오류가 발생했습니다:', error);
-      });
+      const questionId = await fetchCreateQuestion(newQuestion);
+  alert( `질문이 성공적으로 등록되었습니다. ID: ${questionId}`)
+    } catch (error) {
+      console.error("질문 등록 오류:", error.message);
+    }
   };
+
+// function QuestionAskForm() {
+//   const [title, setTitle] = useState(''); // 사용자가 입력한 제목을 상태로 관리
+//   const [body, setBody] = useState('');   // 본문을 상태로 관리
+//
+//   const apiUrl = 'https://659a-116-126-166-12.ngrok-free.app/questions'; // API의 기본 URL
+//
+//   const handlePostQuestion = () => {
+//
+//     const questionData = {
+//       'title': title,
+//       'body': body
+//     };
+//
+//
+//     console.log(questionData);
+//
+//     axios.post(apiUrl,questionData,{
+//
+//         headers : {
+//           'Content-Type': 'application/json;charset=UTF-8',
+//           Accept: 'application/json',
+//           'ngrok-skip-browser-warning': '69420',
+//           Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
+//           Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? ''
+//         }
+//     })
+//
+//
+//       .then(response => {
+//
+//         alert('질문이 성공적으로 등록되었습니다:', response.data);
+//       })
+//       .catch(error => {
+//         alert('질문 등록 중 오류가 발생했습니다:', error);
+//       });
+//   };
 
   return (
     <div>
@@ -175,6 +210,9 @@ function QuestionAskForm() {
           <div className="ask-form-body" id="question-body">
             <textarea value={body} onChange={e => setBody(e.target.value)} />
           </div>
+          {/*<button className="post-button" onClick={QuestionAskForm}>*/}
+          {/*  Post Your Question*/}
+          {/*</button>*/}
           <button className="post-button" onClick={handlePostQuestion}>
             Post Your Question
           </button>
