@@ -1,5 +1,6 @@
 package com.preproject.seb_pre_15.comment.answerComment.controller;
 
+import com.preproject.seb_pre_15.argumentresolver.LoginMemberId;
 import com.preproject.seb_pre_15.comment.answerComment.dto.AnswerCommentDto;
 import com.preproject.seb_pre_15.comment.answerComment.entity.AnswerComment;
 import com.preproject.seb_pre_15.comment.answerComment.mapper.AnswerCommentMapper;
@@ -17,7 +18,7 @@ import java.util.List;
 
 @Validated
 @RestController
-@RequestMapping("/{member-id}/{answer-id}/answer-comments")
+@RequestMapping("/{answer-id}/answer-comments")
 public class AnswerCommentController {
 
     private final AnswerCommentMapper mapper;
@@ -30,7 +31,7 @@ public class AnswerCommentController {
 
     @PostMapping
     public ResponseEntity postAnswerComment(@Valid @RequestBody AnswerCommentDto.Post post,
-                                            @Positive @PathVariable("member-id") long memberId,
+                                            @Positive @LoginMemberId long memberId,
                                             @Positive @PathVariable("answer-id") long answerId){
 
         AnswerComment answerComment = service.createAnswerComment(mapper.postToAnswerComment(post),memberId,answerId);
@@ -39,11 +40,11 @@ public class AnswerCommentController {
         return new ResponseEntity(response,HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{answerComment-id}")
+    @PatchMapping("/{comment-id}")
     public ResponseEntity patchAnswerComment(@Valid @RequestBody AnswerCommentDto.Patch patch,
-                                             @Positive @PathVariable("member-id") long memberId,
+                                             @Positive @LoginMemberId long memberId,
                                              @Positive @PathVariable("answer-id") long answerId,
-                                             @Positive @PathVariable("answerComment-id") long answerCommentId
+                                             @Positive @PathVariable("comment-id") long answerCommentId
                                              ){
         AnswerComment answerComment = service.updateAnswerComment(mapper.patchToAnswerComment(patch),answerCommentId,memberId);
         AnswerCommentDto.Response response= mapper.answerCommentToResponse(answerComment);
@@ -51,14 +52,14 @@ public class AnswerCommentController {
         return new ResponseEntity(response,HttpStatus.OK);
     }
 
-    @GetMapping("/{answerComment-id}")
-    public ResponseEntity getAnswerComment( @Positive @PathVariable("answerComment-id") long answerCommentId){
+    @GetMapping("/{comment-id}")
+    public ResponseEntity getAnswerComment( @Positive @PathVariable("comment-id") long answerCommentId){
         AnswerComment answerComment = service.getAnswerComment(answerCommentId);
         return new ResponseEntity(mapper.answerCommentToResponse(answerComment),HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity getAnswerComments( @Positive @PathVariable("member-id") long memberId,
+    public ResponseEntity getAnswerComments( @Positive @LoginMemberId long memberId,
                                              @Positive @RequestParam("page") int page,
                                              @Positive @RequestParam("size") int size){
 
@@ -68,8 +69,8 @@ public class AnswerCommentController {
         return new ResponseEntity(responses,HttpStatus.OK);
     }
 
-    @DeleteMapping("/{answerComment-id}")
-    public ResponseEntity deleteAnswerComment(@Positive @PathVariable("answerComment-id") long answerCommentId){
+    @DeleteMapping("/{comment-id}")
+    public ResponseEntity deleteAnswerComment(@Positive @PathVariable("comment-id") long answerCommentId){
 
         service.deleteAnswerComment(answerCommentId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);

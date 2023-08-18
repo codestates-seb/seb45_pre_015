@@ -1,5 +1,6 @@
 package com.preproject.seb_pre_15.question.controller;
 
+import com.preproject.seb_pre_15.image.ImageService;
 import com.preproject.seb_pre_15.question.dto.QuestionPatchDto;
 import com.preproject.seb_pre_15.question.dto.QuestionPostDto;
 import com.preproject.seb_pre_15.question.dto.QuestionResponseDto;
@@ -8,19 +9,18 @@ import com.preproject.seb_pre_15.question.entity.Question;
 import com.preproject.seb_pre_15.question.mapper.QuestionMapper;
 
 import com.preproject.seb_pre_15.question.service.QuestionService;
-import com.preproject.seb_pre_15.utils.UriCreator;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.net.URI;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -29,18 +29,31 @@ import java.util.List;
 public class QuestionController {
   private final QuestionService questionService;
   private final QuestionMapper questionMapper;
-  public QuestionController(QuestionService questionService, QuestionMapper questionMapper) {
+  private final ImageService imageService;
+  public QuestionController(QuestionService questionService, QuestionMapper questionMapper, ImageService imageService) {
     this.questionService = questionService;
     this.questionMapper = questionMapper;
+    this.imageService = imageService;
   }
   
-  //질문 글 등록
+//  //질문 글 등록
+//  @PostMapping("/questions")
+//  public ResponseEntity postQuestion(@Valid @RequestBody QuestionPostDto questionPostDto) {
+//    Question question = questionService.createQuestion(questionMapper.questionPostDtoToQuestion(questionPostDto));
+////    URI location = UriCreator.createUri("questions", question.getQuestionId());
+//    QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
+//    return new ResponseEntity<>(response,HttpStatus.CREATED);
+//  }
+  
+  //이미지를 포함한 질문 글 등록
   @PostMapping("/questions")
-  public ResponseEntity postQuestion(@Valid @RequestBody QuestionPostDto questionPostDto) {
-    Question question = questionService.createQuestion(questionMapper.questionPostDtoToQuestion(questionPostDto));
-//    URI location = UriCreator.createUri("questions", question.getQuestionId());
-    QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
-    return new ResponseEntity<>(response,HttpStatus.CREATED);
+  public ResponseEntity createPostWithImage(@RequestPart("json") QuestionPostDto questionPostDto,
+                                            @RequestPart("image") MultipartFile imageFile) throws IOException {
+      Question question = questionService.createQuestion(questionMapper.questionPostDtoToQuestion(questionPostDto));
+      if (!imageFile.isEmpty()) {imageService.saveImage(imageFile);}
+      
+      QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
+      return new ResponseEntity<>(response,HttpStatus.CREATED);
   }
   
   //질문 글 수정

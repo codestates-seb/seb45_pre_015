@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route} from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import Header from './component/header';
 import Footer from './component/footer';
@@ -11,11 +11,21 @@ import MyTokens from "./page/MyTokens";
 import MyRefreshToken from "./page/MyRefreshToken";
 import Main from './page/main';
 
-const App:React.FC = () => {
+const App: React.FC = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <BrowserRouter>
-      <Header />
-      <main className="flex flex-col flex-grow">
+      <Header onSidebarToggle={toggleSidebar} />
+      <main
+        className={`flex flex-col flex-grow transition-all ${
+          isSidebarOpen ? 'ml-64' : 'ml-0'
+        }`}
+      >
         <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
@@ -25,11 +35,10 @@ const App:React.FC = () => {
             <Route path="/mytokens" element={<MyTokens />} />
             <Route path="/myrefreshtoken" element={<MyRefreshToken />} />
         </Routes>
-          <h1> {sessionStorage.getItem("memberEmail")} </h1>
       </main>
       <Footer />
     </BrowserRouter>
   );
-}
+};
 
 export default App;
