@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Myeditor from "../TextEditor/TextEditor";
+import { useState } from "react";
 
 const Section = styled.section`
   display: flex;
@@ -25,12 +26,16 @@ const Cate = styled.article`
 `
 
 const Settings = () => {
+  const [addClass, setAddClass] = useState(true);
+  
   return(
     <Section>
       <Cate>
-        <button className="edit-btn">Edit Profile</button>
-        <button className="delete-btn">Delete Profile</button>
-        <Myeditor />
+        <button onClick={() => setAddClass(true)} className={addClass ? "edit-btn active" : "edit-btn"}>Edit Profile</button>
+        <button onClick={() => setAddClass(false)} className={addClass ? "delete-btn" : "delete-btn active"}>Delete Profile</button>
+        <>
+          {addClass ? <Myeditor /> : <></>}
+        </>
       </Cate>
     </Section>
   )
