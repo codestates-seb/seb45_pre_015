@@ -1,5 +1,6 @@
 package com.preproject.seb_pre_15.image;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +12,10 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/image")
+@RequiredArgsConstructor
 public class ImageController {
-  @Autowired
-  private ImageService imageService;
+
+  private final ImageService imageService;
   
   @PostMapping
   public ResponseEntity<String> postImage(@RequestParam("file") MultipartFile file) {
@@ -25,13 +27,13 @@ public class ImageController {
     }
   }
   
-  @GetMapping("/image/{image-id}")
+  @GetMapping("/{image-id}")
   public ResponseEntity<byte[]> getImage(@PathVariable("image-id") @Positive Long imageId) {
     byte[] imageData = imageService.getImage(imageId);
     return new ResponseEntity<>(imageData, HttpStatus.OK);
   }
   
-  @DeleteMapping("/image/{image-id}")
+  @DeleteMapping("/{image-id}")
   public ResponseEntity deleteImage(@PathVariable("image-id") @Positive Long imageId){
     imageService.deleteImage(imageId);
     return new ResponseEntity<>("success delete image", HttpStatus.NO_CONTENT);//

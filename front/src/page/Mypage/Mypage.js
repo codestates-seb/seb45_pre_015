@@ -14,7 +14,7 @@ export default function Mypage() {
           <span>이미지</span>
         </article>
         <div className="profile_info">
-          <h2 className="profile_user_name">유저네임</h2>
+          <h2 className="profile_user_name">{sessionStorage.getItem('username')}</h2>
           <div className="profile_user_state">
             <button className="logout-btn">Logout</button>
 
