@@ -10,7 +10,7 @@ function Sidebar() {
   };
 
   return (
-    <ol className="flex flex-col w-full text-[15px]">
+    <ol className="flex flex-col w-full text-[15px] w-[100%]">
       <li
         className={`${
           path === ''
