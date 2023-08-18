@@ -34,7 +34,7 @@ public class AnswerController {
     // 답변 생성
     @PostMapping("/answers")
     public ResponseEntity createAnswer(@RequestBody AnswerPostDto answerPostDto,
-                                       @LoginMemberId Long memberId){
+                                       @Positive @LoginMemberId Long memberId){
         Answer answer = answerService.createAnswer(answerMapper.answerPostDtoToAnswer(answerPostDto, memberId));
         AnswerResponseDto response = answerMapper.answerToAnswerResponseDto(answer);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -44,7 +44,7 @@ public class AnswerController {
     @PatchMapping("/answers/{answer-id}")
     public ResponseEntity updateAnswer(@RequestBody AnswerPatchDto answerPatchDto,
                                        @PathVariable("answer-id") @Positive Long answerId,
-                                       @LoginMemberId Long memberId){
+                                       @Positive @LoginMemberId Long memberId){
         Answer answer = answerService.updateAnswer(answerMapper.answerPatchDtoToAnswer(answerPatchDto), answerId, memberId);
         AnswerResponseDto response = answerMapper.answerToAnswerResponseDto(answer);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -80,8 +80,9 @@ public class AnswerController {
 
     // 해당 답변 삭제
     @DeleteMapping("/answers/{answer-id}")
-    public ResponseEntity deleteAnswer(@PathVariable("answer-id") @Positive Long answerId){
-        answerService.deleteAnswer(answerId);
+    public ResponseEntity deleteAnswer(@PathVariable("answer-id") @Positive Long answerId,
+                                       @LoginMemberId Long memberId) {
+        answerService.deleteAnswer(answerId, memberId);
         return new ResponseEntity<>("success delete answer",HttpStatus.NO_CONTENT);
     }
 

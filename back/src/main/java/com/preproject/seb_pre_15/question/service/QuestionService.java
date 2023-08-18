@@ -8,8 +8,10 @@ import com.preproject.seb_pre_15.question.entity.Question;
 import com.preproject.seb_pre_15.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -25,17 +27,24 @@ public class QuestionService {
 
   private final MemberService memberService;
   //질문글 등록
-  public Question createQuestion(Question question) {
-    
+  public Question createQuestion(Question question, Long memberId) {
+    question.setMember(memberService.findMember(memberId));
     return questionRepository.save(question);
   }
   
   //질문글 수정
   public Question updateQuestion(Question question,long memberId) {
-
-    memberService.verifySameUser(memberId);
+    Question findQuestion = findQuestion(question.getQuestionId());
+    Long findQuestionMemberId = findQuestion.getMember().getMemberId();
+    if(findQuestionMemberId.equals(memberId)){
+      findQuestion.setBody(question.getBody());
+      return questionRepository.save(findQuestion);
+    }else{
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to update this question");
+    }
+//    memberService.verifySameUser(memberId);
     
-    return questionRepository.save(question);
+//    return questionRepository.save(question);
   }
   
   //Answer 조회용 Question 조회
@@ -106,9 +115,16 @@ public class QuestionService {
     return findQuestion;
   }
   
-  public void deleteQuestion(long questionId) {
-    Question question = findVerifiedQuestionByQuery(questionId);
-    questionRepository.delete(question);
+  public void deleteQuestion(long questionId, Long memberId) {
+    Question findQuestion = findQuestion(questionId);
+    Long findQuestionMemberId = findQuestion.getMember().getMemberId();
+    if(findQuestionMemberId.equals(memberId)){
+      questionRepository.delete(findQuestion);
+    }else{
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to delete this question");
+    }
+//    Question question = findVerifiedQuestionByQuery(questionId);
+//    questionRepository.delete(question);
   }
   
   //질문 글 검색 기능, 15개씩 출력됩니다

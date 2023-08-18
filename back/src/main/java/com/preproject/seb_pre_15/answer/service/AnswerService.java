@@ -13,12 +13,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -27,10 +30,7 @@ public class AnswerService {
   private final AnswerRepository answerRepository;
   private final QuestionService questionService;
   private final MemberService memberService;
-  
-//  public AnswerService(AnswerRepository answerRepository) {
-//    this.answerRepository = answerRepository;
-//  }
+
   //답변글 등록
   public Answer createAnswer(Answer answer){
     Question question = questionService.findQuestion(answer.getQuestion().getQuestionId());
@@ -41,10 +41,17 @@ public class AnswerService {
   }
   //답변글 수정
   public Answer updateAnswer(Answer answer, long answerId, long memberId){
-    memberService.verifySameUser(memberId);
-    Answer updateFindAnswer = findAnswer(answerId);
-    updateFindAnswer.setBody(answer.getBody());
-    return answerRepository.save(updateFindAnswer);
+//    memberService.verifySameUser(memberId);
+//    Answer updateFindAnswer = findAnswer(answerId);
+//    updateFindAnswer.setBody(answer.getBody());
+    Answer findAnswer = findAnswer(answerId);
+    Long findAnswerMemberId = findAnswer.getMember().getMemberId();
+    if(findAnswerMemberId.equals(memberId)){
+      findAnswer.setBody(answer.getBody());
+      return answerRepository.save(findAnswer);
+    }else{
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to update this answer");
+    }
   }
   //답변글 쿼리 조회(게시판 -> 본문)
   public Answer findAnswer(long answerId){
@@ -55,9 +62,16 @@ public class AnswerService {
     return answerRepository.findAll(PageRequest.of(page, size,
         Sort.by("answerId").descending()));
   }
-  public void deleteAnswer(Long answerId) {
-    Answer answer = findAnswer(answerId);
-    answerRepository.delete(answer);
+
+  //답변글 삭제
+  public void deleteAnswer(Long answerId, Long memberId) {
+    if(answerId.equals(memberId)){
+      Answer answer = findAnswer(answerId);
+      answerRepository.delete(answer);
+    }else{
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to delete this answer");
+    }
+
   }
   //멤버별 답변글 전체조회
   public Page<Answer> findMemberAnswers(Long memberId, int page) {
