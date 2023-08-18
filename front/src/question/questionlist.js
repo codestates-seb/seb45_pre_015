@@ -4,14 +4,12 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import PostSummary from "./postsummary";
 import { SortBtn } from "../component/buttons";
-import QuestionAside from "./questionAside";
-// import QuestionAside from "./questionAside";
 
 const AllQuestionPage = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 10px 24px 20px 0px;
+    padding: 30px 24px 20px 0px;
     border-left: 1px solid hsl(210,8%,90%) ;
 
   .container {
@@ -19,11 +17,11 @@ const AllQuestionPage = styled.div`
   }
 
   .header {
-  margin-left: 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  padding-bottom:10px;
 }
 
   .question-count {
@@ -34,13 +32,13 @@ const AllQuestionPage = styled.div`
 
 h1 {
   font-weight: 500;
-    font-size: 27px;
+  font-size: 27px;
+  margin-left:24px;
 }
 
 h4 {
     display: flex;
     align-items: center;
-    
     font-size: 17px;
     padding: 10px 10px 10px 0;
 }
@@ -63,27 +61,44 @@ h4 {
 .question-title {
  color: hsl(206,100%,40%);
 }
+.question-contents {
+  font-size: 13px;
+}
+
 .question-user-container {
   padding: 5px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  width: 100%;
 }
 
 .question-user-info-container{
     display: flex;
-    justify-content: center;
-    align-items: center;
+    font-size: 13px;
+    justify-content: flex-end;
 }
 
 .user {
   color: hsl(206,100%,40%);
+  padding: 4px;
+}
+
+.asked-date {
+  padding: 4px;
 }
 
 .button {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.border-right {
+  border-radius: 6px 0 0 6px;
+}
+.border-left {
+  border-radius: 0 6px 6px 0;
 }
 `;
 
@@ -93,9 +108,9 @@ function QuestionList() {
 
   const currentDate = new Date().toLocaleDateString();
 
-    const [page, setPage] = useState(1);
+  const [page, setPage] = useState(1);
 
-    const pageHandle = (pageValue) => {
+  const pageHandle = (pageValue) => {
     if (pageValue === 'Next') {
       if (page >= 5) {
         return;
@@ -114,7 +129,7 @@ function QuestionList() {
   
 
     return (
-        <AllQuestionPage> 
+        <AllQuestionPage>
             <div className="container">
               <div className="header">
                   <h1>All Questions</h1>
@@ -123,8 +138,8 @@ function QuestionList() {
               <div className="question-count">
                 <h4>만들어진 숫자 questions</h4>
                 <div>
-                  <SortBtn>newest</SortBtn>
-                  <SortBtn>voted</SortBtn>
+                  <SortBtn className="border-right">newest</SortBtn>
+                  <SortBtn className="border-left">voted</SortBtn>
                 </div>
                 </div>
               <div className="questions-container">
@@ -134,8 +149,8 @@ function QuestionList() {
                       <div className="question-contents">질문 내용</div>
                       <div className="question-user-container">
                         <div className="question-user-info-container">
-                          <div className="user">질문유저</div>
-                          <div>{currentDate}</div>
+                          <div className="user">질문유저 이름</div>
+                          <div className="asked-date">asked {currentDate}</div>
                         </div>
                       </div>
                   </div>
@@ -170,7 +185,6 @@ function QuestionList() {
           </PageButton>
         </div>
       </div>
-      <QuestionAside />
         </AllQuestionPage>
     )
 }

@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 import questionCreateBg from '../images/questionCreateBg.svg'
-import QuestionAskForm from './questionAskForm';
-import QuestionEditor from './questionEditor';
 
 const QuestionAskPage = styled.section`
 
@@ -13,6 +11,7 @@ const QuestionAskPage = styled.section`
     background: url(${questionCreateBg}) right bottom no-repeat;
     h2 {
       font-size: 27px;
+      font-weight:800;
     }
   }
 
@@ -29,7 +28,7 @@ const QuestionAskPage = styled.section`
           border: 1px solid powderblue;
             }
         h3 {
-            font-weight: 400;
+            font-weight:400;
             font-size: 21px;
             margin: 0 0 8px;
             line-height: 1.3;
@@ -86,8 +85,6 @@ function QuestionAsk() {
                 </p>
               </div>
             </div>
-          <QuestionAskForm />
-          <QuestionEditor />
         </QuestionAskPage>
         
     )

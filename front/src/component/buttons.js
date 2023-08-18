@@ -6,10 +6,9 @@ export const AskButton = styled.button`
     color: white;
     border: none;
     border-radius: 0.5rem;
-    padding: 5px;
     cursor: pointer;
     text-decoration: none;
-    width: 120px;
+    width: 100px;
     height: 35px;
     font-size: 13px;
   
@@ -49,7 +48,7 @@ export const SortBtn = styled.button`
   width: auto;
   height: 35px;
   border: 1px solid rgb(159, 166, 173);
-  border-radius: 3px;
+  border-radius: 6px;
   font-size: 13px;
   font-weight: 500;
   color: var(--black-800);

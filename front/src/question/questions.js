@@ -1,18 +1,18 @@
 import QuestionUsers from "./questionUsers"; 
-import QuestionAside from "./questionAside";
 import Vote from "../component/vote";
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { AskButton } from "../component/buttons";
 
-import Answers from "../answer/answers"; //완성되면 지울것
+// import Answers from "../answer/answers";
 
 
 
 const Content = styled.div`
   display: flex;
-  padding: 20px;
+  padding: 30px;
   flex-direction: column;
+  border-left: 1px solid hsl(210,8%,90%) ;
 
 .head-line {
   display: flex;
@@ -50,17 +50,17 @@ h1 {
   padding: 15px 0 15px 0;
 }
 
-.row {
-  display: flex;
-  flex-direction: row;
-  padding: 20px 20px 20px 0;
-  gap: 60px;
-}
 
-.question-section{
+.question-container{
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+.question-section {
+  display: flex;
+  flex-direction: column;
+  
 }
 
 textarea {
@@ -99,6 +99,7 @@ textarea {
 }
 
 h2 {
+  border-top: 1px solid hsl(210,8%,90%);
   padding-top: 20px;
   margin: 0 0 1em;
   font-size: 1.46153846rem;
@@ -132,22 +133,18 @@ function Questions() {
           <span> Viewed</span>
         </div>
       </div>
-      <div className="row">
-        <div>
-          <div>
-            <div className="question-section">
+            <div className="question-container">
               <Vote />
-              <p>질문글입니다.23324234324324234324324</p>
+              <div className="question-section">
+                <p>질문글입니다.23324234324324234324324</p>
+                <QuestionUsers />
+              </div>
             </div>
-            <QuestionUsers />
-          </div>
-        </div>
-        <QuestionAside />
-      </div>
+            
       <h2>Your Answer</h2>
       <textarea/>
       <Link to="/question"><button className="post-button" onClick={handlePostQuestion}>Post Your Answer</button></Link>
-      <Answers />{/*완성되면 지울것*/}
+      {/* <Answers />완성되면 지울것 */}
     </Content>
   );
 }
