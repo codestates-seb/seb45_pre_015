@@ -1,4 +1,4 @@
-import axios from 'axios';
+// import axios from 'axios';
 
 export const fetchLogin = async (data: string): Promise<Response> => {
   try {

@@ -112,7 +112,7 @@ const Header: React.FC = () => {
     const [isFocus, setIsFocus] = useState<boolean>(false);
   
     return (
-      <div className='sticky top-0 z-20 flex-col w-full drop-shadow h-[60px] flex-nowrap'>        
+      <header className='sticky top-0 z-20 flex-col w-full drop-shadow flex-nowrap'>        
         <div className="h-1 bg-primary-300"></div>
         <div className="flex justify-center px-2 py-3 bg-soGray-headerbg">
         <div>
@@ -150,7 +150,7 @@ const Header: React.FC = () => {
           </div>
           <div>{isLogin ? <LoginGNB /> : <LogoutGNB />}</div>
         </div>
-      </div>
+      </header>
     );
   };
   
