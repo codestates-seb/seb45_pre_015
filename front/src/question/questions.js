@@ -66,7 +66,7 @@ h1 {
 
 textarea {
   height: 200px;
-  width: 727.2px;
+  width: 100%;
   border: 1px solid hsl(210,8%,80%);
   border-radius: 3px;
 
