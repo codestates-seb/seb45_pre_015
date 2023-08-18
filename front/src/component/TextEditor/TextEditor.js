@@ -14,6 +14,7 @@ function Myeditor(){
   return (
     <div className='editor_wrap'>
       <Editor
+        ref={editorRef}
         initialValue="hello react editor world!"
         previewStyle="vertical"
         height="600px"
