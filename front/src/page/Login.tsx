@@ -1,7 +1,6 @@
 import React from 'react';
 import Logincomponent from '../component/Logincomponent';
 import ExLoginButtons from '../component/ExLoginButton';
-import Sidebar from '../component/Sidebar';
 
 const Login:React.FC = () => {
 
@@ -9,7 +8,7 @@ const Login:React.FC = () => {
 
   return(
     <div className='flex flex-grow'>
-  <Sidebar />
+  
   <div className='flex justify-center w-full align-center bg-soGray-bg flex-grow'>
     <div className='flex-col justify-center mb-auto pt-14'>
       <div className='flex items-center justify-center mx-2 my-10'>

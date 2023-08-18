@@ -32,9 +32,10 @@ const ButtonAndUser = styled.div`
   font-size: 12px;
   }
 
-  .user-inFo {
+  .user-info {
   display: flex;
   align-items: center;
+  justify-content: center;
   color: hsl(206,100%,40%);
   }
 
@@ -54,7 +55,7 @@ function QuestionUsers() {
           <div className='asked-users'>
               <div className='user-infomation'>
                 <div>asked {currentDate}</div>
-                <div className='user-inFo'>
+                <div className='user-info'>
                   <div>유저사진</div>
                   <div>유저이름</div>
                 </div>
