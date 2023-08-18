@@ -25,9 +25,12 @@ const AsideContainer = styled.div`
 
 function Main() {
   return (
-    <main className="flex flex-grow">
-      <Sidebar />
-      <MainContainer className="flex flex-grow">
+    <>
+      
+      <MainContainer>
+        <SidebarContainer>
+        <Sidebar />
+      </SidebarContainer>
         <QuestionListContainer>
           <QuestionList />
         </QuestionListContainer>
@@ -35,7 +38,7 @@ function Main() {
           <Aside />
         </AsideContainer>
       </MainContainer>
-    </main>
+    </>
   );
 }
 
