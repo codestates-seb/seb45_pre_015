@@ -1,7 +1,7 @@
 import React from "react";
 const Footer = () => {
     return (
-      <div className="flex-col">
+      <footer className="flex-col">
         <div className="flex px-4 pt-8 align-top h-[120px] text-soGray-light bg-soGray-footerbg">
           <div className="flex mx-5">어떤이미지넣는곳</div>
           <h1> {sessionStorage.getItem("memberEmail")} </h1>
@@ -21,7 +21,7 @@ const Footer = () => {
             </a>
           </div>
         </div>
-      </div>
+      </footer>
     );
   };
   

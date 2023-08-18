@@ -1,5 +1,5 @@
+import { json } from 'stream/consumers';
 import { showToast } from '../component/Toast';
-import {useState} from "react";
 
 export const fetchLogin = async (data: string): Promise<Response> => {
   try {
@@ -50,7 +50,6 @@ export const fetchUserInfo = async (): Promise<any> => {
         Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? ''
       },
       redirect: "follow",
-      // })
     })
 
       if (!response.ok) {

@@ -5,8 +5,6 @@ import Header from './component/header';
 import Footer from './component/footer';
 import Login from './page/Login';
 import Signup from './page/Signup';
-import MyTokens from "./page/MyTokens";
-import MyRefreshToken from "./page/MyRefreshToken";
 
 const App: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -19,7 +17,7 @@ const App: React.FC = () => {
     <BrowserRouter>
       <Header onSidebarToggle={toggleSidebar} />
       <main
-        className={`flex flex-col flex-grow transition-all ${
+        className={`flex flex-col flex-grow transition-all w-full h-full ${
           isSidebarOpen ? 'ml-64' : 'ml-0'
         }`}
       >
@@ -27,8 +25,6 @@ const App: React.FC = () => {
             <Route path="/" element={''} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/mytokens" element={<MyTokens />} />
-            <Route path="/myrefreshtoken" element={<MyRefreshToken />} />
         </Routes>
       </main>
       <Footer />
