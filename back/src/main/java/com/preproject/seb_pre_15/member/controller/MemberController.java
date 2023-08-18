@@ -24,8 +24,8 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberMapper memberMapper;
 
-    @GetMapping("{memberId}")
-    public ResponseEntity memberDetails(@PathVariable("memberId") @Positive Long memberId){
+    @GetMapping("{member-Id}")
+    public ResponseEntity memberDetails(@PathVariable("member-Id") @Positive Long memberId){
         Member member = memberService.findMember(memberId);
         MemberResponseDto response = memberMapper.memberToMemberResponseDto(member);
         return new ResponseEntity<>(response, HttpStatus.OK);
