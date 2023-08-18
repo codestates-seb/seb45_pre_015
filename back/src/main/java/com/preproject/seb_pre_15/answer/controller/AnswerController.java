@@ -80,8 +80,9 @@ public class AnswerController {
 
     // 해당 답변 삭제
     @DeleteMapping("/answers/{answer-id}")
-    public ResponseEntity deleteAnswer(@PathVariable("answer-id") @Positive Long answerId){
-        answerService.deleteAnswer(answerId);
+    public ResponseEntity deleteAnswer(@PathVariable("answer-id") @Positive Long answerId,
+                                       @LoginMemberId Long memberId) {
+        answerService.deleteAnswer(answerId, memberId);
         return new ResponseEntity<>("success delete answer",HttpStatus.NO_CONTENT);
     }
 
