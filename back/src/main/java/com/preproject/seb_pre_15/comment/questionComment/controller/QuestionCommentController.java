@@ -47,7 +47,7 @@ public class QuestionCommentController {
                                              @Positive @PathVariable("question-id") long answerId,
                                              @Positive @PathVariable("comment-id") long questionCommentId
                                              ){
-        QuestionComment questionComment = service.updateQuestionComment(mapper.patchToQuestionComment(patch),questionCommentId);
+        QuestionComment questionComment = service.updateQuestionComment(mapper.patchToQuestionComment(patch),questionCommentId,memberId);
         QuestionCommentDto.Response response= mapper.questionCommentToResponse(questionComment);
 
         return new ResponseEntity(response,HttpStatus.OK);

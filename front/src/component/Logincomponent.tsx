@@ -8,7 +8,6 @@ const LoginInfo: React.FC = () => {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const [isValidate, setIsValidate] = useState(false);
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -125,7 +124,7 @@ const LoginInfo: React.FC = () => {
       <div className="flex justify-between mx-3 my-10 text-sm">
         <p>Don&apos;t have an account?</p>
         <a
-          href="./login"
+          href="./signup"
           className="text-secondary-600 hover:text-secondary-300"
         >
           Sign up

@@ -3,6 +3,7 @@ package com.preproject.seb_pre_15.auth.config;
 
 //import com.preproject.seb_pre_15.auth.filter.JwtExceptionFilter;
 import com.preproject.seb_pre_15.auth.filter.JwtVerificationFilter;
+import com.preproject.seb_pre_15.auth.handler.MemberAuthenticationEntryPoint;
 import com.preproject.seb_pre_15.auth.handler.OAuth2memberSuccessHandler;
 import com.preproject.seb_pre_15.auth.jwt.JwtTokenizer;
 import com.preproject.seb_pre_15.auth.utils.CustomAuthorityUtils;
@@ -19,6 +20,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -50,29 +52,30 @@ public class SecurityConfiguration {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .exceptionHandling()
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint(jwtTokenizer,authorityUtils))
                 .and()
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers("/members/**").hasRole("USER")
-                        .antMatchers(HttpMethod.GET,"/*/members").hasRole("ADMIN")
-                        .antMatchers(HttpMethod.POST,"/**/questions").hasRole("USER")
-                        .antMatchers(HttpMethod.PATCH,"/**/questions/**").hasRole("USER")
-                        .antMatchers(HttpMethod.DELETE,"/**/questions/**").hasRole("USER")
-                        .antMatchers(HttpMethod.POST,"/**/answers").hasRole("USER")
-                        .antMatchers(HttpMethod.PATCH,"/**/answers/**").hasRole("USER")
-                        .antMatchers(HttpMethod.DELETE,"/**/answers/**").hasRole("USER")
-                        .antMatchers(HttpMethod.POST,"/**/answer-comment").hasRole("USER")
-                        .antMatchers(HttpMethod.PATCH,"/**/answer-comment/**").hasRole("USER")
-                        .antMatchers(HttpMethod.DELETE,"/**/answer-comment/**").hasRole("USER")
-                        .antMatchers(HttpMethod.POST,"/**/question-comment").hasRole("USER")
-                        .antMatchers(HttpMethod.PATCH,"/**/question-comment/**").hasRole("USER")
-                        .antMatchers(HttpMethod.DELETE,"/**/question-comment/**").hasRole("USER")
+//                        .antMatchers("/members/**").hasRole("USER")
+//                        .antMatchers(HttpMethod.GET,"/*/members").hasRole("ADMIN")
+//                        .antMatchers(HttpMethod.POST,"/**/questions").hasRole("USER")
+//                        .antMatchers(HttpMethod.PATCH,"/**/questions/**").hasRole("USER")
+//                        .antMatchers(HttpMethod.DELETE,"/**/questions/**").hasRole("USER")
+//                        .antMatchers(HttpMethod.POST,"/**/answers").hasRole("USER")
+//                        .antMatchers(HttpMethod.PATCH,"/**/answers/**").hasRole("USER")
+//                        .antMatchers(HttpMethod.DELETE,"/**/answers/**").hasRole("USER")
+//                        .antMatchers(HttpMethod.POST,"/**/answer-comment").hasRole("USER")
+//                        .antMatchers(HttpMethod.PATCH,"/**/answer-comment/**").hasRole("USER")
+//                        .antMatchers(HttpMethod.DELETE,"/**/answer-comment/**").hasRole("USER")
+//                        .antMatchers(HttpMethod.POST,"/**/question-comment").hasRole("USER")
+//                        .antMatchers(HttpMethod.PATCH,"/**/question-comment/**").hasRole("USER")
+//                        .antMatchers(HttpMethod.DELETE,"/**/question-comment/**").hasRole("USER")
                         .anyRequest().permitAll()
                 )
-
-
-                .oauth2Login(oauth2 -> oauth2.successHandler(new OAuth2memberSuccessHandler(jwtTokenizer,authorityUtils,memberService)));
+                .oauth2Login(oauth2 -> oauth2.successHandler(new OAuth2memberSuccessHandler(jwtTokenizer,authorityUtils,memberService)))
+                .logout()
+                .logoutSuccessUrl("/");
         return http.build();
     }
 
@@ -97,11 +100,22 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOriginPatterns(Arrays.asList("{url}"));
-        configuration.setAllowedOrigins(Arrays.asList("*"));
+////        configuration.setAllowedOriginPatterns(Arrays.asList("{url}"));
+//        configuration.setAllowedOrigins(Arrays.asList("*"));
+//        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE"));
+////        configuration.setAllowCredentials(Boolean.valueOf(true));
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//        configuration.addAllowedOriginPattern("*");
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://localhost:8080"));
+        configuration.setAllowCredentials(true);
+//        configuration.addAllowedMethod("*");
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE"));
-//        configuration.setAllowCredentials(Boolean.valueOf(true));
-
+        configuration.addAllowedHeader("*");
+        configuration.addExposedHeader("*");
+        configuration.setMaxAge(3000L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

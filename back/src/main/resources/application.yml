@@ -4,10 +4,14 @@ spring:
       enabled: true
       path: /h2
   datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/stackoverflowdb?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+#    username: ${username}
+#    password: ${password}
     url: jdbc:h2:mem:test
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -41,5 +45,5 @@ mail:
 jwt:
   key:
     secret: ${JWT_SECRET_KEY}
-  access-token-expiration-minutes: 100000 #테스트를 위해 설정 추후 30으로 수정
-  refresh-token-expiration-minutes: 100000 #추후 450으로 수정
+  access-token-expiration-minutes: 30 #테스트를 위해 설정 추후 30으로 수정
+  refresh-token-expiration-minutes: 450 #추후 450으로 수정

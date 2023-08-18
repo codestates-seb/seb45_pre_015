@@ -21,8 +21,6 @@ public class QuestionResponseDto {
 
   private Long vote;
   
-//  private Long memberId;
-//
 //  private List<Answer> answers;
   
 //private List<questionComment> questionComments;
