@@ -59,11 +59,13 @@ export const fetchQuestionList = async (
 
 export const fetchCreateQuestion = async (fetchData: CreateQuestionData): Promise<number> => {
   try {
-    const response = await fetch(`http://localhost:8080/questions`, {
+    const response = await fetch(`https://659a-116-126-166-12.ngrok-free.app/questions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': '69420',
         Authorization: sessionStorage.getItem('access_token') ?? '',
+        Refresh: sessionStorage.getItem('access_token') ?? '',
       },
       body: JSON.stringify(fetchData),
     });
