@@ -15,6 +15,7 @@ import MyTokens from "./page/MyTokens";
 import MyRefreshToken from "./page/MyRefreshToken";
 import Main from './page/main';
 
+
 const App: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -26,14 +27,13 @@ const App: React.FC = () => {
     <BrowserRouter>
       <Header onSidebarToggle={toggleSidebar} />
       <main
-        className={`flex flex-col flex-grow transition-all ${
+        className={`flex flex-col flex-grow transition-all w-full h-full ${
           isSidebarOpen ? 'ml-64' : 'ml-0'
         }`}
       >
         <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-
             <Route path="/" element={<Main />} />
             <Route path="/ask" element={<Ask />} />
             <Route path="/question" element={<Question />} />
@@ -42,6 +42,7 @@ const App: React.FC = () => {
 
             <Route path="/mytokens" element={<MyTokens />} />
             <Route path="/myrefreshtoken" element={<MyRefreshToken />} />
+
         </Routes>
       </main>
       <Footer />
