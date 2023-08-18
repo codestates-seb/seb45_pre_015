@@ -1,6 +1,5 @@
 package com.preproject.seb_pre_15.question.controller;
 
-import com.preproject.seb_pre_15.argumentresolver.LoginMemberId;
 import com.preproject.seb_pre_15.image.ImageService;
 import com.preproject.seb_pre_15.question.dto.QuestionPatchDto;
 import com.preproject.seb_pre_15.question.dto.QuestionPostDto;
@@ -47,22 +46,28 @@ public class QuestionController {
 //  }
   
   //이미지를 포함한 질문 글 등록
+//  @PostMapping("/questions")
+//  public ResponseEntity createPostWithImage(@RequestPart("json") QuestionPostDto questionPostDto,
+//                                            @RequestPart("image") MultipartFile imageFile) throws IOException {
+//      Question question = questionService.createQuestion(questionMapper.questionPostDtoToQuestion(questionPostDto));
+//      if (!imageFile.isEmpty()) {imageService.saveImage(imageFile);}
+//
+//      QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
+//      return new ResponseEntity<>(response,HttpStatus.CREATED);
+//  }
   @PostMapping("/questions")
-  public ResponseEntity createPostWithImage(@RequestPart("json") QuestionPostDto questionPostDto,
-                                            @RequestPart("image") MultipartFile imageFile,
-                                            @LoginMemberId Long memberId) throws IOException {
-      Question question = questionService.createQuestion(questionMapper.questionPostDtoToQuestion(questionPostDto), memberId);
-      if (!imageFile.isEmpty()) {imageService.saveImage(imageFile, memberId);}
-      
-      QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
-      return new ResponseEntity<>(response,HttpStatus.CREATED);
+  public ResponseEntity createPost(@RequestBody QuestionPostDto postDto,
+                                   @PathVariable("member-id") @Positive long memberId){
+
+    Question question = questionService.createQuestion(questionMapper.questionPostDtoToQuestion(postDto),memberId);
+    return new ResponseEntity<>(questionMapper.questionToQuestionResponseDto(question),HttpStatus.CREATED);
   }
   
   //질문 글 수정
   //권한 설정을 위해 API 주소 변경
-  @PatchMapping("/questions/{question-id}")
+  @PatchMapping("/questions/{member-id}/{question-id}")
   public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive long questionId,
-                                      @LoginMemberId @Positive long memberId,
+                                      @PathVariable("member-id") @Positive long memberId,
                                     @Valid @RequestBody QuestionPatchDto questionPatchDto) {
     questionPatchDto.setQuestionId(questionId);
     Question question = questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(questionPatchDto), memberId);
@@ -104,9 +109,8 @@ public class QuestionController {
   
   //선택 질문 글 삭제
   @DeleteMapping("/questions/{question-id}")
-  public ResponseEntity questionDelete(@PathVariable("question-id") @Positive Long questionId,
-                                       @LoginMemberId Long memberId){
-    questionService.deleteQuestion(questionId, memberId);
+  public ResponseEntity questionDelete(@PathVariable("question-id") @Positive Long questionId){
+    questionService.deleteQuestion(questionId);
     
     return new ResponseEntity<>("success delete question", HttpStatus.NO_CONTENT);
   }

@@ -2,12 +2,14 @@ import axios from "axios";
 import { CreateQuestionData, QuestionData, UpdateQuestionData } from "../type/types";
 
 export const fetchQuestionList = async (
+
+
   page: number,
   filter: string,
   searchText: string | null
 ): Promise<QuestionData[]> => {
   
-    let url = 'http://localhost:8080/questions';
+    let url = 'https://659a-116-126-166-12.ngrok-free.app/questions';
 
     if (filter === 'vote') {
       url += '/totalVote';
@@ -18,25 +20,25 @@ export const fetchQuestionList = async (
     if (filter === 'unanswered' && searchText) {
       params.set('page', String(page));
       params.set('size', '10');
-      params.set('sort', 'createdAt,desc');
-      params.set('keyword', searchText);
+      // params.set('sort', 'createdAt,desc');
+      // params.set('keyword', searchText);
     } else if (filter === 'unanswered') {
       params.set('page', String(page));
       params.set('size', '10');
-      params.set('sort', 'createdAt,desc');
+      // params.set('sort', 'createdAt,desc');
     } else if (filter === 'newest' && searchText) {
       params.set('page', String(page));
       params.set('size', '10');
-      params.set('sort', 'id,desc');
-      params.set('keyword', searchText);
+      // params.set('sort', 'id,desc');
+      // params.set('keyword', searchText);
     } else if (filter === 'newest') {
       params.set('page', String(page));
       params.set('size', '10');
-      params.set('sort', 'createdAt,desc');
+      // params.set('sort', 'createdAt,desc');
     } else if (searchText) {
       params.set('page', String(page));
       params.set('size', '10');
-      params.set('keyword', searchText);
+      // params.set('keyword', searchText);
     } else {
       params.set('page', String(page));
       params.set('size', '10');

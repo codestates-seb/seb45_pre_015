@@ -15,7 +15,4 @@ public class QuestionPostDto {
   private String body;
 
 
-//  private String images;
-//
-//  private Long vote;
 }
