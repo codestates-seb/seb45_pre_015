@@ -3,6 +3,7 @@ package com.preproject.seb_pre_15.image;
 import com.preproject.seb_pre_15.exception.ExceptionCode;
 import com.preproject.seb_pre_15.member.entity.Member;
 import com.preproject.seb_pre_15.member.service.MemberService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,11 @@ import java.io.IOException;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ImageService {
   
-  @Autowired
-  private ImageRepository imageRepository;
-  @Autowired
-  private MemberService memberService;
+  private final ImageRepository imageRepository;
+  private final MemberService memberService;
   
   public void saveImage(MultipartFile file, Long memberId) throws IOException {
     Member member = memberService.findMember(memberId);

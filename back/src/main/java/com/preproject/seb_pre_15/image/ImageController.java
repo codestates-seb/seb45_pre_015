@@ -1,6 +1,7 @@
 package com.preproject.seb_pre_15.image;
 
 import com.preproject.seb_pre_15.argumentresolver.LoginMemberId;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +13,9 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/image")
+@RequiredArgsConstructor
 public class ImageController {
-  @Autowired
-  private ImageService imageService;
+  private final ImageService imageService;
   
   @PostMapping
   public ResponseEntity<String> postImage(@RequestParam("file") MultipartFile file,
