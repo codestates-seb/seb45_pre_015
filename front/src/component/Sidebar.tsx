@@ -10,7 +10,7 @@ function Sidebar() {
   };
 
   return (
-    <div className="flex-grow-0 w-[20%] overflow-x-hidden">
+    <div className="flex-grow-0 w-[100%] overflow-x-hidden">
       <ol className="flex flex-col w-full text-[15px]">
       <li
         className={`${

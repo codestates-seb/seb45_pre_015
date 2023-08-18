@@ -11,15 +11,16 @@ const MainContainer = styled.div`
 `;
 
 const SidebarContainer = styled.div`
-  flex: 15;
+    width: 15%;
 `;
 
 const QuestionListContainer = styled.div`
-  flex: 55;
+    width: 55%;
 `;
 
 const AsideContainer = styled.div`
-  flex: 30;
+    width: 30%;
+
 `;
 
 function Main() {
