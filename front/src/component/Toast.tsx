@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { createRoot } from 'react-dom/client';
+// import { createRoot } from 'react-dom/client';
+import ReactDOM from 'react-dom'
 
 const TOAST_ID = 'toast';
 const TOAST_MS = 1500;
@@ -13,12 +14,17 @@ export const showToast = (message: string = 'default message', type: string = 'c
     document.body.appendChild(container);
   }
 
-  const root = createRoot(container);
-  root.render(
-    <React.StrictMode>
-      <Toast message={message} type={type} />
-    </React.StrictMode>
+  // const root = createRoot(container);
+  // root.render(
+  //   <React.StrictMode>
+  //     <Toast message={message} type={type} />
+  //   </React.StrictMode>
+  // );
+
+  ReactDOM.render(
+    <Toast message={message} type={type} /> , container
   );
+
 };
 export const HideToast = (target: any): void => {
     target.unmount();
