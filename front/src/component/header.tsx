@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {useNavigate, Link, redirect} from 'react-router-dom';
-import Sidebar from './Sidebar';
 import { fetchUserInfo, checkIfLogined } from '../util/fetchlogin';
 import './header.css'
 
@@ -19,12 +18,6 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle }) => {
     setMenu((prevMenu) => !prevMenu);
   };
   const navigator = useNavigate();
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const accessToken = urlParams.get('access_token');
-  const refreshToken = urlParams.get('refresh_token');
-  sessionStorage.setItem('access_token', accessToken ?? '');
-  sessionStorage.setItem('refresh_token', refreshToken ?? '');
 
   useEffect(() => {
     checkLoginState();
@@ -128,7 +121,7 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle }) => {
   const [isFocus, setIsFocus] = useState<boolean>(false);
 
   return (
-    <div className='sticky top-0 z-20 flex-col w-full drop-shadow h-[60px] flex-nowrap'>        
+    <header className='sticky top-0 z-20 flex-col w-full drop-shadow h-[60px] flex-nowrap'>        
       <div className="h-1 bg-primary-300"></div>
       <div className="flex justify-center px-2 py-3 bg-soGray-headerbg">
       <div>
@@ -138,11 +131,6 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle }) => {
         className="h-10 mr-76 p-2"
         onClick={handleClick}
       />
-      {menu === true ? (
-        <div className={`sidebar-container ${menu ? 'active' : ''}`}>
-        <Sidebar/>
-      </div>
-      ) : null}
     </div>         
       <div className="items-center mx-2 my-1">
         <Link to="/" onClick={onClickRemove}>
@@ -166,7 +154,7 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle }) => {
       </div>
       <div>{isLogin ? <LoginGNB /> : <LogoutGNB />}</div>
     </div>
-  </div>
+  </header>
   );
 };
 

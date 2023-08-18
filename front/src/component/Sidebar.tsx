@@ -10,7 +10,8 @@ function Sidebar() {
   };
 
   return (
-    <ol className="flex flex-col w-full text-[15px]">
+    <div className="flex-grow-0 w-[20%] overflow-x-hidden">
+      <ol className="flex flex-col w-full text-[15px]">
       <li
         className={`${
           path === ''
@@ -51,7 +52,8 @@ function Sidebar() {
           </li>
         </ul>
       </li>
-    </ol>
+      </ol>
+    </div>
   );
 }
 
