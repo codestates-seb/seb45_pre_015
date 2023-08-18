@@ -6,9 +6,12 @@ import Footer from './component/footer';
 import Login from './page/Login';
 import Ask from './page/ask';
 import Question from './page/question';
+
 import Mypage from './page/Mypage/Mypage'
+
 import Signup from './page/Signup';
 import Main from './page/main';
+import MyTokens from "./util/MyTokens";
 
 
 const App: React.FC = () => {
@@ -33,6 +36,8 @@ const App: React.FC = () => {
             <Route path="/ask" element={<Ask />} />
             <Route path="/question" element={<Question />} />
             <Route path='/mypage' element={<Mypage />} />
+
+            <Route path="/mytokens" element={<MyTokens />} />
         </Routes>
       </main>
       <Footer />

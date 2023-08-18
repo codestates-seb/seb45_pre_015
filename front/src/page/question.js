@@ -1,12 +1,12 @@
 import Questions from "../question/questions";
 import Sidebar from "../component/Sidebar";
 import Aside from "../component/aside";
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const MainContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    margin: 0 120px;
+  display: flex;
+  flex-direction: row;
+  margin: 0 120px;
 `;
 
 const SidebarContainer = styled.div`
@@ -19,24 +19,25 @@ const QuestionsContainer = styled.div`
 
 const AsideContainer = styled.div`
     width: 30%;
+
 `;
 
 function Question() {
-    return(
-        <div>
-            <MainContainer>
-            <SidebarContainer>
-                <Sidebar />
-            </SidebarContainer>
-            <QuestionsContainer>
-                <Questions />
-            </QuestionsContainer>
-            <AsideContainer>
-                <Aside />
-            </AsideContainer>
-        </MainContainer>       
-        </div>
-    )
+  return (
+    <div>
+      <MainContainer>
+        <SidebarContainer>
+          <Sidebar />
+        </SidebarContainer>
+        <QuestionsContainer>
+          <Questions />
+        </QuestionsContainer>
+        <AsideContainer>
+          <Aside />
+        </AsideContainer>
+      </MainContainer>
+    </div>
+  );
 }
 
 export default Question;

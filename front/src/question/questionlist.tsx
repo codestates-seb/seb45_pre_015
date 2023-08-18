@@ -1,9 +1,10 @@
 import { styled } from "styled-components";
-import {AskButton, PageButton } from "../component/buttons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PostSummary from "./postsummary";
-import { SortBtn } from "../component/buttons";
+import { AskButton, PageButton, SortBtn } from "../component/buttons";
+import { fetchQuestionList } from "../util/fetchquestion";
+import { QuestionData } from "../type/types";
 
 const AllQuestionPage = styled.div`
     display: flex;
@@ -105,18 +106,19 @@ h4 {
 
 
 function QuestionList() {
-
   const currentDate = new Date().toLocaleDateString();
+  const [page, setPage] = useState<number>(1);
+  const [questions, setQuestions] = useState<QuestionData[]>([]);
+  const filter = "newest";
+  const searchText = null;
 
-  const [page, setPage] = useState(1);
-
-  const pageHandle = (pageValue) => {
-    if (pageValue === 'Next') {
+  const pageHandle = (pageValue: number | "Prev" | "Next"): void => {
+    if (pageValue === "Next") {
       if (page >= 5) {
         return;
       }
       setPage(page + 1);
-    } else if (pageValue === 'Prev') {
+    } else if (pageValue === "Prev") {
       if (page <= 1) {
         return;
       }
@@ -125,6 +127,20 @@ function QuestionList() {
       setPage(pageValue);
     }
   };
+
+  const fetchQuestions = async () => {
+    try {
+      const data = await fetchQuestionList(page, filter, searchText);
+      setQuestions(data);
+    } catch (error:any) {
+      console.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchQuestions();
+  }, [page, filter, searchText]);
+
 
   
 
@@ -167,14 +183,13 @@ function QuestionList() {
           </PageButton>
           {[1, 2, 3, 4, 5].map(btnPage => (
             <PageButton
-              key={btnPage}
-              bgColor={page === btnPage}
-              onClick={() => {
-                pageHandle(btnPage);
-              }}
-            >
-              {btnPage}
-            </PageButton>
+            color={page === btnPage ? 'orange' : 'white'}
+            onClick={() => {
+              pageHandle(btnPage);
+            }}
+          >
+            {btnPage}
+          </PageButton>
           ))}
           <PageButton
             onClick={() => {
