@@ -28,7 +28,7 @@ public class ImageController {
   @PatchMapping("/{image-id}")
   public ResponseEntity updateImage(@RequestParam("file") MultipartFile file,
                                     @PathVariable("image-id") @Positive Long imageId) throws IOException {
-    imageService.updateImage(file, imageId);
+    imageService.updateImage(file , imageId);
     return ResponseEntity.status(HttpStatus.OK).body("Image update successfully");
   }
   
