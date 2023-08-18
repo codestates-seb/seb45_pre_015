@@ -24,16 +24,23 @@ public class ImageController {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading image");
     }
   }
+
+  @PatchMapping("/{image-id}")
+  public ResponseEntity updateImage(@RequestParam("file") MultipartFile file,
+                                    @PathVariable("image-id") @Positive Long imageId) throws IOException {
+    imageService.updateImage(file, imageId);
+    return ResponseEntity.status(HttpStatus.OK).body("Image update successfully");
+  }
   
-  @GetMapping("/image/{image-id}")
+  @GetMapping("/{image-id}")
   public ResponseEntity<byte[]> getImage(@PathVariable("image-id") @Positive Long imageId) {
     byte[] imageData = imageService.getImage(imageId);
     return new ResponseEntity<>(imageData, HttpStatus.OK);
   }
   
-  @DeleteMapping("/image/{image-id}")
+  @DeleteMapping("/{image-id}")
   public ResponseEntity deleteImage(@PathVariable("image-id") @Positive Long imageId){
     imageService.deleteImage(imageId);
-    return new ResponseEntity<>("success delete image", HttpStatus.NO_CONTENT);//
+    return new ResponseEntity<>("success delete image", HttpStatus.NO_CONTENT);
   }
 }
