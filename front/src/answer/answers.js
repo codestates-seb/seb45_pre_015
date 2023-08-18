@@ -1,16 +1,10 @@
-import AnswerUsers from "./answerUsers";
+import UserInfo from "../component/userinfo";
 import Vote from "../component/vote";
 import styled from 'styled-components';
 
 const Content = styled.div`
   display: flex;
-  padding: 20px;
   flex-direction: column;
-
-  .headline {
-  display: flex;
-  justify-content: space-between; 
-  }
 
   h1 {
   font-size: 30px;
@@ -33,24 +27,24 @@ const Content = styled.div`
 `;
 
 
-function Answers() {
+function Answers({ answerText }) {
   return (
     <Content>
       <div>
         <div>
-          <div className="headline">
-            <h1>제목입니다.</h1>
-          </div>
         </div>
       </div>
       <div className="row">
-          <div>
-            <div className="answer-section">
-              <Vote />
-              <p>답변글입니다.23324234324324234324324</p>
+        <div>
+          <div className="answer-section">
+            <Vote />
+            <div className="question-section">
+              {/* answerText로 받은 내용을 출력 */}
+              <p>입력한 내용: {answerText}</p>
+              <UserInfo />
             </div>
-            <AnswerUsers />
           </div>
+        </div>
       </div>
     </Content>
   );

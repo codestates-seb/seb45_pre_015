@@ -27,7 +27,7 @@ const ButtonAndUser = styled.div`
   width: 100%;
   padding: 7px 6px 7px 7px;
   border-radius: 3px;
-  background-color: rgb(217, 234, 247);
+
   color: hsl(210,8%,45%);
   font-size: 12px;
   }
@@ -41,7 +41,7 @@ const ButtonAndUser = styled.div`
 
 `
 
-function QuestionUsers({ name }) {
+function UserInfo({ name }) {
 
   const currentDate = new Date().toLocaleDateString();
 
@@ -66,4 +66,4 @@ function QuestionUsers({ name }) {
   );
 }
 
-export default QuestionUsers;
+export default UserInfo;

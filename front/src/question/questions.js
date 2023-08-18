@@ -1,9 +1,10 @@
-import QuestionUsers from "./questionUsers"; 
+import UserInfo from "../component/userinfo"; 
 import Vote from "../component/vote";
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { AskButton } from "../component/buttons";
 import { useState } from "react";
+import { postAnswer } from "../util/answerApi";
 
 import Answers from "../answer/answers";
 
@@ -61,7 +62,6 @@ h1 {
 .question-section {
   display: flex;
   flex-direction: column;
-  
 }
 
 textarea {
@@ -114,11 +114,18 @@ function Questions() {
   const currentDate = new Date().toLocaleDateString();
   const [answerText, setAnswerText] = useState('');
 
-  const handlePostButton = () => {
-    alert(answerText);
-  }
-  
-  const handlePostAnswer = (event) => {
+  const handlePostButton = async () => {
+    try {
+      await postAnswer(answerText); // 답변 게시 API 호출
+      console.log('답변이 성공적으로 게시되었습니다');
+      alert('답변이 성공적으로 게시되었습니다');
+    } catch (error) {
+      console.error('답변 게시 중 오류 발생', error);
+      alert('답변 게시 중 오류가 발생했습니다');
+    }
+  };
+
+  const handlePostAnswer = event => {
     setAnswerText(event.target.value);
   };
 
@@ -141,14 +148,16 @@ function Questions() {
               <Vote />
               <div className="question-section">
                 <p>질문글입니다.23324234324324234324324</p>
-                <QuestionUsers />
+                <UserInfo />
               </div>
             </div>
-            
-      <h2>Your Answer</h2>
-      <textarea value={answerText}
-        onChange={handlePostAnswer} />
-      <Link to="/question"><button className="post-button" onClick={handlePostButton}>Post Your Answer</button></Link>
+       <textarea
+        value={answerText}
+        onChange={handlePostAnswer}
+      />
+      <button className="post-button" onClick={handlePostButton}>
+        Post Your Answer
+      </button>
       <Answers />
       {/* 완성되면 지울것 */}
     </Content>
