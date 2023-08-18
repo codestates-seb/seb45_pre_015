@@ -52,7 +52,7 @@ public class QuestionController {
                                             @RequestPart("image") MultipartFile imageFile,
                                             @LoginMemberId Long memberId) throws IOException {
       Question question = questionService.createQuestion(questionMapper.questionPostDtoToQuestion(questionPostDto), memberId);
-      if (!imageFile.isEmpty()) {imageService.saveImage(imageFile);}
+      if (!imageFile.isEmpty()) {imageService.saveImage(imageFile, memberId);}
       
       QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
       return new ResponseEntity<>(response,HttpStatus.CREATED);

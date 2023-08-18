@@ -1,5 +1,6 @@
 package com.preproject.seb_pre_15.image;
 
+import com.preproject.seb_pre_15.argumentresolver.LoginMemberId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,10 @@ public class ImageController {
   private ImageService imageService;
   
   @PostMapping
-  public ResponseEntity<String> postImage(@RequestParam("file") MultipartFile file) {
+  public ResponseEntity<String> postImage(@RequestParam("file") MultipartFile file,
+                                          @LoginMemberId Long memberId) {
     try {
-      imageService.saveImage(file);
+      imageService.saveImage(file, memberId);
       return ResponseEntity.status(HttpStatus.CREATED).body("Image uploaded successfully");
     } catch (IOException e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading image");
@@ -27,8 +29,9 @@ public class ImageController {
 
   @PatchMapping("/{image-id}")
   public ResponseEntity updateImage(@RequestParam("file") MultipartFile file,
-                                    @PathVariable("image-id") @Positive Long imageId) throws IOException {
-    imageService.updateImage(file , imageId);
+                                    @PathVariable("image-id") @Positive Long imageId,
+                                    @LoginMemberId Long memberId) throws IOException {
+    imageService.updateImage(file , imageId, memberId);
     return ResponseEntity.status(HttpStatus.OK).body("Image update successfully");
   }
   
@@ -39,8 +42,9 @@ public class ImageController {
   }
   
   @DeleteMapping("/{image-id}")
-  public ResponseEntity deleteImage(@PathVariable("image-id") @Positive Long imageId){
-    imageService.deleteImage(imageId);
+  public ResponseEntity deleteImage(@PathVariable("image-id") @Positive Long imageId,
+                                    @LoginMemberId Long memberId){
+    imageService.deleteImage(imageId, memberId);
     return new ResponseEntity<>("success delete image", HttpStatus.NO_CONTENT);
   }
 }

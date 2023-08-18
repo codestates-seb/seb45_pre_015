@@ -1,6 +1,8 @@
 package com.preproject.seb_pre_15.image;
 
 import com.preproject.seb_pre_15.exception.ExceptionCode;
+import com.preproject.seb_pre_15.member.entity.Member;
+import com.preproject.seb_pre_15.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,10 +18,14 @@ public class ImageService {
   
   @Autowired
   private ImageRepository imageRepository;
+  @Autowired
+  private MemberService memberService;
   
-  public void saveImage(MultipartFile file) throws IOException {
+  public void saveImage(MultipartFile file, Long memberId) throws IOException {
+    Member member = memberService.findMember(memberId);
     Image sample = new Image();
     sample.setImg(file.getBytes());
+    sample.setMember(member);
     imageRepository.save(sample);
   }
   
@@ -28,19 +34,26 @@ public class ImageService {
     return optionalImage.map(Image::getImg).orElse(null);
   }
   
-  public void deleteImage(Long imageId) {
-    imageRepository.deleteById(imageId);
+  public void deleteImage(Long imageId, Long memberId) {
+    Optional<Image> optionalImage = imageRepository.findById(imageId);
+    Long findImageMemberId = optionalImage.get().getImageId();
+    if(findImageMemberId.equals(memberId)){
+      imageRepository.deleteById(imageId);
+    }else {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to delete this image");
+    }
+
   }
 
-  public void updateImage(MultipartFile file, Long imageId) throws IOException {
+  public void updateImage(MultipartFile file, Long imageId, Long memberId) throws IOException {
     Optional<Image> optionalImage = imageRepository.findById(imageId);
-    if(optionalImage.isPresent()){
+    Long findImageMemberId = optionalImage.get().getImageId();
+    if(findImageMemberId.equals(memberId)){
       Image image = optionalImage.get();
       image.setImg(file.getBytes());
       imageRepository.save(image);
-    }else {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, ExceptionCode.IMAGE_NOT_FOUND.getMessage());
+    }else{
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to update this image");
     }
-
   }
 }
