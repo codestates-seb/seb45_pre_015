@@ -87,7 +87,7 @@ const StatusContainer = styled.div`
   }
 `
 
-const Summary = () => {
+const Summary = ({userInfo}) => {
   return(
     <StatusContainer>
       <div className="info_stats">

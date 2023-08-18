@@ -12,18 +12,29 @@ function Myeditor(){
     console.log(data);
   }
   return (
-    <div className='editor_wrap'>
-      <Editor
-        ref={editorRef}
-        initialValue="hello react editor world!"
-        previewStyle="vertical"
-        height="600px"
-        initialEditType="wysiwyg"
-        useCommandShortcut={false}
-        language='ko-KR'
-      />
+    <section className='form_wrap'>
+      <form action='' method='get' className='form' >
+        <div className='form_input_wrap'>
+          <div className='form_input_name'>
+            <label htmlFor='name'>Display name</label>
+            <input type='text' name='name' id='name' required />
+          </div>
+          <div className='editor_wrap'>
+            <h4>Title</h4>
+            <Editor
+              ref={editorRef}
+              initialValue="텍스트를 입력하세요"
+              previewStyle="vertical"
+              height="600px"
+              initialEditType="wysiwyg"
+              useCommandShortcut={false}
+              language='ko-KR'
+            />
+          </div>
+        </div>
       <button onClick={handleRegisterBtn}>등록</button>
-    </div>
+      </form>
+    </section>
 );
 }
 
