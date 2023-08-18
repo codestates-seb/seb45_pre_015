@@ -3,9 +3,9 @@ import Vote from "../component/vote";
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { AskButton } from "../component/buttons";
+import { useState } from "react";
 
 import Answers from "../answer/answers";
-//완성되면 지울것
 
 
 
@@ -111,12 +111,15 @@ h2 {
 `;
 
 function Questions() {
-
   const currentDate = new Date().toLocaleDateString();
+  const [answerText, setAnswerText] = useState('');
 
-  const handlePostQuestion = () => {
-    // 이 곳에서 실제로 할 작업을 수행하거나 알림을 보여줄 수 있습니다.
-    alert('Question posted!'); // 간단한 알림
+  const handlePostButton = () => {
+    alert(answerText);
+  }
+  
+  const handlePostAnswer = (event) => {
+    setAnswerText(event.target.value);
   };
 
   return (
@@ -143,8 +146,9 @@ function Questions() {
             </div>
             
       <h2>Your Answer</h2>
-      <textarea/>
-      <Link to="/question"><button className="post-button" onClick={handlePostQuestion}>Post Your Answer</button></Link>
+      <textarea value={answerText}
+        onChange={handlePostAnswer} />
+      <Link to="/question"><button className="post-button" onClick={handlePostButton}>Post Your Answer</button></Link>
       <Answers />
       {/* 완성되면 지울것 */}
     </Content>
