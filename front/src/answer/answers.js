@@ -27,7 +27,7 @@ const Content = styled.div`
 `;
 
 
-function Answers({ answerText }) {
+function Answers({ body }) {
   return (
     <Content>
       <div>
@@ -39,8 +39,7 @@ function Answers({ answerText }) {
           <div className="answer-section">
             <Vote />
             <div className="question-section">
-              {/* answerText로 받은 내용을 출력 */}
-              <p>입력한 내용: {answerText}</p>
+              <p>내용: {body}</p>
               <UserInfo />
             </div>
           </div>
