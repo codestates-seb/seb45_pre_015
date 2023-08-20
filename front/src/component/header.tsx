@@ -2,21 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import {useNavigate, Link, redirect} from 'react-router-dom';
 import { fetchUserInfo, checkIfLogined } from '../util/fetchlogin';
 import './header.css'
+import IconLogo from '../images/logo-stackoverflow.svg';
 
-type HeaderProps = {
-  onSidebarToggle: () => void;
-};
-
-const Header: React.FC<HeaderProps> = ({ onSidebarToggle }) => {
+const Header: React.FC = () => {
   const [isLogin, setIsLogin] = useState<boolean>(false);
   const [userProfileImage, setUserProfileImage] = useState<string>('');
   const [userProfileImageLink, setUserProfileImageLink] = useState<string>('');
   const [searchText, setSearchText] = useState<string>('');
   const search = useRef<HTMLInputElement | null>(null);
   const [menu, setMenu] = useState<boolean>(false);
-  const handleClick = () => {
-    setMenu((prevMenu) => !prevMenu);
-  };
+
   const navigator = useNavigate();
 
   useEffect(() => {
@@ -80,36 +75,32 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle }) => {
 
   const LoginGNB: React.FC = () => {
     return (
-      <div className="flex items-center">
+      <>
         <button
           onClick={onLogoutClick}
           className="px-3 py-1 mx-1 text-gray hover:bg-[#eee] rounded"
         >
-          <Link to="/">Logout</Link>
+        Logout
         </button>
         <div className="items-center p-2 hover:bg-soGray-light">
-          <a href={userProfileImageLink}>
+          <Link to='/mypage'>
             <img
               src={userProfileImage}
               alt="userProfile"
               width={25}
               height={25}
             ></img>
-          </a>
+          </Link>
         </div>
-      </div>
+      </>
     );
   };
 
   const LogoutGNB: React.FC = () => {
     return (
       <>
-        <button className="login-btn">
-          <Link to="/login">Log in</Link>
-        </button>
-        <button className="px-2 py-1 mx-1 text-white border rounded hover:bg-buttonPrimaryHover bg-buttonPrimary border-secondary-300">
-          <Link to="/signup">Sign up</Link>
-        </button>
+        <Link to="/login">Log in</Link>
+        <Link to="/signup" className='signup_btn'>Sign up</Link>
       </>
     );
   };
@@ -121,39 +112,26 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle }) => {
   const [isFocus, setIsFocus] = useState<boolean>(false);
 
   return (
-    <header className='sticky top-0 z-20 flex-col w-full drop-shadow h-[60px] flex-nowrap'>        
-      <div className="h-1 bg-primary-300"></div>
-      <div className="flex justify-center px-2 py-3 bg-soGray-headerbg">
-      <div>
-      <img
-        src="icon.png"
-        alt=""
-        className="h-10 mr-76 p-2"
-        onClick={handleClick}
-      />
-    </div>         
-      <div className="items-center mx-2 my-1">
+    <header>        
+      <div className="top_bg"></div>
+      <section className= "hd_wrap">
         <Link to="/" onClick={onClickRemove}>
-          <p className='mx-0 w-150 h-30 mt-n4'>stack overflow</p>              
+          <img src={IconLogo} alt="Icon" />            
         </Link>
-      </div>
-      <div className="flex items-center px-2 py-1 mx-2 mr-10 bg-white border rounded-md grow border-soGray-light focus:ring-secondary-300">
-        <div className="flex mx-2 my-1 text-soGray-icon">
-          
+        <div className="hd_input">
+          <input
+            type="text"
+            value={searchText}
+            className="search-bar"
+            placeholder="Search..."
+            onChange={handleSearch}
+            onFocus={onChangeSearch}
+            onBlur={onChangeSearch}
+            ref={search}
+          />
         </div>
-        <input
-          type="text"
-          value={searchText}
-          className="search-bar"
-          placeholder="Search..."
-          onChange={handleSearch}
-          onFocus={onChangeSearch}
-          onBlur={onChangeSearch}
-          ref={search}
-        />
-      </div>
-      <div>{isLogin ? <LoginGNB /> : <LogoutGNB />}</div>
-    </div>
+        <div className='hd_user'>{isLogin ? <LoginGNB /> : <LogoutGNB />}</div>
+      </section>
   </header>
   );
 };

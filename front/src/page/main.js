@@ -4,30 +4,29 @@ import Aside from "../component/aside";
 import QuestionList from "../question/questionlist";
 import { styled } from "styled-components";
 
-const MainContainer = styled.div`
+const MainContainerWrap = styled.section`
   display: flex;
-  flex-direction: row;
-  margin: 0 120px;
+  max-width: 78.75rem;
+  margin: 0 auto;
+`
+
+const MainContainer = styled.div`
 `;
 
 const SidebarContainer = styled.div`
-    width: 15%;
 `;
 
 const QuestionListContainer = styled.div`
-    width: 55%;
 `;
 
 const AsideContainer = styled.div`
-    width: 30%;
-
 `;
 
 function Main() {
   return (
-    <main className="flex flex-grow">
+    <MainContainerWrap>
       <Sidebar />
-      <MainContainer className="flex flex-grow">
+      <MainContainer>
         <QuestionListContainer>
           <QuestionList />
         </QuestionListContainer>
@@ -35,7 +34,7 @@ function Main() {
           <Aside />
         </AsideContainer>
       </MainContainer>
-    </main>
+    </MainContainerWrap>
   );
 }
 
