@@ -7,7 +7,7 @@ export const fetchQuestionList = async (
   searchText: string | null
 ): Promise<QuestionData[]> => {
   
-  let url = 'http://localhost:8080/questions';
+  let url = 'https://659a-116-126-166-12.ngrok-free.app/questions';
 
   if (filter === 'vote') {
     url += '/totalVote';
