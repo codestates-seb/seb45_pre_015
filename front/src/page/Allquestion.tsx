@@ -25,8 +25,7 @@ const AsideContainer = styled.div`
 
 function Main() {
   return (
-    <>
-      
+    <>      
       <MainContainer>
         <SidebarContainer>
         <Sidebar />
