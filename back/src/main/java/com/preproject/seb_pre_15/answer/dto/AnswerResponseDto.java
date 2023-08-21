@@ -16,7 +16,9 @@ public class AnswerResponseDto {
     
     private String body;
     
-    private Long vote;
+    private Long vote;  
+    
+    private List<byte[]> img;
 
     private List<AnswerCommentDto.Response> comments;
 }

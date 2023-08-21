@@ -5,9 +5,7 @@ import com.preproject.seb_pre_15.answer.entity.Answer;
 import com.preproject.seb_pre_15.comment.questionComment.dto.QuestionCommentDto;
 import com.preproject.seb_pre_15.comment.questionComment.entity.QuestionComment;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.List;
 
 
@@ -23,6 +21,8 @@ public class QuestionResponseDto {
   private Long view;
 
   private Long vote;
+  
+  private List<byte[]> img;
   
   private List<AnswerResponseDto> answers;
   
