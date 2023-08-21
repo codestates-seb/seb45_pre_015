@@ -2,14 +2,16 @@ export interface QuestionData {
   questionId: number;
     title: string;
     body: string;
+    vote: number;
+    view: number;
 }
   
   export interface CreateQuestionData {
     title: string;
-    content: string;
+    body: string;
   }
   
   export interface UpdateQuestionData {
     title?: string;
-    content?: string;
+    body?: string;
   }

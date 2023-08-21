@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { AskButton, PageButton, SortBtn } from "../component/buttons";
 import { fetchQuestionList } from "../util/fetchquestion";
 import { QuestionData } from "../type/types"
+import PostSummary from './postsummary'
 
 const PostSum = styled.div`
   display: flex;
@@ -15,7 +16,8 @@ const PostSum = styled.div`
   text-align: left;
   font-size: 13px;
   `
-const AllQuestionPage = styled.div`
+
+const TopQuestionPage = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -114,74 +116,58 @@ h4 {
 
 
 
-function QuestionList() {
+function TopQuestionList() {
   const currentDate = new Date().toLocaleDateString();
-  const [page, setPage] = useState<number>(1);
   const [questions, setQuestions] = useState<QuestionData[]>([]);
+  const [page, setPage] = useState<number>(1);
   const filter = "newest";
   const searchText = null;
-  const totalPages = Math.ceil(questions.length / 10);
-  const pageButtons = Array.from({ length: totalPages }, (_, index) => index + 1);
-
-  const pageHandle = (pageValue: number | 'Prev' | 'Next'): void => {
-    if (pageValue === 'Next') {
-      if (questions.length < 10) {
-        return;
-      }
-      setPage(page + 1);
-    } else if (pageValue === 'Prev') {
-      if (page <= 1) {
-        return;
-      }
-      setPage(page - 1);
-    } else {
-      setPage(pageValue);
-    }
-  };
-
-  const fetchQuestions = async () => {
-    try {
-      const data = await fetchQuestionList(page, filter, searchText);
-      setQuestions(data);
-    } catch (error: any) {
-      console.error(error.message);
-    }
-  };
 
   useEffect(() => {
-    fetchQuestions();
-  }, [page, filter, searchText]);
+    const fetchData = async () => {
+      try {
+        const data = await fetchQuestionList(page, filter, searchText);
+        const sortedData = data.sort((a, b) => b.vote - a.vote);
+        const top10Questions = sortedData.slice(0, 10);
+        setQuestions(top10Questions);
+      } catch (error: any) {
+        console.error(error.message);
+      }
+    };
+  
+    fetchData();
+  }, []);
 
   return (
-    <AllQuestionPage>
-      <div className="container">
-        <div className="header">
-          <h1>All Questions</h1>
-          <Link to="/ask">
-            <AskButton>Ask Question</AskButton>
-          </Link>
-        </div>
-        <div className="question-count">
+    <TopQuestionPage>
+    <div className="container">
+      <div className="header">
+      <h1>Top Questions</h1>
+      <Link to="/ask">
+        <AskButton>Ask Question</AskButton>
+      </Link>
+      </div>
+      <div className="question-count">
           <h4>{questions.length} questions</h4>
           <div>
             <SortBtn className="border-right">newest</SortBtn>
             <SortBtn className="border-left">voted</SortBtn>
           </div>
         </div>
-        <ul>
+      <ul>
         {questions.map((question) => (
           <li className="questions-container" key={question.questionId}>
-        <PostSum>
+            <PostSum>
             <span>{question.vote} votes</span>
             <span> answers</span>
             <span>{question.view} views</span>
-        </PostSum>
+            </PostSum>
             <div className="questions">
-              <Link to={`/question/${question.questionId}`}>
-                <div className="question-title">{question.title}</div>
-              </Link>
-              <div className="question-contents">{question.body}</div>
-              <div className="question-user-info-container">
+            <Link to={`/question/${question.questionId}`}>
+              <div className="question-title">{question.title}</div>
+            </Link>
+            <div className="question-contents">{question.body}</div>
+            <div className="question-user-info-container">
                           <Link to={'/mypage'}><div className="user">질문유저 이름</div></Link>
                           <div className="asked-date">asked {currentDate}</div>
                         </div>
@@ -189,38 +175,9 @@ function QuestionList() {
           </li>
         ))}
       </ul>
-        <div className="button">
-        <PageButton
-  onClick={() => {
-    pageHandle('Prev');
-  }}
-  style={{ display: page === 1 ? 'none' : 'block' }} // 페이지가 1일 때 숨김
->
-  Prev
-</PageButton>
-{pageButtons.map((btnPage) => (
-  <PageButton
-    color={page === btnPage ? 'orange' : 'white'}
-    onClick={() => {
-      pageHandle(btnPage);
-    }}
-    key={btnPage}
-  >
-    {btnPage}
-  </PageButton>
-))}
-<PageButton
-  onClick={() => {
-    pageHandle('Next');
-  }}
-  style={{ display: page === totalPages ? 'none' : 'block' }} // 페이지가 마지막일 때 숨김
->
-  Next
-</PageButton>
-        </div>
-      </div>
-    </AllQuestionPage>
+    </div>
+    </TopQuestionPage>
   );
 }
 
-export default QuestionList;
+export default TopQuestionList;
