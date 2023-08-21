@@ -1,5 +1,4 @@
 
-import { useState } from "react";
 import { postAnswer } from "../util/answerApi";
 import { styled } from "styled-components";
 
@@ -42,15 +41,13 @@ textarea {
 `;
 
 
-function AnswerForm () {
-
-    const [answerText, setAnswerText] = useState('');
-
+function AnswerForm ({body, setAnswerBody}) {
     const handlePostButton = async () => {
       try {
-        await postAnswer(answerText); // 답변 게시 API 호출
+        await postAnswer(body); // 답변 게시 API 호출
         console.log('답변이 성공적으로 게시되었습니다');
         alert('답변이 성공적으로 게시되었습니다');
+        setAnswerBody("");
       } catch (error) {
         console.error('답변 게시 중 오류 발생', error);
         alert('답변 게시 중 오류가 발생했습니다');
@@ -58,12 +55,12 @@ function AnswerForm () {
     };
   
     const handlePostAnswer = event => {
-      setAnswerText(event.target.value);
+      setAnswerBody(event.target.value);
     };
     return (
 <AnswerFormBody>
     <textarea
-            value={answerText}
+            value={body}
             onChange={handlePostAnswer}
           />
           <button className="post-button" onClick={handlePostButton}>

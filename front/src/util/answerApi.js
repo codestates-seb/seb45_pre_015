@@ -2,9 +2,9 @@ import axios from 'axios';
 
 const API_URL = 'https://659a-116-126-166-12.ngrok-free.app/answers';
 
-export const postAnswer = async (answerText) => {
+export const postAnswer = async (body) => {
   const requestBody = {
-    body: answerText
+    body: body
   };
 
   const headers = {

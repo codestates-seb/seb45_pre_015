@@ -74,7 +74,7 @@ h2 {
 
 `;
 
-function Questions({title, body}) {
+function Questions({title, body, view}) {
   const currentDate = new Date().toLocaleDateString();
   
   return (
@@ -89,7 +89,7 @@ function Questions({title, body}) {
         <div className="activities">
           <span>Asked {currentDate}</span>
           <span> Modified</span>
-          <span> Viewed</span>
+          <span> Viewed {view}</span>
         </div>
       </div>
             <div className="question-container">
