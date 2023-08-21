@@ -1,14 +1,14 @@
 package com.preproject.seb_pre_15.question.controller;
 
 import com.preproject.seb_pre_15.argumentresolver.LoginMemberId;
-import com.preproject.seb_pre_15.image.ImageService;
+
+import com.preproject.seb_pre_15.image.service.QuestionImageService;
 import com.preproject.seb_pre_15.question.dto.QuestionPatchDto;
 import com.preproject.seb_pre_15.question.dto.QuestionPostDto;
 import com.preproject.seb_pre_15.question.dto.QuestionResponseDto;
 import com.preproject.seb_pre_15.question.dto.QuestionVotePatchDto;
 import com.preproject.seb_pre_15.question.entity.Question;
 import com.preproject.seb_pre_15.question.mapper.QuestionMapper;
-
 import com.preproject.seb_pre_15.question.service.QuestionService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -23,6 +23,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping
@@ -30,13 +31,13 @@ import java.util.List;
 public class QuestionController {
   private final QuestionService questionService;
   private final QuestionMapper questionMapper;
-  private final ImageService imageService;
-  public QuestionController(QuestionService questionService, QuestionMapper questionMapper, ImageService imageService) {
+  private final QuestionImageService questionImageService;
+  public QuestionController(QuestionService questionService, QuestionMapper questionMapper, QuestionImageService questionImageService) {
     this.questionService = questionService;
     this.questionMapper = questionMapper;
-    this.imageService = imageService;
+    this.questionImageService = questionImageService;
   }
-
+  
 //  //질문 글 등록
 //  @PostMapping("/questions")
 //  public ResponseEntity postQuestion(@Valid @RequestBody QuestionPostDto questionPostDto) {
@@ -45,80 +46,87 @@ public class QuestionController {
 //    QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
 //    return new ResponseEntity<>(response,HttpStatus.CREATED);
 //  }
-
+  
   //이미지를 포함한 질문 글 등록
-//  @PostMapping("/questions")
-//  public ResponseEntity createPostWithImage(@RequestPart("json") QuestionPostDto questionPostDto,
-//                                            @RequestPart("image") MultipartFile imageFile,
-//                                            @LoginMemberId Long memberId) throws IOException {
-//    Question question = questionService.createQuestion(questionMapper.questionPostDtoToQuestion(questionPostDto), memberId);
-//    if (!imageFile.isEmpty()) {imageService.saveImage(imageFile, memberId);}
-//
-//    QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
-//    return new ResponseEntity<>(response,HttpStatus.CREATED);
-//  }
   @PostMapping("/questions")
-  public ResponseEntity createPost(@RequestBody QuestionPostDto postDto,
-                                   @LoginMemberId @Positive long memberId){
-
-    Question question = questionService.createQuestion(questionMapper.questionPostDtoToQuestion(postDto),memberId);
-    return new ResponseEntity<>(questionMapper.questionToQuestionResponseDto(question),HttpStatus.CREATED);
+  public ResponseEntity createPostWithImages(@Valid @RequestPart("json") QuestionPostDto questionPostDto,
+                                             @RequestPart("images") List<MultipartFile> images,
+                                             @LoginMemberId Long memberId) {
+    Question question = questionService.createQuestion(questionMapper.questionPostDtoToQuestion(questionPostDto), memberId);
+    QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
+    response.setImg(questionImageService.saveImages(images, question));
+    return new ResponseEntity<>(response, HttpStatus.CREATED);
   }
 
+//  //질문 글 수정
+//  //권한 설정을 위해 API 주소 변경
+//  @PatchMapping("/questions/{question-id}")
+//  public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive long questionId,
+//                                      @LoginMemberId @Positive long memberId,
+//                                      @Valid @RequestBody QuestionPatchDto questionPatchDto) {
+//    questionPatchDto.setQuestionId(questionId);
+//    Question question = questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(questionPatchDto), memberId);
+//    QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
+//    return new ResponseEntity<>(response, HttpStatus.OK);
+//  }
 
-  //질문 글 수정
-  //권한 설정을 위해 API 주소 변경
+  //이미지를 포함한 질문 글 수정
   @PatchMapping("/questions/{question-id}")
-  public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive long questionId,
-                                      @LoginMemberId @Positive long memberId,
-                                      @Valid @RequestBody QuestionPatchDto questionPatchDto) {
+  public ResponseEntity patchQuestion(@Valid @RequestPart("json") QuestionPatchDto questionPatchDto,
+                                      @RequestPart("images") List<MultipartFile> images,
+                                      @PathVariable("question-id") @Positive long questionId,
+                                      @LoginMemberId @Positive long memberId) throws IOException {
+
     questionPatchDto.setQuestionId(questionId);
     Question question = questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(questionPatchDto), memberId);
     QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
+    response.setImg(questionImageService.updateImages(images, questionId));
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
-
+  
   //전체 질문 글 조회
   @GetMapping("/questions")
   public ResponseEntity getQuestions(@Positive @RequestParam int page,
-                                     @Positive @RequestParam int size) {
+                                  @Positive @RequestParam int size) {
     Page<Question> pageOrders = questionService.findQuestions(page - 1, size);
     List<Question> questions = pageOrders.getContent();
     List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
-
+    
     return new ResponseEntity<>(response,HttpStatus.OK);
   }
-
+  
   //선택 질문 글 조회 + 쿠키 조회 및 조회수 증가
   @GetMapping("/questions/{question-id}")
   public ResponseEntity getQuestion(HttpServletRequest request, HttpServletResponse response,
                                     @PathVariable("question-id") @Positive long questionId ) {
     Question question = questionService.findQuestion(questionId, request, response);
     QuestionResponseDto responseDto = questionMapper.questionToQuestionResponseDto(question);
-
+    responseDto.setImg(questionImageService.getQuestionImage(questionId)
+        .stream().map(m->m.getImg()).collect(Collectors.toList()));
+    
     return new ResponseEntity<>(responseDto,HttpStatus.OK);
   }
-
+  
   //맴버별 질문 글 조회, 15개씩 출력됩니다
   @GetMapping("/{member-id}/questions")
   public ResponseEntity getMemberQuestion(@Positive @RequestParam int page,
-                                          @PathVariable("member-id") long memberId) {
+      @PathVariable("member-id") long memberId) {
     Page<Question> pageOrders = questionService.findMemberQuestions(page, memberId);
     List<Question> questions = pageOrders.getContent();
     List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
 
     return new ResponseEntity<>(response,HttpStatus.OK);
   }
-
+  
   //선택 질문 글 삭제
   @DeleteMapping("/questions/{question-id}")
   public ResponseEntity questionDelete(@PathVariable("question-id") @Positive Long questionId,
                                        @LoginMemberId Long memberId){
     questionService.deleteQuestion(questionId, memberId);
-
+    
     return new ResponseEntity<>("success delete question", HttpStatus.NO_CONTENT);
   }
-
+  
   //질문글 검색 기능
   @GetMapping("/questions/search-word")
   public ResponseEntity getQuestionSearch(@RequestParam(value = "search-word" ) String searchWord,
@@ -126,25 +134,25 @@ public class QuestionController {
     Page<Question> pageOrders = questionService.findSearchWordQuestions(searchWord, page);
     List<Question> questions = pageOrders.getContent();
     List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
-
+    
     return new ResponseEntity<>(response,HttpStatus.OK);
   }
-
+  
   //질문글 Top10 조회(게시판 조회)
   @GetMapping("/questions/top10")
   public ResponseEntity getQuestions() {
     Page<Question> pageOrders = questionService.findTopQuestions();
     List<Question> questions = pageOrders.getContent();
     List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
-
+    
     return new ResponseEntity<>(response,HttpStatus.OK);
   }
-
+  
   //추천수 증가 로직
   @PatchMapping("/questions/{question-id}/votes-up")
   public ResponseEntity patchQuestionVoteUp(HttpServletRequest request, HttpServletResponse response,
-                                            @PathVariable("question-id") @Positive long questionId,
-                                            @Valid @RequestBody QuestionVotePatchDto questionVotePatchDto) {
+                                          @PathVariable("question-id") @Positive long questionId,
+                                          @Valid @RequestBody QuestionVotePatchDto questionVotePatchDto) {
     questionVotePatchDto.setQuestionId(questionId);
     Question question = questionMapper.questionVotePatchDtoToQuestion(questionVotePatchDto);
     question = questionService.updateQuestionVote(request, response, question, "up");
@@ -154,8 +162,8 @@ public class QuestionController {
   // 추천수 감소 로직
   @PatchMapping("/questions/{question-id}/votes-down")
   public ResponseEntity patchQuestionVoteDown(HttpServletRequest request, HttpServletResponse response,
-                                              @PathVariable("question-id") @Positive long questionId,
-                                              @Valid @RequestBody QuestionVotePatchDto questionVotePatchDto) {
+                                            @PathVariable("question-id") @Positive long questionId,
+                                            @Valid @RequestBody QuestionVotePatchDto questionVotePatchDto) {
     questionVotePatchDto.setQuestionId(questionId);
     Question question = questionMapper.questionVotePatchDtoToQuestion(questionVotePatchDto);
     question = questionService.updateQuestionVote(request, response, question, "down");

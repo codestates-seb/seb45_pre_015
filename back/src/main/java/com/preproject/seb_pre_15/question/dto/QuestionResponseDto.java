@@ -1,8 +1,6 @@
 package com.preproject.seb_pre_15.question.dto;
 
-import com.preproject.seb_pre_15.answer.entity.Answer;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -21,7 +19,9 @@ public class QuestionResponseDto {
 
   private Long vote;
   
-//  private List<Answer> answers;
+  private List<byte[]> img;
   
-//private List<questionComment> questionComments;
+// private List<Answer> answers;
+  
+// private List<questionComment> questionComments;
 }

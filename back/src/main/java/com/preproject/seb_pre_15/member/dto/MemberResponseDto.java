@@ -18,5 +18,5 @@ public class MemberResponseDto {
     private List<QuestionResponseDto> questions;
     private List<AnswerResponseDto> answers;
     private List<AnswerCommentDto.Response> answerComments;
-//    private String img;
+//    private Image img;
 }
