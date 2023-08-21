@@ -4,18 +4,15 @@ import { CreateQuestionData, QuestionData, UpdateQuestionData } from "../type/ty
 export const fetchQuestionList = async (
   page: number,
   filter: string,
-  searchText: string | null
+  searchText: string | null,
+  pageSize: number = 10
 ): Promise<QuestionData[]> => {
   
   let url = 'https://659a-116-126-166-12.ngrok-free.app/questions';
-
-  if (filter === 'vote') {
-    url += '/totalVote';
-  }
   
   const params = new URLSearchParams();
   params.set('page', String(page));
-  params.set('size', '10');
+  params.set('size', String(pageSize));
   
   url += '?' + params.toString();
 
