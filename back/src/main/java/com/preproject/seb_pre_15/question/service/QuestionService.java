@@ -87,7 +87,7 @@ public class QuestionService {
   //질문글 전체조회(게시판 조회)
   public Page<Question> findQuestions(int page, int size) {
     return questionRepository.findAll(PageRequest.of(page, size,
-        Sort.by(Sort.Direction.DESC, "vote").descending()));
+        Sort.by(Sort.Direction.DESC, "questionId").descending()));
   }
   
   //질문글 Top10 조회(게시판 조회)    e

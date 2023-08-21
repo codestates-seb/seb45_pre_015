@@ -1,6 +1,8 @@
 import axios from "axios";
 import { CreateQuestionData, QuestionData, UpdateQuestionData } from "../type/types";
 
+
+
 export const fetchQuestionList = async (
   page: number,
   filter: string,
@@ -8,7 +10,7 @@ export const fetchQuestionList = async (
   pageSize: number = 10
 ): Promise<QuestionData[]> => {
   
-  let url = 'https://659a-116-126-166-12.ngrok-free.app/questions';
+  let url = 'https://659a-116-126-166-12.ngrok-free.app/questions/top10';
   
   const params = new URLSearchParams();
   params.set('page', String(page));
