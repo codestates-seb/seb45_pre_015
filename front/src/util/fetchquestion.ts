@@ -7,7 +7,7 @@ export const fetchQuestionList = async (
   searchText: string | null
 ): Promise<QuestionData[]> => {
   
-  let url = 'http://localhost:8080/questions';
+  let url = 'https://659a-116-126-166-12.ngrok-free.app/questions';
 
   if (filter === 'vote') {
     url += '/totalVote';
@@ -83,7 +83,7 @@ export const fetchUpdateQuestion = async (
     questionId: number
 ): Promise<any> => {
   try {
-    const response = await fetch(`http://localhost:8080/questions/${memberId}/${questionId}`, {
+    const response = await fetch(`https://659a-116-126-166-12.ngrok-free.app/questions/${memberId}/${questionId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -111,7 +111,7 @@ export const fetchUpdateQuestion = async (
 
 export const fetchDeleteQuestion = async (questionId: number): Promise<any> => {
   try {
-    const response = await fetch(`http://localhost:8080/questions/${questionId}`, {
+    const response = await fetch(`https://659a-116-126-166-12.ngrok-free.app/questions/${questionId}`, {
       method: 'DELETE',
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
