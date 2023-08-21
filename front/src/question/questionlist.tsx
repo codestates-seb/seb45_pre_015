@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AskButton, PageButton, SortBtn } from "../component/buttons";
 import { fetchQuestionList } from "../util/fetchquestion";
-import { QuestionData } from "../type/types"
+import { QuestionData } from "../type/types";
 
 const PostSum = styled.div`
   display: flex;
@@ -120,12 +120,10 @@ function QuestionList() {
   const [questions, setQuestions] = useState<QuestionData[]>([]);
   const filter = "newest";
   const searchText = null;
-  const totalPages = Math.ceil(questions.length / 10);
-  const pageButtons = Array.from({ length: totalPages }, (_, index) => index + 1);
 
   const pageHandle = (pageValue: number | 'Prev' | 'Next'): void => {
     if (pageValue === 'Next') {
-      if (questions.length < 10) {
+      if (page >= 5) {
         return;
       }
       setPage(page + 1);
@@ -142,7 +140,9 @@ function QuestionList() {
   const fetchQuestions = async () => {
     try {
       const data = await fetchQuestionList(page, filter, searchText);
-      setQuestions(data);
+      const sortedData = data.sort((a, b) => b.questionId - a.questionId);
+      const Questions = sortedData.slice(0, 10);
+      setQuestions(Questions);
     } catch (error: any) {
       console.error(error.message);
     }
@@ -190,33 +190,31 @@ function QuestionList() {
         ))}
       </ul>
         <div className="button">
-        <PageButton
-  onClick={() => {
-    pageHandle('Prev');
-  }}
-  style={{ display: page === 1 ? 'none' : 'block' }} // 페이지가 1일 때 숨김
->
-  Prev
-</PageButton>
-{pageButtons.map((btnPage) => (
-  <PageButton
-    color={page === btnPage ? 'orange' : 'white'}
-    onClick={() => {
-      pageHandle(btnPage);
-    }}
-    key={btnPage}
-  >
-    {btnPage}
-  </PageButton>
-))}
-<PageButton
-  onClick={() => {
-    pageHandle('Next');
-  }}
-  style={{ display: page === totalPages ? 'none' : 'block' }} // 페이지가 마지막일 때 숨김
->
-  Next
-</PageButton>
+          <PageButton
+            onClick={() => {
+              pageHandle('Prev');
+            }}
+          >
+            Prev
+          </PageButton>
+          {[1, 2, 3, 4, 5].map((btnPage) => (
+            <PageButton
+              color={page === btnPage ? 'orange' : 'white'}
+              onClick={() => {
+                pageHandle(btnPage);
+              }}
+              key={btnPage}
+            >
+              {btnPage}
+            </PageButton>
+          ))}
+          <PageButton
+            onClick={() => {
+              pageHandle('Next');
+            }}
+          >
+            Next
+          </PageButton>
         </div>
       </div>
     </AllQuestionPage>
