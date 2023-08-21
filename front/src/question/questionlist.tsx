@@ -157,17 +157,18 @@ function QuestionList() {
             <SortBtn className="border-left">voted</SortBtn>
           </div>
         </div>
-        <div className="questions-container">
-          {questions.map((question) => (
-            <div className="questions" key={question.questionId}>
+        <ul>
+        {questions.map((question) => (
+          <li key={question.questionId}>
+            <div className="questions">
               <Link to={`/question/${question.questionId}`}>
                 <div className="question-title">{question.title}</div>
               </Link>
               <div className="question-contents">{question.body}</div>
             </div>
-          ))}
-        </div>
-
+          </li>
+        ))}
+      </ul>
         <div className="button">
           <PageButton
             onClick={() => {
