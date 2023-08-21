@@ -7,46 +7,30 @@ export const fetchQuestionList = async (
   searchText: string | null
 ): Promise<QuestionData[]> => {
   
-    let url = 'http://localhost:8080/questions';
+  let url = 'http://localhost:8080/questions';
 
-    if (filter === 'vote') {
-      url += '/totalVote';
-    }
-    
-    const params = new URLSearchParams();
-    
-    if (filter === 'unanswered' && searchText) {
-      params.set('page', String(page));
-      params.set('size', '10');
-      params.set('sort', 'createdAt,desc');
-      params.set('keyword', searchText);
-    } else if (filter === 'unanswered') {
-      params.set('page', String(page));
-      params.set('size', '10');
-      params.set('sort', 'createdAt,desc');
-    } else if (filter === 'newest' && searchText) {
-      params.set('page', String(page));
-      params.set('size', '10');
-      params.set('sort', 'id,desc');
-      params.set('keyword', searchText);
-    } else if (filter === 'newest') {
-      params.set('page', String(page));
-      params.set('size', '10');
-      params.set('sort', 'createdAt,desc');
-    } else if (searchText) {
-      params.set('page', String(page));
-      params.set('size', '10');
-      params.set('keyword', searchText);
-    } else {
-      params.set('page', String(page));
-      params.set('size', '10');
-    }
-    
-    url += '?' + params.toString();
+  if (filter === 'vote') {
+    url += '/totalVote';
+  }
+  
+  const params = new URLSearchParams();
+  params.set('page', String(page));
+  params.set('size', '10');
+  
+  url += '?' + params.toString();
 
-  try {
-    const response = await fetch(url);
-
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+          Accept: 'application/json',
+          'ngrok-skip-browser-warning': '69420',
+          Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
+          Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? ''
+        }
+      });
     if (!response.ok) {
       throw new Error('유효하지 않은 요청입니다.');
     }
@@ -65,8 +49,8 @@ export const fetchCreateQuestion = async (fetchData: CreateQuestionData): Promis
       headers: {
         'Content-Type': 'application/json',
         'ngrok-skip-browser-warning': '69420',
-        Authorization: sessionStorage.getItem('access_token') ?? '',
-        Refresh: sessionStorage.getItem('access_token') ?? '',
+        Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
+        Refresh: "Bearer " + sessionStorage.getItem('access_token') ?? '',
       },
       body: JSON.stringify(fetchData),
     });
@@ -103,7 +87,8 @@ export const fetchUpdateQuestion = async (
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: sessionStorage.getItem('access_token') ?? '',
+        Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
+        Refresh: "Bearer " + sessionStorage.getItem('access_token') ?? '',
       },
       body: JSON.stringify(fetchData),
     });
@@ -129,7 +114,8 @@ export const fetchDeleteQuestion = async (questionId: number): Promise<any> => {
     const response = await fetch(`http://localhost:8080/questions/${questionId}`, {
       method: 'DELETE',
       headers: {
-        Authorization: sessionStorage.getItem('access_token') ?? '',
+        Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
+        Refresh: "Bearer " + sessionStorage.getItem('access_token') ?? '',
       },
     });
 
