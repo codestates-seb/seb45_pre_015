@@ -1,21 +1,20 @@
 import axios from "axios";
 import { CreateQuestionData, QuestionData, UpdateQuestionData } from "../type/types";
 
+
+
 export const fetchQuestionList = async (
   page: number,
   filter: string,
-  searchText: string | null
+  searchText: string | null,
+  pageSize: number = 10
 ): Promise<QuestionData[]> => {
   
-  let url = 'https://659a-116-126-166-12.ngrok-free.app/questions';
-
-  if (filter === 'vote') {
-    url += '/totalVote';
-  }
+  let url = 'https://659a-116-126-166-12.ngrok-free.app/questions/top10';
   
   const params = new URLSearchParams();
   params.set('page', String(page));
-  params.set('size', '10');
+  params.set('size', String(pageSize));
   
   url += '?' + params.toString();
 
@@ -41,6 +40,35 @@ export const fetchQuestionList = async (
     throw new Error(error.message);
   }
 };
+
+// 질문 ID로 질문조회
+export const fetchQuestionById = async (questionId: number) => {
+  const url = `https://659a-116-126-166-12.ngrok-free.app/questions/${questionId}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Accept: 'application/json',
+        'ngrok-skip-browser-warning': '69420',
+        Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
+        Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? ''
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('유효하지 않은 요청입니다.');
+    }
+
+    const questionData = await response.json();
+    return questionData;
+  } catch (error:any) {
+    throw new Error(error.message);
+  }
+};
+
 
 export const fetchCreateQuestion = async (fetchData: CreateQuestionData): Promise<number> => {
   try {

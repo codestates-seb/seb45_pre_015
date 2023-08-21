@@ -1,8 +1,11 @@
 package com.preproject.seb_pre_15.question.dto;
 
+import com.preproject.seb_pre_15.answer.dto.AnswerResponseDto;
+import com.preproject.seb_pre_15.answer.entity.Answer;
+import com.preproject.seb_pre_15.comment.questionComment.dto.QuestionCommentDto;
+import com.preproject.seb_pre_15.comment.questionComment.entity.QuestionComment;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.List;
 
 
@@ -21,7 +24,7 @@ public class QuestionResponseDto {
   
   private List<byte[]> img;
   
-// private List<Answer> answers;
+  private List<AnswerResponseDto> answers;
   
-// private List<questionComment> questionComments;
+  private List<QuestionCommentDto.Response> comments;
 }

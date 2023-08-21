@@ -1,8 +1,8 @@
 import React from "react";
 import Sidebar from "../component/Sidebar";
 import Aside from "../component/aside";
+import QuestionList from "../question/questionlist";
 import { styled } from "styled-components";
-import TopQuestionList from "../question/toppuestion";
 
 const MainContainer = styled.div`
   display: flex;
@@ -11,26 +11,27 @@ const MainContainer = styled.div`
 `;
 
 const SidebarContainer = styled.div`
-  width: 15%;
+    width: 15%;
 `;
 
 const QuestionListContainer = styled.div`
-  width: 55%;
+    width: 55%;
 `;
 
 const AsideContainer = styled.div`
-  width: 30%;
+    width: 30%;
+
 `;
 
 function Main() {
   return (
-    <>
+    <>      
       <MainContainer>
         <SidebarContainer>
-          <Sidebar />
-        </SidebarContainer>
+        <Sidebar />
+      </SidebarContainer>
         <QuestionListContainer>
-          <TopQuestionList />
+          <QuestionList />
         </QuestionListContainer>
         <AsideContainer>
           <Aside />

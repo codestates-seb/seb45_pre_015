@@ -1,11 +1,20 @@
 import { styled } from "styled-components";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import PostSummary from "./postsummary";
 import { AskButton, PageButton, SortBtn } from "../component/buttons";
 import { fetchQuestionList } from "../util/fetchquestion";
 import { QuestionData } from "../type/types";
 
+const PostSum = styled.div`
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  flex-direction: column;
+  width: 140px;
+  padding: 2px 16px 4px 0;
+  text-align: left;
+  font-size: 13px;
+  `
 const AllQuestionPage = styled.div`
     display: flex;
     flex-direction: column;
@@ -103,8 +112,6 @@ h4 {
 }
 `;
 
-
-
 function QuestionList() {
   const currentDate = new Date().toLocaleDateString();
   const [page, setPage] = useState<number>(1);
@@ -112,26 +119,12 @@ function QuestionList() {
   const filter = "newest";
   const searchText = null;
 
-  const pageHandle = (pageValue: number | 'Prev' | 'Next'): void => {
-    if (pageValue === 'Next') {
-      if (page >= 5) {
-        return;
-      }
-      setPage(page + 1);
-    } else if (pageValue === 'Prev') {
-      if (page <= 1) {
-        return;
-      }
-      setPage(page - 1);
-    } else {
-      setPage(pageValue);
-    }
-  };
-
   const fetchQuestions = async () => {
     try {
       const data = await fetchQuestionList(page, filter, searchText);
-      setQuestions(data);
+      const sortedData = data.sort((a, b) => b.questionId - a.questionId);
+      const Questions = sortedData.slice(0, 10);
+      setQuestions(Questions);
     } catch (error: any) {
       console.error(error.message);
     }
@@ -140,6 +133,10 @@ function QuestionList() {
   useEffect(() => {
     fetchQuestions();
   }, [page, filter, searchText]);
+
+  const totalPages = Math.ceil(questions.length / 10);
+  const questionId = questions.length > 0 ? questions[0].questionId : 0;
+  const maxPages = Math.ceil(questionId / 10);
 
   return (
     <AllQuestionPage>
@@ -151,7 +148,7 @@ function QuestionList() {
           </Link>
         </div>
         <div className="question-count">
-          <h4>{questions.length} questions</h4>
+          <h4>{questionId > 0 ? `${questionId} question` : 'No questions'}</h4>
           <div>
             <SortBtn className="border-right">newest</SortBtn>
             <SortBtn className="border-left">voted</SortBtn>
@@ -159,42 +156,55 @@ function QuestionList() {
         </div>
         <ul>
         {questions.map((question) => (
-          <li key={question.questionId}>
+          <li className="questions-container" key={question.questionId}>
+            <PostSum>
+              <span>{question.vote} votes</span>
+              <span> answers</span>
+              <span>{question.view} views</span>
+            </PostSum>
             <div className="questions">
               <Link to={`/question/${question.questionId}`}>
                 <div className="question-title">{question.title}</div>
               </Link>
               <div className="question-contents">{question.body}</div>
+              <div className="question-user-info-container">
+                <Link to={'/mypage'}><div className="user">질문유저 이름</div></Link>
+                <div className="asked-date">asked {currentDate}</div>
+              </div>
             </div>
           </li>
         ))}
-      </ul>
+        </ul>
         <div className="button">
-          <PageButton
-            onClick={() => {
-              pageHandle('Prev');
-            }}
-          >
-            Prev
-          </PageButton>
-          {[1, 2, 3, 4, 5].map((btnPage) => (
+          {page > 1 && (
             <PageButton
-              color={page === btnPage ? 'orange' : 'white'}
               onClick={() => {
-                pageHandle(btnPage);
+                setPage(page - 1);
               }}
-              key={btnPage}
             >
-              {btnPage}
+              Prev
+            </PageButton>
+          )}
+          {Array.from({ length: maxPages }, (_, i) => (
+            <PageButton
+              key={i + 1}
+              color={page === i + 1 ? 'orange' : 'white'}
+              onClick={() => {
+                setPage(i + 1);
+              }}
+            >
+              {i + 1}
             </PageButton>
           ))}
-          <PageButton
-            onClick={() => {
-              pageHandle('Next');
-            }}
-          >
-            Next
-          </PageButton>
+          {page < maxPages && (
+            <PageButton
+              onClick={() => {
+                setPage(page + 1);
+              }}
+            >
+              Next
+            </PageButton>
+          )}
         </div>
       </div>
     </AllQuestionPage>
