@@ -50,7 +50,7 @@ export const fetchCreateQuestion = async (fetchData: CreateQuestionData): Promis
         'Content-Type': 'application/json',
         'ngrok-skip-browser-warning': '69420',
         Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
-        Refresh: "Bearer " + sessionStorage.getItem('access_token') ?? '',
+        Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? '',
       },
       body: JSON.stringify(fetchData),
     });
@@ -84,6 +84,7 @@ export const fetchUpdateQuestion = async (
 ): Promise<any> => {
   try {
     const response = await fetch(`https://659a-116-126-166-12.ngrok-free.app/questions/${memberId}/${questionId}`, {
+
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -111,7 +112,9 @@ export const fetchUpdateQuestion = async (
 
 export const fetchDeleteQuestion = async (questionId: number): Promise<any> => {
   try {
+
     const response = await fetch(`https://659a-116-126-166-12.ngrok-free.app/questions/${questionId}`, {
+
       method: 'DELETE',
       headers: {
         Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
