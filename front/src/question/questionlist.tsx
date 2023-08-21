@@ -112,13 +112,13 @@ function QuestionList() {
   const filter = "newest";
   const searchText = null;
 
-  const pageHandle = (pageValue: number | "Prev" | "Next"): void => {
-    if (pageValue === "Next") {
+  const pageHandle = (pageValue: number | 'Prev' | 'Next'): void => {
+    if (pageValue === 'Next') {
       if (page >= 5) {
         return;
       }
       setPage(page + 1);
-    } else if (pageValue === "Prev") {
+    } else if (pageValue === 'Prev') {
       if (page <= 1) {
         return;
       }
@@ -132,7 +132,7 @@ function QuestionList() {
     try {
       const data = await fetchQuestionList(page, filter, searchText);
       setQuestions(data);
-    } catch (error:any) {
+    } catch (error: any) {
       console.error(error.message);
     }
   };
@@ -141,55 +141,51 @@ function QuestionList() {
     fetchQuestions();
   }, [page, filter, searchText]);
 
+  return (
+    <AllQuestionPage>
+      <div className="container">
+        <div className="header">
+          <h1>All Questions</h1>
+          <Link to="/ask">
+            <AskButton>Ask Question</AskButton>
+          </Link>
+        </div>
+        <div className="question-count">
+          <h4>{questions.length} questions</h4>
+          <div>
+            <SortBtn className="border-right">newest</SortBtn>
+            <SortBtn className="border-left">voted</SortBtn>
+          </div>
+        </div>
+        <div className="questions-container">
+          {questions.map((question) => (
+            <div className="questions" key={question.questionId}>
+              <Link to={`/question/${question.questionId}`}>
+                <div className="question-title">{question.title}</div>
+              </Link>
+              <div className="question-contents">{question.body}</div>
+            </div>
+          ))}
+        </div>
 
-  
-
-    return (
-        <AllQuestionPage>
-            <div className="container">
-              <div className="header">
-                  <h1>All Questions</h1>
-                  <Link to="/ask"><AskButton>Ask Question</AskButton></Link>
-              </div>
-              <div className="question-count">
-                <h4>만들어진 숫자 questions</h4>
-                <div>
-                  <SortBtn className="border-right">newest</SortBtn>
-                  <SortBtn className="border-left">voted</SortBtn>
-                </div>
-                </div>
-              <div className="questions-container">
-                  <PostSummary />
-                  <div className="questions">
-                      <Link to="/question"><div className="question-title">질문 제목</div></Link>
-                      <div className="question-contents">질문 내용</div>
-                      <div className="question-user-container">
-                        <div className="question-user-info-container">
-                          <div className="user">질문유저 이름</div>
-                          <div className="asked-date">asked {currentDate}</div>
-                        </div>
-                      </div>
-                  </div>
-              </div>
-  
-              <div className="button">
+        <div className="button">
           <PageButton
             onClick={() => {
               pageHandle('Prev');
             }}
           >
             Prev
-  
           </PageButton>
-          {[1, 2, 3, 4, 5].map(btnPage => (
+          {[1, 2, 3, 4, 5].map((btnPage) => (
             <PageButton
-            color={page === btnPage ? 'orange' : 'white'}
-            onClick={() => {
-              pageHandle(btnPage);
-            }}
-          >
-            {btnPage}
-          </PageButton>
+              color={page === btnPage ? 'orange' : 'white'}
+              onClick={() => {
+                pageHandle(btnPage);
+              }}
+              key={btnPage}
+            >
+              {btnPage}
+            </PageButton>
           ))}
           <PageButton
             onClick={() => {
@@ -200,8 +196,8 @@ function QuestionList() {
           </PageButton>
         </div>
       </div>
-        </AllQuestionPage>
-    )
+    </AllQuestionPage>
+  );
 }
 
 export default QuestionList;
