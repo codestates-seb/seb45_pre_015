@@ -1,8 +1,8 @@
 export interface QuestionData {
-    id: number;
+  questionId: number;
     title: string;
-    content: string;
-  }
+    body: string;
+}
   
   export interface CreateQuestionData {
     title: string;
