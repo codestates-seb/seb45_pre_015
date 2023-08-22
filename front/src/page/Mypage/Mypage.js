@@ -21,10 +21,8 @@ export default function Mypage() {
     <Section>
       <div className="profile">
         <article className="profile_img">
-          <span>
             <img
-                src={sessionStorage.getItem('profilePic')}/>
-            </span>
+                src={sessionStorage.getItem('profilePic')} alt="profileImg"/>
         </article>
         <div className="profile_info">
           <h2 className="profile_user_name">{username}</h2>

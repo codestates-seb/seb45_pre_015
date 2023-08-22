@@ -2,7 +2,6 @@ import React from "react";
 import Sidebar from "../component/Sidebar";
 import Aside from "../component/aside";
 import { styled } from "styled-components";
-import QuestionList from "../question/toppuestion";
 import TopQuestionList from "../question/toppuestion";
 
 const MainContainerWrap = styled.section`
