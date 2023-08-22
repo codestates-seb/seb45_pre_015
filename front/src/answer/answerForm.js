@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { styled } from "styled-components";
-import { postAnswer } from "../util/fetchquestion";
+import { postAnswer, fetchQuestionById } from "../util/fetchquestion";
 
 const AnswerFormBody = styled.div`
   h1 {
@@ -35,6 +35,17 @@ const AnswerFormBody = styled.div`
 
 function AnswerForm({ questionId, onAnswerSubmit }) {
   const [answer, setAnswer] = useState("");
+  const [questionData, setQuestionData] = useState(null);
+
+  useEffect(() => {
+    fetchQuestionById(questionId)
+      .then((data) => {
+        setQuestionData(data);
+      })
+      .catch((error) => {
+        console.error("에러 발생: ", error);
+      });
+  }, [questionId]);
 
   const handleAnswerChange = (event) => {
     setAnswer(event.target.value);
@@ -47,9 +58,9 @@ function AnswerForm({ questionId, onAnswerSubmit }) {
         body: answer,
       };
 
-      const createdAnswerId = await postAnswer(data);
+      await postAnswer(data);
 
-      alert("답변이 성공적으로 게시되었습니다. ID: " + createdAnswerId);
+      alert("답변이 성공적으로 게시되었습니다.");
 
       setAnswer("");
       onAnswerSubmit(answer);
