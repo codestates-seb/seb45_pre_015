@@ -1,5 +1,8 @@
 import styled from 'styled-components';
 import getTimeAgo from '../component/getTimeAgo';
+import React, { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import { fetchQuestionById } from "../util/fetchquestion";
 
 
 const ButtonAndUser = styled.div`
@@ -44,9 +47,23 @@ const ButtonAndUser = styled.div`
 `
 
 function QuestionUsers() {
-
   const timestamp = "2023-08-22T09:00:00";
   const elapsedTime = getTimeAgo(timestamp);
+  const { questionId } = useParams();
+  const [questionData, setQuestionData] = useState({});
+
+  useEffect(() => {
+    const fetchQuestion = async () => {
+      try {
+        const data = await fetchQuestionById(Number(questionId));
+        setQuestionData(data);
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+
+    fetchQuestion();
+  }, [questionId]);
 
   return (
     <ButtonAndUser>
@@ -60,7 +77,7 @@ function QuestionUsers() {
                 <div>asked {elapsedTime}</div>
                 <div className='user-info'>
                   <div>유저사진</div>
-                  <div>유저이름: </div>
+                  <div>유저이름: {questionData.user} </div>
                 </div>
               </div>
           </div>

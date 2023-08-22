@@ -76,7 +76,8 @@ const Content = styled.div`
 function Questions() {
   const { questionId } = useParams();
   const [questionData, setQuestionData] = useState({});
-  const currentDate = getTimeAgo(new Date());
+  const timestamp = "2023-08-22T09:00:00";
+  const elapsedTime = getTimeAgo(timestamp);
 
   useEffect(() => {
     const fetchQuestion = async () => {
@@ -101,8 +102,9 @@ function Questions() {
       </div>
       <div className="activities">
         <span>Asked </span>
-        {currentDate}
+        {elapsedTime}
         <span> Modified</span>
+        {elapsedTime}
         <span> Viewed </span>
         {questionData.view}
       </div>
