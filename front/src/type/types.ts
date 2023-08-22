@@ -1,5 +1,4 @@
 export interface QuestionData {
-  quantity: number;
   questionId: number;
     title: string;
     body: string;
