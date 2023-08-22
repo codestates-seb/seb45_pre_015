@@ -37,7 +37,7 @@ function Answers() {
       <div className="question-container">
         <Vote />
         <div className="question-section">
-          <p>답변 내용{submittedAnswer}</p>
+          <p>답변 내용: {submittedAnswer}</p>
           <AnswerUsers />
         </div>
       </div>

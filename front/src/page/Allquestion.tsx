@@ -11,11 +11,11 @@ const MainContainer = styled.div`
 `;
 
 const SidebarContainer = styled.div`
-    width: 15%;
+    width: 16%;
 `;
 
 const QuestionListContainer = styled.div`
-    width: 55%;
+    width: 70%;
 `;
 
 const AsideContainer = styled.div`

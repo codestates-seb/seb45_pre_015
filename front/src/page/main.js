@@ -16,6 +16,10 @@ const MainContainer = styled.div`
   width: calc(100% - 200px);
 `;
 
+const SidebarContainer = styled.div`
+    width: 16%;
+`;
+
 const QuestionListContainer = styled.div`
   width: 70%;
 `;
@@ -27,7 +31,9 @@ const AsideContainer = styled.div`
 function Main() {
   return (
     <MainContainerWrap>
-      <Sidebar />
+      <SidebarContainer>
+        <Sidebar />
+      </SidebarContainer>
       <MainContainer>
         <QuestionListContainer>
           <TopQuestionList />

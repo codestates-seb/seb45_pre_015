@@ -5,6 +5,7 @@ import { AskButton, PageButton, SortBtn } from "../component/buttons";
 import { fetchQuestionList } from "../util/fetchquestion";
 import { QuestionData } from "../type/types"
 import PostSummary from './postsummary'
+import getTimeAgo from "../component/getTimeAgo";
 
 const PostSum = styled.div`
   display: flex;
@@ -23,10 +24,6 @@ const TopQuestionPage = styled.div`
     width: 100%;
     padding: 30px 24px 20px 0px;
     border-left: 1px solid hsl(210,8%,90%) ;
-
-  .container {
-    /* display: flex; */
-  }
 
   .header {
   display: flex;
@@ -62,12 +59,15 @@ h4 {
     padding: 16px;
 }
 
+span {
+  color: hsl(210,8%,45%);
+}
+
 .questions {
   width: calc(100% - 140px);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
 }
 
 .question-title {
@@ -117,11 +117,14 @@ h4 {
 
 
 function TopQuestionList() {
-  const currentDate = new Date().toLocaleDateString();
+  const timestamp = "2023-08-22T09:00:00";
+  const elapsedTime = getTimeAgo(timestamp);
   const [questions, setQuestions] = useState<QuestionData[]>([]);
   const [page, setPage] = useState<number>(1);
   const filter = "newest";
   const searchText = null;
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -158,9 +161,9 @@ function TopQuestionList() {
         {questions.map((question) => (
           <li className="questions-container" key={question.questionId}>
             <PostSum>
-            <span>{question.vote} votes</span>
-            <span> answers</span>
-            <span>{question.view} views</span>
+              <div>{question.vote}<span> votes</span></div>
+              <span> answers</span>
+              <div>{question.view}<span> views</span></div>
             </PostSum>
             <div className="questions">
             <Link to={`/question/${question.questionId}`}>
@@ -169,7 +172,7 @@ function TopQuestionList() {
             <div className="question-contents">{question.body}</div>
             <div className="question-user-info-container">
                           <Link to={'/mypage'}><div className="user">질문유저 이름</div></Link>
-                          <div className="asked-date">asked {currentDate}</div>
+                          <div className="asked-date">asked {elapsedTime}</div>
                         </div>
             </div>
           </li>
