@@ -41,7 +41,7 @@ const ButtonAndUser = styled.div`
 
 `
 
-function QuestionUsers({ name }) {
+function QuestionUsers() {
 
   const currentDate = new Date().toLocaleDateString();
 
@@ -57,7 +57,7 @@ function QuestionUsers({ name }) {
                 <div>asked {currentDate}</div>
                 <div className='user-info'>
                   <div>유저사진</div>
-                  <div>유저이름: { name }</div>
+                  <div>유저이름: </div>
                 </div>
               </div>
           </div>

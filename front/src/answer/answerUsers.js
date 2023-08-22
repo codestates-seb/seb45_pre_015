@@ -1,22 +1,35 @@
 import styled from 'styled-components';
 
 const ButtonAndUser = styled.div`
-  display: flex;
-  justify-content: space-between;
-
+  .space {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 16px 0;
+    padding-top: 10px;
+    width: 550px;
+  }
   .styled-Button {
-  background: none;
-  border: none;
-  font-size: 16px;
-  margin-right: 10px;
-  color: rgb(106, 115, 124);
+  font-size: 13px;
+  color: hsl(210,8%,45%);
   cursor: pointer;
+  }
+
+  .edited-date {
+    font-size: 12px;
+    color: hsl(206,100%,40%);
+    padding-top: 7px;
   }
 
   .user-infomation {
   display: flex;
   flex-direction: column;
-  padding: 5px;
+  width: 100%;
+  padding: 7px 6px 7px 7px;
+  border-radius: 3px;
+
+  color: hsl(210,8%,45%);
+  font-size: 12px;
   }
 
   .user-info {
@@ -34,15 +47,20 @@ function AnswerUsers() {
 
   return (
     <ButtonAndUser>
-        <div className='styled-Button'>Share Edit Follow</div> 
-        <div className='AskedUsers'>
-            <div className='user-infomation'>
-              <div>{currentDate}</div>
-              <div className='user-info'>
-                <div>유저사진</div>
-                <div>유저이름</div>
+        <div className='space'>
+          <div className='styled-Button'>
+            Share Edit Follow
+          </div> 
+           <div className='edited-date'>edited {currentDate}</div>
+          <div className='asked-users'>
+              <div className='user-infomation'>
+                <div>asked {currentDate}</div>
+                <div className='user-info'>
+                  <div>유저사진</div>
+                  <div>유저이름: </div>
+                </div>
               </div>
-            </div>
+          </div>
         </div>
     </ButtonAndUser>
   );

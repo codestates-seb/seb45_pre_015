@@ -3,10 +3,7 @@ import Vote from "../component/vote";
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { AskButton } from "../component/buttons";
-import { useState } from "react";
-
 import Answers from "../answer/answers";
-
 
 
 const Content = styled.div`
@@ -22,7 +19,6 @@ const Content = styled.div`
 
 h1 {
     font-size: 30px;
-    white-space: pre-line;
 }
 
 .ask-button{
@@ -112,22 +108,13 @@ h2 {
 
 function Questions() {
   const currentDate = new Date().toLocaleDateString();
-  const [answerText, setAnswerText] = useState('');
-
-  const handlePostButton = () => {
-    alert(answerText);
-  }
-  
-  const handlePostAnswer = (event) => {
-    setAnswerText(event.target.value);
-  };
 
   return (
     <Content>
       <div>
         <div>
           <div className="head-line">
-            <h1>제목입니다.</h1>
+            <h1>질문 제목</h1>
             <Link to="/ask"><AskButton>Ask Question</AskButton></Link>
           </div>
         </div>
@@ -140,16 +127,11 @@ function Questions() {
             <div className="question-container">
               <Vote />
               <div className="question-section">
-                <p>질문글입니다.23324234324324234324324</p>
+                <p>질문 내용</p>
                 <QuestionUsers />
               </div>
             </div>
-            
-      <h2>Your Answer</h2>
-      <textarea value={answerText}
-        onChange={handlePostAnswer} />
-      <Link to="/question"><button className="post-button" onClick={handlePostButton}>Post Your Answer</button></Link>
-      <Answers />
+             <Answers />
       {/* 완성되면 지울것 */}
     </Content>
   );
