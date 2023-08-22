@@ -35,7 +35,7 @@ const Cate = styled.article`
   }
 `
 
-const Settings = () => {
+const Settings = ({username, onChangeUsername}) => {
   const [addClass, setAddClass] = useState(true);
   
   return(
@@ -46,7 +46,7 @@ const Settings = () => {
           <button onClick={() => setAddClass(false)} className={addClass ? "delete-btn" : "delete-btn active"}>Delete Profile</button>
         </div>
         <div className="content_wrap">
-          {addClass ? <Myeditor /> : <Delete />}
+          {addClass ? <Myeditor username={username} onChangeUsername={onChangeUsername} /> : <Delete />}
         </div>
       </Cate>
     </Section>

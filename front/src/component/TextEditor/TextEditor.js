@@ -1,8 +1,9 @@
 import { Editor } from '@toast-ui/react-editor';
-import { useRef } from 'react';
+import { useState ,useRef } from 'react';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import '@toast-ui/editor/dist/i18n/ko-kr';
 import styled from "styled-components";
+import axios from 'axios';
 
 const Section = styled.section`
   padding: 1.25rem;
@@ -36,43 +37,70 @@ const Section = styled.section`
     font-size: 1.125rem;
     width: 7.5rem;
     padding: .625rem 1.25rem;
-    background-color: #f48225;
+    background-color: #f49335;
     color: #fff;
     border: 1px solid #fff;
     border-radius: 20px;
     margin: 1.25rem 0 0;
+    transition: 0.3s;
+  }
+  .submit_btn:hover{
+    background-color: #f48225;
   }
 `
 
 
-function Myeditor(){
+function Myeditor( {username, onChangeUsername } ){
   const editorRef = useRef();
-  
+  const inputRef = useRef();
+  const [newDisplayName, setNewDisplayName] = useState(username);
+
   const handleRegisterBtn = () => {
-    const data = editorRef.current.getInstance().getHTML();
-    console.log(data);
+    // const data = editorRef.current.getInstance().getHTML();
+    // console.log(data);
+
+    const newUsername = inputRef.current.value;
+    onChangeUsername(newUsername);
+    console.log(onChangeUsername(newUsername))
+  }
+
+  const onInputChange = (e) => {
+    setNewDisplayName(e.target.value);
+  }
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    try{
+      await axios.put("https://659a-116-126-166-12.ngrok-free.app/members/{member-id}" , {
+        name : newDisplayName
+      })
+      onChangeUsername(newDisplayName); // 변경된 username을 상위 컴포넌트로 전달
+    } catch (error) {
+      console.error("서버에 요청을 보낼 수 없습니다:", error)
+    }
+    
   }
   return (
     <Section className='form_wrap'>
-      <form action='' method='get' className='form' >
+      <form onSubmit={onSubmit} className='form' >
         <div className='form_input_wrap'>
           <div className='form_input_name'>
             <label htmlFor='name'>Display name</label>
-            <input type='text' name='name' id='name' required />
+            <input type='text' name='name' id='name' required onChange={onInputChange}  defaultValue={username} ref={inputRef}/>
           </div>
-          <div className='editor_wrap'>
+          {/* <div className='editor_wrap'>
             <h4>Title</h4>
             <Editor
               ref={editorRef}
               initialValue="텍스트를 입력하세요"
               previewStyle="vertical"
               height="300px"
-              width="300px"
               initialEditType="wysiwyg"
               useCommandShortcut={false}
               language='ko-KR'
             />
-          </div>
+          </div> */}
         </div>
       <button className='submit_btn' onClick={handleRegisterBtn}>등록</button>
       </form>
