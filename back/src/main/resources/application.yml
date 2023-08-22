@@ -5,13 +5,27 @@ spring:
       path: /h2
   datasource:
     url: jdbc:h2:mem:test
+##    driver-class-name: com.mysql.cj.jdbc.Driver
+##    url: jdbc:mysql://localhost:3306/stackoverflowdb?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+##    username: ${username}
+##    password: ${password}
+##    url: jdbc:h2:mem:test
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+#    database: mysql
+#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+#  datasource:
+#        url: jdbc:mysql://{AWS RDS Endpoint}/test?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+#        username: adim
+#        password: ${RDS-Mysql-password}
+#        driver-class-name: com.mysql.cj.jdbc.Driver
+#  config:
+#      domain: { AWS S3 Endpoint }
   sql:
     init:
       data-locations: classpath*:db/h2/data.spl
@@ -41,5 +55,5 @@ mail:
 jwt:
   key:
     secret: ${JWT_SECRET_KEY}
-  access-token-expiration-minutes: 100000 #테스트를 위해 설정 추후 30으로 수정
-  refresh-token-expiration-minutes: 100000 #추후 450으로 수정
+  access-token-expiration-minutes: 30 #테스트를 위해 설정 추후 30으로 수정
+  refresh-token-expiration-minutes: 450 #추후 450으로 수정

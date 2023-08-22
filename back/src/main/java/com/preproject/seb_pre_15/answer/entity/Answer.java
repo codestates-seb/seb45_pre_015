@@ -2,6 +2,7 @@ package com.preproject.seb_pre_15.answer.entity;
 
 import com.preproject.seb_pre_15.audit.Auditable;
 import com.preproject.seb_pre_15.comment.answerComment.entity.AnswerComment;
+import com.preproject.seb_pre_15.image.entity.AnswerImage;
 import com.preproject.seb_pre_15.member.entity.Member;
 import com.preproject.seb_pre_15.question.entity.Question;
 import lombok.Getter;
@@ -9,10 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -26,7 +24,7 @@ public class Answer extends Auditable {
     private String body;
 
     @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne
@@ -40,25 +38,21 @@ public class Answer extends Auditable {
     private List<AnswerComment> answerComments = new ArrayList<>();
 
     @Column
-    private Long vote;
-
-    @Column
-    private String images;
+    private Long vote = 0L;
     
-    public Answer(String body, Member member, Question question) {
+    @OneToMany(mappedBy = "answer",cascade = CascadeType.REMOVE)
+    private List<AnswerImage> images;
+    
+    
+    //더미 생성용 생성자
+    public Answer(String body, Member member, Question question, long vote) {
         this.body = body;
         this.member = member;
         this.question = question;
+        this.vote = vote;
     }
     
-    public Answer() {
-    
-    }
-    
-    //더미 생성용 생성자
-    
-
-
+    public Answer() {}
     public void addAnswerComment(AnswerComment answerComment){
         if (answerComment.getAnswer() != this) answerComment.setAnswer(this);
         answerComments.add(answerComment);

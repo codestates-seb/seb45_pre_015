@@ -9,6 +9,7 @@ import com.preproject.seb_pre_15.member.service.MemberService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -38,9 +39,13 @@ public class OAuth2memberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         var oAuth2User = (OAuth2User) authentication.getPrincipal();
+
         String email = String.valueOf(oAuth2User.getAttributes().get("email"));
+        String profilePic = String.valueOf(oAuth2User.getAttributes().get("picture"));
         List<String> authorities = authorityUtils.createRoles(email);
-        saveMember(email, authorities);
+        System.out.println("++++++++++++profile:+++++++++++++++++++++++++  "+ profilePic + "  +++++++++++++++++++++++++++++++++++++++");
+        System.out.println("++++++++++++++++++++++++++++++++++++++"+authorities+"++++++++++++++++++++++++++++++++++++++");
+        saveMember(email, authorities, profilePic);
         redirect(request,response,email,authorities);
     }
 
@@ -62,7 +67,8 @@ public class OAuth2memberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return UriComponentsBuilder.newInstance()
                 .scheme("http")
                 .host("localhost")
-                .path("receive-token.html")//redirect 받기 위한 주소
+                .port(3000)
+                .path("/mytokens")//redirect 받기 위한 주소
                 .queryParams(queryParams)
                 .build().toUri();
     }
@@ -92,11 +98,12 @@ public class OAuth2memberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return refreshToken;
     }
 
-    private void saveMember(String email, List<String> authorities) {
+    private void saveMember(String email, List<String> authorities, String pic) {
         if (!memberService.existsEmail(email)) {
             Member member = new Member();
             member.setEmail(email);
             member.setRoles(authorities);
+            member.setProfilePic(pic);
             memberService.createMember(member);
         }
     }
