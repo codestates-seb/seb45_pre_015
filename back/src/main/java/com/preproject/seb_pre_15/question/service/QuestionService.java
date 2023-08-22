@@ -52,27 +52,23 @@ public class QuestionService {
   //질문글 조회(게시판 -> 본문), 해당 질문글 조회수 증가
   public Question findQuestion(long questionId, HttpServletRequest request, HttpServletResponse response) {
     Question findQuestion = findVerifiedQuestionByQuery(questionId);
+
     return questionRepository.save(addQuestionView(request, response, findQuestion));
   }
   
   //조회수 증가, 조회글 쿠키 생성 로직
   private Question addQuestionView(HttpServletRequest request, HttpServletResponse response, Question findQuestion) {
     if (shouldUpdateQuestionView(request, findQuestion)) {// 쿠키 조회, 없으면 조회수 증가 + 쿠키 생성
-      System.out.println(findQuestion.getView() + "1111111");
       findQuestion.setView(findQuestion.getView() + 1);
-      System.out.println(findQuestion.getView() + "22222222");
-
+      
       Cookie viewedCookie = new Cookie("viewed_question_" + findQuestion.getQuestionId(), "true");
       viewedCookie.setMaxAge(86400); // 쿠키 만료시간 하루로 설정
-      response.addCookie(viewedCookie);
       String cookieHeader = viewedCookie.getName() + "=" + viewedCookie.getValue() +
               "; Secure; HttpOnly; SameSite=None"; // SameSite 설정 추가
       response.setHeader("Set-Cookie", cookieHeader);
-      return findQuestion;
-    }else {
-      return findQuestion;
+      response.addCookie(viewedCookie);
     }
-
+    return findQuestion;
   }
   
   //쿠키 조회 로직
