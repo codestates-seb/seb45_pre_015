@@ -10,13 +10,13 @@ import java.util.List;
 @Setter
 public class AnswerResponseDto {
     
-    private Long answerId;
+    private long answerId;
 
     private String memberEmail;
     
     private String body;
     
-    private Long vote;  
+    private long vote;
     
     private List<byte[]> img;
 
