@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Myeditor from "../TextEditor/TextEditor";
+import Delete from "../DeleteProfile/DeleteProfile";
 import { useState } from "react";
 
 const Section = styled.section`
@@ -8,10 +9,15 @@ const Section = styled.section`
 `
 
 const Cate = styled.article`
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  gap: .9375rem;
-
+  gap: 1.875rem;
+  
+  .btn_wrap{
+    display: flex;
+    flex-direction: column;
+    gap: .9375rem;
+  }
   .edit-btn,
   .delete-btn{
     width: 7.5rem;
@@ -23,19 +29,25 @@ const Cate = styled.article`
   .delete-btn.active{
     background-color: #f1f2f3;
   }
+
+  .content_wrap{
+    width: calc(100% - 7.5rem);
+  }
 `
 
-const Settings = () => {
+const Settings = ({username, onChangeUsername}) => {
   const [addClass, setAddClass] = useState(true);
   
   return(
     <Section>
       <Cate>
-        <button onClick={() => setAddClass(true)} className={addClass ? "edit-btn active" : "edit-btn"}>Edit Profile</button>
-        <button onClick={() => setAddClass(false)} className={addClass ? "delete-btn" : "delete-btn active"}>Delete Profile</button>
-        <>
-          {addClass ? <Myeditor /> : <></>}
-        </>
+        <div className="btn_wrap">
+          <button onClick={() => setAddClass(true)} className={addClass ? "edit-btn active" : "edit-btn"}>Edit Profile</button>
+          <button onClick={() => setAddClass(false)} className={addClass ? "delete-btn" : "delete-btn active"}>Delete Profile</button>
+        </div>
+        <div className="content_wrap">
+          {addClass ? <Myeditor username={username} onChangeUsername={onChangeUsername} /> : <Delete />}
+        </div>
       </Cate>
     </Section>
   )

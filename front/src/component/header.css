@@ -54,3 +54,14 @@ header .hd_user > a.signup_btn{
   background-color: #0a95ff;
   color: #fff;
 }
+
+header .logout_btn{
+  font-size: .9375rem;
+  padding: .5rem .625rem;
+  border-radius: 5px;
+  transition: .3s all;
+}
+
+header .logout_btn:hover{
+  background-color: #eeeded;
+}
