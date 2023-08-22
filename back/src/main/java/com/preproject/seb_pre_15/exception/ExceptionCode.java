@@ -11,7 +11,8 @@ public enum ExceptionCode {
     NOT_IMPLEMENTATION(501, "Not Implementation"),
     INVALID_VOTE(403, "Invalid vote operation detected"),
 
-    COMMENT_NOT_EXIST(404, "Comment doesnt exist");
+    COMMENT_NOT_EXIST(404, "Comment doesnt exist"),
+    IMAGE_NOT_FOUND(404, "Image not found");
 
     @Getter
     private int status;

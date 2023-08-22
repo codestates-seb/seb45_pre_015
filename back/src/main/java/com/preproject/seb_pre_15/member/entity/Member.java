@@ -4,6 +4,7 @@ import com.preproject.seb_pre_15.answer.entity.Answer;
 import com.preproject.seb_pre_15.audit.Auditable;
 import com.preproject.seb_pre_15.comment.answerComment.entity.AnswerComment;
 import com.preproject.seb_pre_15.comment.questionComment.entity.QuestionComment;
+import com.preproject.seb_pre_15.image.entity.ProfileImage;
 import com.preproject.seb_pre_15.question.entity.Question;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +12,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -42,6 +42,9 @@ public class Member extends Auditable {
 
     @OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<QuestionComment> questionComments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<ProfileImage> images = new ArrayList<>();
 
     public void addAnswerComment(AnswerComment answerComment){
         if (answerComment.getMember() != this) answerComment.setMember(this);

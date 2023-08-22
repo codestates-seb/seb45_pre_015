@@ -2,20 +2,19 @@ package com.preproject.seb_pre_15.question.service;
 
 import com.preproject.seb_pre_15.exception.BusinessLogicException;
 import com.preproject.seb_pre_15.exception.ExceptionCode;
-import com.preproject.seb_pre_15.member.entity.Member;
 import com.preproject.seb_pre_15.member.service.MemberService;
 import com.preproject.seb_pre_15.question.entity.Question;
 import com.preproject.seb_pre_15.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,17 +24,24 @@ public class QuestionService {
 
   private final MemberService memberService;
   //질문글 등록
-  public Question createQuestion(Question question) {
-    
+  public Question createQuestion(Question question, Long memberId) {
+    question.setMember(memberService.findMember(memberId));
     return questionRepository.save(question);
   }
   
   //질문글 수정
   public Question updateQuestion(Question question,long memberId) {
-
-    memberService.verifySameUser(memberId);
+    Question findQuestion = findQuestion(question.getQuestionId());
+    Long findQuestionMemberId = findQuestion.getMember().getMemberId();
+    if(findQuestionMemberId.equals(memberId)){
+      findQuestion.setBody(question.getBody());
+      return questionRepository.save(findQuestion);
+    }else{
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to update this question");
+    }
+//    memberService.verifySameUser(memberId);
     
-    return questionRepository.save(question);
+//    return questionRepository.save(question);
   }
   
   //Answer 조회용 Question 조회
@@ -77,11 +83,12 @@ public class QuestionService {
   
   //질문글 전체조회(게시판 조회)
   public Page<Question> findQuestions(int page, int size) {
+    questionRepository.count();
     return questionRepository.findAll(PageRequest.of(page, size,
-        Sort.by(Sort.Direction.DESC, "vote").descending()));
+        Sort.by(Sort.Direction.DESC, "questionId").descending()));
   }
   
-  //질문글 Top10 조회(게시판 조회)    e
+  //질문글 Top10 조회(게시판 조회)
   public Page<Question> findTopQuestions() {
     return questionRepository.findAll(PageRequest.of(0, 10,
         Sort.by("vote").descending()));
@@ -99,24 +106,28 @@ public class QuestionService {
   //본문 조회 로직
   private Question findVerifiedQuestionByQuery(long questionId) {
     Optional<Question> optionalQuestion = questionRepository.findById(questionId);
-    Question findQuestion =
-        optionalQuestion.orElseThrow(() ->
-            new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
     //마이페이지 게시글 검색용 에러 로그 분리필요
-    return findQuestion;
+    return optionalQuestion.orElseThrow(() ->
+        new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
   }
   
-  public void deleteQuestion(long questionId) {
-    Question question = findVerifiedQuestionByQuery(questionId);
-    questionRepository.delete(question);
+  public void deleteQuestion(long questionId, Long memberId) {
+    Question findQuestion = findQuestion(questionId);
+    Long findQuestionMemberId = findQuestion.getMember().getMemberId();
+    if(findQuestionMemberId.equals(memberId)){
+      questionRepository.delete(findQuestion);
+    }else{
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to delete this question");
+    }
+//    Question question = findVerifiedQuestionByQuery(questionId);
+//    questionRepository.delete(question);
   }
   
   //질문 글 검색 기능, 15개씩 출력됩니다
   public Page<Question> findSearchWordQuestions(String searchWord, int page) {
     Pageable pageable = PageRequest.of(page, 15, Sort.by("questionId").descending());
-    Page<Question> findQuestions = questionRepository.findBySearchWordQuestion(searchWord, pageable);
     
-    return findQuestions;
+    return questionRepository.findBySearchWordQuestion(searchWord, pageable);
   }
   
   //투표수 증감 및 쿠키 생성 로직

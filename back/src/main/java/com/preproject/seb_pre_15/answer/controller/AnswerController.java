@@ -15,12 +15,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -33,18 +34,29 @@ public class AnswerController {
 
     // 답변 생성
     @PostMapping("/answers")
-    public ResponseEntity createAnswer(@RequestBody AnswerPostDto answerPostDto,
-                                       @LoginMemberId Long memberId){
+    public ResponseEntity createAnswer(@RequestPart("json") AnswerPostDto answerPostDto,
+                                       @RequestPart("image") MultipartFile imageFile,
+                                       @LoginMemberId Long memberId) throws IOException {
         Answer answer = answerService.createAnswer(answerMapper.answerPostDtoToAnswer(answerPostDto, memberId));
         AnswerResponseDto response = answerMapper.answerToAnswerResponseDto(answer);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+//    @PostMapping("/answers")
+//    public ResponseEntity createAnswer(@RequestPart("json") AnswerPostDto answerPostDto,
+//                                       @RequestPart("image") MultipartFile imageFile,
+//                                       @LoginMemberId Long memberId) throws IOException {
+//        Answer answer = answerService.createAnswer(answerMapper.answerPostDtoToAnswer(answerPostDto), memberId);
+//        if (!imageFile.isEmpty()) {imageService.saveImage(imageFile, memberId, answer);}
+//
+//        AnswerResponseDto response = answerMapper.answerToAnswerResponseDto(answer);
+//        return new ResponseEntity<>(response,HttpStatus.CREATED);
+//    }
 
     // 해당 답변 수정
     @PatchMapping("/answers/{answer-id}")
     public ResponseEntity updateAnswer(@RequestBody AnswerPatchDto answerPatchDto,
                                        @PathVariable("answer-id") @Positive Long answerId,
-                                       @LoginMemberId Long memberId){
+                                       @Positive @LoginMemberId Long memberId){
         Answer answer = answerService.updateAnswer(answerMapper.answerPatchDtoToAnswer(answerPatchDto), answerId, memberId);
         AnswerResponseDto response = answerMapper.answerToAnswerResponseDto(answer);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -80,8 +92,9 @@ public class AnswerController {
 
     // 해당 답변 삭제
     @DeleteMapping("/answers/{answer-id}")
-    public ResponseEntity deleteAnswer(@PathVariable("answer-id") @Positive Long answerId){
-        answerService.deleteAnswer(answerId);
+    public ResponseEntity deleteAnswer(@PathVariable("answer-id") @Positive Long answerId,
+                                       @LoginMemberId Long memberId) {
+        answerService.deleteAnswer(answerId, memberId);
         return new ResponseEntity<>("success delete answer",HttpStatus.NO_CONTENT);
     }
 

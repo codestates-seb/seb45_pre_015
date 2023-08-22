@@ -1,33 +1,35 @@
 import React from "react";
 import Sidebar from "../component/Sidebar";
 import Aside from "../component/aside";
+import QuestionList from "../question/questionlist";
 import { styled } from "styled-components";
-import TopQuestionList from "../question/toppuestion";
-
-const MainContainerWrap = styled.section`
-  display: flex;
-  max-width: 78.75rem;
-  margin: 0 auto;
-`
 
 const MainContainer = styled.div`
   display: flex;
-  width: calc(100% - 200px);
+  flex-direction: row;
+  margin: 0 120px;
+`;
+
+const SidebarContainer = styled.div`
+    width: 15%;
 `;
 
 const QuestionListContainer = styled.div`
-  width: 70%;
+    width: 55%;
 `;
 
 const AsideContainer = styled.div`
-  width: 30%;
+    width: 30%;
+
 `;
 
 function Main() {
   return (
-    <MainContainerWrap>
-      <Sidebar />
+    <>      
       <MainContainer>
+        <SidebarContainer>
+        <Sidebar />
+      </SidebarContainer>
         <QuestionListContainer>
           <QuestionList />
         </QuestionListContainer>
@@ -35,7 +37,7 @@ function Main() {
           <Aside />
         </AsideContainer>
       </MainContainer>
-    </MainContainerWrap>
+    </>
   );
 }
 

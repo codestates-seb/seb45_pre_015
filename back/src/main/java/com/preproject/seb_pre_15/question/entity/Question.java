@@ -2,15 +2,14 @@ package com.preproject.seb_pre_15.question.entity;
 
 import com.preproject.seb_pre_15.answer.entity.Answer;
 import com.preproject.seb_pre_15.audit.Auditable;
-import com.preproject.seb_pre_15.comment.answerComment.entity.AnswerComment;
 import com.preproject.seb_pre_15.comment.questionComment.entity.QuestionComment;
+import com.preproject.seb_pre_15.image.entity.QuestionImage;
 import com.preproject.seb_pre_15.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -33,8 +32,8 @@ public class Question extends Auditable {
     @Column
     private Long vote = 0L;
     
-//    @Column
-//    private String images;
+    @OneToMany(mappedBy = "question",cascade = CascadeType.REMOVE)
+    private List<QuestionImage> images;
     
     @ManyToOne
     @JoinColumn(name = "member_id")
