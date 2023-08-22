@@ -2,6 +2,7 @@ package com.preproject.seb_pre_15.question.dummy;
 
 import com.preproject.seb_pre_15.answer.entity.Answer;
 import com.preproject.seb_pre_15.answer.repository.AnswerRepository;
+import com.preproject.seb_pre_15.image.entity.ProfileImage;
 import com.preproject.seb_pre_15.member.entity.Member;
 import com.preproject.seb_pre_15.member.repository.MemberRepository;
 import com.preproject.seb_pre_15.question.entity.Question;
@@ -49,8 +50,9 @@ public class DummyDataLoader implements CommandLineRunner {
     Answer answer5 = new Answer("펄", question2.getMember(), question2, 100);
     Answer answer6 = new Answer("골든", question2.getMember(), question2, 0);
     Answer answer7 = new Answer("다섯번째 질문/멤버3 작성", question5.getMember(), question5, -20);
-
-
+    
+//    ProfileImage image = new ProfileImage();
+//    image.setImg()
     // 더미 데이터 저장
     memberRepository.save(member1);
     memberRepository.save(member2);

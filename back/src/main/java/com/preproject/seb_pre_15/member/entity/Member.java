@@ -43,8 +43,8 @@ public class Member extends Auditable {
     @OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<QuestionComment> questionComments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private List<ProfileImage> images = new ArrayList<>();
+    @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private ProfileImage images = new ProfileImage();
 
     public void addAnswerComment(AnswerComment answerComment){
         if (answerComment.getMember() != this) answerComment.setMember(this);

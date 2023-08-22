@@ -17,7 +17,7 @@ public class ProfileImage {
   @Lob
   private byte[] img;
   
-  @ManyToOne
+  @OneToOne
   @JoinColumn(name = "member_id")
   private Member member;
 
