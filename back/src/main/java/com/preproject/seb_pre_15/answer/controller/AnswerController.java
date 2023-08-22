@@ -89,7 +89,11 @@ public class AnswerController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    // 모든 답변 조회
+    // 해당 질문 모든 답변
+//    @GetMapping("/answers")
+//    public ResponseEntity getAnswers(@Re)
+
+//     모든 답변 조회
     @GetMapping("/answers")
     public ResponseEntity getAnswers(@Positive @RequestParam int page,
                                      @Positive @RequestParam int size){

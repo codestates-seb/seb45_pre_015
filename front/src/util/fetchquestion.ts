@@ -1,5 +1,7 @@
 import axios from "axios";
 import { CreateQuestionData, QuestionData, UpdateQuestionData } from "../type/types";
+// @ts-ignore
+import Cookies from 'js-cookie';
 
 export const fetchTotalQuestions = async () => {
   try {
@@ -11,7 +13,8 @@ export const fetchTotalQuestions = async () => {
         Accept: 'application/json',
         'ngrok-skip-browser-warning': '69420',
         Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
-        Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? ''
+        Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? '',
+
       }
     });
 
@@ -67,19 +70,19 @@ export const fetchQuestionList = async (
 
 // 질문 ID로 질문조회
 export const fetchQuestionById = async (questionId: number) => {
-  const url = `https://659a-116-126-166-12.ngrok-free.app/questions/${questionId}`;
-
+  const url = `http://localhost:8080/questions/${questionId}`;
   try {
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
         Accept: 'application/json',
         'ngrok-skip-browser-warning': '69420',
         // 'Cookie': `viewed_question_1=${sessionStorage.getItem('viewed_question_1')}`,
         Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
-        Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? ''
+        Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? '',
       }
     });
 
