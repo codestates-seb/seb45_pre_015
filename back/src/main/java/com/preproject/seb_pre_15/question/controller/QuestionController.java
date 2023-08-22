@@ -1,7 +1,6 @@
 package com.preproject.seb_pre_15.question.controller;
 
 import com.preproject.seb_pre_15.argumentresolver.LoginMemberId;
-
 import com.preproject.seb_pre_15.image.service.QuestionImageService;
 import com.preproject.seb_pre_15.question.dto.QuestionPatchDto;
 import com.preproject.seb_pre_15.question.dto.QuestionPostDto;
@@ -10,6 +9,7 @@ import com.preproject.seb_pre_15.question.dto.QuestionVotePatchDto;
 import com.preproject.seb_pre_15.question.entity.Question;
 import com.preproject.seb_pre_15.question.mapper.QuestionMapper;
 import com.preproject.seb_pre_15.question.service.QuestionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,61 +28,59 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping
 @Validated
+@RequiredArgsConstructor
 public class QuestionController {
   private final QuestionService questionService;
   private final QuestionMapper questionMapper;
   private final QuestionImageService questionImageService;
-  public QuestionController(QuestionService questionService, QuestionMapper questionMapper, QuestionImageService questionImageService) {
-    this.questionService = questionService;
-    this.questionMapper = questionMapper;
-    this.questionImageService = questionImageService;
-  }
   
-//  //질문 글 등록
-//  @PostMapping("/questions")
-//  public ResponseEntity postQuestion(@Valid @RequestBody QuestionPostDto questionPostDto) {
-//    Question question = questionService.createQuestion(questionMapper.questionPostDtoToQuestion(questionPostDto));
-////    URI location = UriCreator.createUri("questions", question.getQuestionId());
-//    QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
-//    return new ResponseEntity<>(response,HttpStatus.CREATED);
-//  }
   
-  //이미지를 포함한 질문 글 등록
+  //질문 글 등록
   @PostMapping("/questions")
-  public ResponseEntity createPostWithImages(@Valid @RequestPart("json") QuestionPostDto questionPostDto,
-                                             @RequestPart("images") List<MultipartFile> images,
-                                             @LoginMemberId Long memberId) {
+  public ResponseEntity postQuestion(@Valid @RequestBody QuestionPostDto questionPostDto,
+                                     @LoginMemberId Long memberId) {
     Question question = questionService.createQuestion(questionMapper.questionPostDtoToQuestion(questionPostDto), memberId);
+//    URI location = UriCreator.createUri("questions", question.getQuestionId());
     QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
-    response.setImg(questionImageService.saveImages(images, question));
-    return new ResponseEntity<>(response, HttpStatus.CREATED);
+    return new ResponseEntity<>(response,HttpStatus.CREATED);
   }
-
-//  //질문 글 수정
-//  //권한 설정을 위해 API 주소 변경
-//  @PatchMapping("/questions/{question-id}")
-//  public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive long questionId,
-//                                      @LoginMemberId @Positive long memberId,
-//                                      @Valid @RequestBody QuestionPatchDto questionPatchDto) {
-//    questionPatchDto.setQuestionId(questionId);
-//    Question question = questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(questionPatchDto), memberId);
+  
+//  //이미지를 포함한 질문 글 등록
+//  @PostMapping("/questions")
+//  public ResponseEntity createPostWithImages(@Valid @RequestPart("json") QuestionPostDto questionPostDto,
+//                                             @RequestPart("images") List<MultipartFile> images,
+//                                             @LoginMemberId Long memberId) {
+//    Question question = questionService.createQuestion(questionMapper.questionPostDtoToQuestion(questionPostDto), memberId);
 //    QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
-//    return new ResponseEntity<>(response, HttpStatus.OK);
+//    response.setImg(questionImageService.saveImages(images, question));
+//    return new ResponseEntity<>(response, HttpStatus.CREATED);
 //  }
 
-  //이미지를 포함한 질문 글 수정
+  //질문 글 수정
+  //권한 설정을 위해 API 주소 변경
   @PatchMapping("/questions/{question-id}")
-  public ResponseEntity patchQuestion(@Valid @RequestPart("json") QuestionPatchDto questionPatchDto,
-                                      @RequestPart("images") List<MultipartFile> images,
-                                      @PathVariable("question-id") @Positive long questionId,
-                                      @LoginMemberId @Positive long memberId) throws IOException {
-
+  public ResponseEntity patchQuestion(@PathVariable("question-id") @Positive long questionId,
+                                      @LoginMemberId @Positive long memberId,
+                                      @Valid @RequestBody QuestionPatchDto questionPatchDto) {
     questionPatchDto.setQuestionId(questionId);
     Question question = questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(questionPatchDto), memberId);
     QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
-    response.setImg(questionImageService.updateImages(images, questionId));
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
+
+//  //이미지를 포함한 질문 글 수정
+//  @PatchMapping("/questions/{question-id}")
+//  public ResponseEntity patchQuestion(@Valid @RequestPart("json") QuestionPatchDto questionPatchDto,
+//                                      @RequestPart("images") List<MultipartFile> images,
+//                                      @PathVariable("question-id") @Positive long questionId,
+//                                      @LoginMemberId @Positive long memberId) throws IOException {
+//
+//    questionPatchDto.setQuestionId(questionId);
+//    Question question = questionService.updateQuestion(questionMapper.questionPatchDtoToQuestion(questionPatchDto), memberId);
+//    QuestionResponseDto response = questionMapper.questionToQuestionResponseDto(question);
+//    response.setImg(questionImageService.updateImages(images, questionId));
+//    return new ResponseEntity<>(response, HttpStatus.OK);
+//  }
   
   //전체 질문 글 조회
   @GetMapping("/questions")

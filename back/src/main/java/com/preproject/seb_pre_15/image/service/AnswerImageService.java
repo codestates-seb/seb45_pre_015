@@ -1,6 +1,10 @@
 package com.preproject.seb_pre_15.image.service;
 
+import com.preproject.seb_pre_15.answer.entity.Answer;
+import com.preproject.seb_pre_15.answer.service.AnswerService;
+import com.preproject.seb_pre_15.image.entity.AnswerImage;
 import com.preproject.seb_pre_15.image.entity.QuestionImage;
+import com.preproject.seb_pre_15.image.repository.AnswerImageRepository;
 import com.preproject.seb_pre_15.image.repository.ProfileImageRepository;
 import com.preproject.seb_pre_15.image.repository.QuestionImageRepository;
 import com.preproject.seb_pre_15.member.service.MemberService;
@@ -18,41 +22,41 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AnswerImageService {
   
-  private final QuestionImageRepository questionImageRepository;
-  private final QuestionService questionService;
+  private final AnswerImageRepository answerImageRepository;
+  private final AnswerService answerService;
   
-  //질문글 이미지 저장
-  public List<byte[]> saveImages(List<MultipartFile> images, Question question){
-    List<QuestionImage> saveImages = images.stream()
+  //답변글 이미지 저장
+  public List<byte[]> saveImages(List<MultipartFile> images, Answer answer){
+    List<AnswerImage> saveImages = images.stream()
         .filter(multipartFile -> !multipartFile.isEmpty())
         .map(multipartFile -> {
-          QuestionImage image = new QuestionImage();
+          AnswerImage image = new AnswerImage();
           try {
-            image.setQuestion(question);
+            image.setAnswer(answer);
             image.setImg(multipartFile.getBytes());
             } catch (IOException e) {}
-          return questionImageRepository.save(image);
+          return answerImageRepository.save(image);
         })
         .collect(Collectors.toList());
     return saveImages.stream().map(m->m.getImg()).collect(Collectors.toList());
   }
     
-  //질문글 이미지 수정
-  public List<byte[]> updateImages (List <MultipartFile> newImages,long questionId) {
-    Question question = questionService.findQuestion(questionId);
-    List<QuestionImage> existingImage = getQuestionImage(questionId);
+  //답변글 이미지 수정
+  public List<byte[]> updateImages (List <MultipartFile> newImages,long answerId) {
+    Answer answer = answerService.findAnswer(answerId);
+    List<AnswerImage> existingImage = getAnswerImage(answerId);
     
     if (existingImage != null) {
-      questionImageRepository.deleteAll(existingImage);
+      answerImageRepository.deleteAll(existingImage);
     }
     
-    return saveImages(newImages, question);
+    return saveImages(newImages, answer);
     
   }
   
-  //질문글 이미지 조회
-  public List<QuestionImage> getQuestionImage (Long questionId){
-    List<QuestionImage> findImages = questionImageRepository.findQuestionImagesByQuestion_QuestionId(questionId);
+  //답변글 이미지 조회
+  public List<AnswerImage> getAnswerImage (Long answerId){
+    List<AnswerImage> findImages = answerImageRepository.findAnswerImagesByAnswer_AnswerId(answerId);
     return findImages;
   }
 }
