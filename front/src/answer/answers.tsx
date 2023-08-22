@@ -3,7 +3,7 @@ import Vote from "../component/vote";
 import styled from "styled-components";
 import { SetStateAction, useEffect, useState } from "react";
 import AnswerForm from "./answerForm";
-import { fetchAnswerById } from "../util/fetchquestion";
+import {fetchAnswerById, fetchQuestionById} from "../util/fetchquestion";
 import { useParams } from "react-router-dom";
 import { answers } from "../type/types";
 
@@ -27,15 +27,16 @@ const Content = styled.div`
 
 function Answers() {
   const [submittedAnswer, setSubmittedAnswer] = useState('');
-  const [answerData, setAnswerData] = useState<any>({});
-
+  const [answerData, setAnswerData] = useState<any[]>([]);
+  const { questionId } = useParams();
   const { answerId } = useParams<{ answerId: string }>();
 
   useEffect(() => {
     const fetchAnswer = async () => {
       try {
-        const data = await fetchAnswerById(Number(answerId));
-        setAnswerData(data);
+        const data = await fetchQuestionById(Number(questionId));
+        setAnswerData(data.answers);
+
       } catch (error) {
         console.error('Error fetching answer:', error);
       }
@@ -50,11 +51,16 @@ function Answers() {
 
   return (
     <Content>
-      <AnswerForm questionId={4} onAnswerSubmit={handleAnswerSubmit} />
+      <AnswerForm questionId={questionId} onAnswerSubmit={handleAnswerSubmit} />
       <div className="question-container">
         <Vote />
         <div className="question-section">
-          <p>답변 내용: {answerData.body}</p>
+          {answerData.map((answer: any) => (
+              <div key={answer.id}>
+                <p>답변 내용: {answer.body}</p>
+              </div>
+          ))}
+
           <AnswerUsers />
         </div>
       </div>
