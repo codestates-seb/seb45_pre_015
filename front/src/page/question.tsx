@@ -1,9 +1,7 @@
-import React from "react";
 import Sidebar from "../component/Sidebar";
 import Aside from "../component/aside";
 import { styled } from "styled-components";
-import QuestionList from "../question/toppuestion";
-import TopQuestionList from "../question/toppuestion";
+import Questions from "../question/questions";
 
 const MainContainerWrap = styled.section`
   display: flex;
@@ -16,10 +14,6 @@ const MainContainer = styled.div`
   width: calc(100% - 200px);
 `;
 
-const SidebarContainer = styled.div`
-    width: 16%;
-`;
-
 const QuestionListContainer = styled.div`
   width: 70%;
 `;
@@ -28,16 +22,14 @@ const AsideContainer = styled.div`
   width: 30%;
 `;
 
-function Main() {
+function Question() {
   return (
-    <MainContainerWrap>
-      <SidebarContainer>
-        <Sidebar />
-      </SidebarContainer>
+      <MainContainerWrap>
+      <Sidebar />
       <MainContainer>
         <QuestionListContainer>
-          <TopQuestionList />
-        </QuestionListContainer>
+          <Questions />
+          </QuestionListContainer>
         <AsideContainer>
           <Aside />
         </AsideContainer>
@@ -46,4 +38,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default Question;

@@ -2,14 +2,13 @@ import React from "react";
 import Sidebar from "../component/Sidebar";
 import Aside from "../component/aside";
 import { styled } from "styled-components";
-import QuestionList from "../question/questionlist";
+import TopQuestionList from "../question/toppuestion";
 
 const MainContainerWrap = styled.section`
   display: flex;
   max-width: 78.75rem;
   margin: 0 auto;
 `
-
 
 const MainContainer = styled.div`
   display: flex;
@@ -18,7 +17,6 @@ const MainContainer = styled.div`
 
 const QuestionListContainer = styled.div`
   width: 70%;
-
 `;
 
 const AsideContainer = styled.div`
@@ -27,11 +25,11 @@ const AsideContainer = styled.div`
 
 function Main() {
   return (
-    <MainContainerWrap>      
+    <MainContainerWrap>
+      <Sidebar />
       <MainContainer>
-        <Sidebar />
         <QuestionListContainer>
-          <QuestionList />
+          <TopQuestionList />
         </QuestionListContainer>
         <AsideContainer>
           <Aside />
