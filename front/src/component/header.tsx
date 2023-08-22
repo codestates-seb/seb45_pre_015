@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {useNavigate, Link, redirect} from 'react-router-dom';
+import {useNavigate, Link} from 'react-router-dom';
 import { fetchUserInfo, checkIfLogined } from '../util/fetchlogin';
 import './header.css'
 import IconLogo from '../images/logo-stackoverflow.svg';
@@ -10,7 +10,6 @@ const Header: React.FC = () => {
   const [userProfileImageLink, setUserProfileImageLink] = useState<string>('');
   const [searchText, setSearchText] = useState<string>('');
   const search = useRef<HTMLInputElement | null>(null);
-  const [menu, setMenu] = useState<boolean>(false);
 
   const navigator = useNavigate();
 

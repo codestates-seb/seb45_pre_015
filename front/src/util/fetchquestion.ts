@@ -217,3 +217,33 @@ export const fetchDeleteQuestion = async (questionId: number): Promise<any> => {
     throw new Error(error.message);
   }
 };
+
+//답변 등록
+export const postAnswer = async (answerData: any) => {
+  try {
+    const response = await fetch('https://659a-116-126-166-12.ngrok-free.app/answers', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': '69420',
+        Authorization: 'Bearer ' + sessionStorage.getItem('access_token') ?? '',
+        Refresh: 'Bearer ' + sessionStorage.getItem('refresh_token') ?? '',
+      },
+      body: JSON.stringify(answerData),
+    });
+
+    const accessToken = response.headers.get('Authorization');
+    if (accessToken !== null) {
+      sessionStorage.setItem('access_token', accessToken);
+    }
+
+    if (!response.ok) {
+      throw new Error('유효하지 않은 요청입니다.');
+    }
+
+    const data = await response.json();
+    return data.id;
+  } catch (error:any) {
+    throw new Error(error.message);
+  }
+};
