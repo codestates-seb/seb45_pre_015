@@ -2,8 +2,8 @@ import { styled } from "styled-components";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AskButton, PageButton, SortBtn } from "../component/buttons";
-import { fetchQuestionList } from "../util/fetchquestion";
-import { QuestionData } from "../type/types";
+import { fetchQuestionList, fetchTotalQuestions } from "../util/fetchquestion";
+import { QuestionData, TotalQuestionData } from "../type/types";
 
 const PostSum = styled.div`
   display: flex;
@@ -116,8 +116,22 @@ function QuestionList() {
   const currentDate = new Date().toLocaleDateString();
   const [page, setPage] = useState<number>(1);
   const [questions, setQuestions] = useState<QuestionData[]>([]);
+  const [totalQuestions, setTotalQuestions] = useState<TotalQuestionData | null>(null);
   const filter = "newest";
   const searchText = null;
+
+  const fetchTotalQuestionsData = async () => {
+    try {
+      const total = await fetchTotalQuestions();
+      setTotalQuestions(total);
+    } catch (error) {
+    }
+  };
+
+  useEffect(() => {
+    fetchQuestions();
+    fetchTotalQuestionsData();
+  }, [page, filter, searchText]);
 
   const fetchQuestions = async () => {
     try {
@@ -134,6 +148,14 @@ function QuestionList() {
     fetchQuestions();
   }, [page, filter, searchText]);
 
+  useEffect(() => {
+    const fetchTotal = async () => {
+      const total = await fetchTotalQuestions();
+      setTotalQuestions(total);
+    };
+    fetchTotal();
+  }, []);
+
   const totalPages = Math.ceil(questions.length / 10);
   const questionId = questions.length > 0 ? questions[0].questionId : 0;
   const maxPages = Math.ceil(questionId / 10);
@@ -148,7 +170,7 @@ function QuestionList() {
           </Link>
         </div>
         <div className="question-count">
-          <h4>{questionId > 0 ? `${questionId} question` : 'No questions'}</h4>
+        <h4>{totalQuestions !== null ? `${totalQuestions.totalQuestions} questions` : 'No questions'}</h4>
           <div>
             <SortBtn className="border-right">newest</SortBtn>
             <SortBtn className="border-left">voted</SortBtn>

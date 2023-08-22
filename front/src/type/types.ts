@@ -1,4 +1,5 @@
 export interface QuestionData {
+  quantity: number;
   questionId: number;
     title: string;
     body: string;
@@ -14,4 +15,8 @@ export interface QuestionData {
   export interface UpdateQuestionData {
     title?: string;
     body?: string;
+  }
+
+  export interface TotalQuestionData {
+    totalQuestions: number;
   }
