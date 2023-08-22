@@ -2,6 +2,7 @@ package com.preproject.seb_pre_15.answer.entity;
 
 import com.preproject.seb_pre_15.audit.Auditable;
 import com.preproject.seb_pre_15.comment.answerComment.entity.AnswerComment;
+import com.preproject.seb_pre_15.image.entity.AnswerImage;
 import com.preproject.seb_pre_15.member.entity.Member;
 import com.preproject.seb_pre_15.question.entity.Question;
 import lombok.Getter;
@@ -38,9 +39,9 @@ public class Answer extends Auditable {
 
     @Column
     private Long vote = 0L;
-
-    @Column
-    private String images;
+    
+    @OneToMany(mappedBy = "answer",cascade = CascadeType.REMOVE)
+    private List<AnswerImage> images;
     
     
     //더미 생성용 생성자

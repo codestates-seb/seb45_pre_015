@@ -123,7 +123,7 @@ function QuestionAskForm() {
     try {
       const newQuestion = {
         title: title,
-        content: body,
+        body: body,
       };
 
       const questionId = await fetchCreateQuestion(newQuestion);

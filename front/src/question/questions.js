@@ -1,12 +1,9 @@
-import UserInfo from "../component/userinfo"; 
+import QuestionUsers from "./questionusers";
 import Vote from "../component/vote";
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { AskButton } from "../component/buttons";
-
 import Answers from "../answer/answers";
-import AnswerForm from "../answer/answerForm";
-
 
 
 const Content = styled.div`
@@ -22,7 +19,6 @@ const Content = styled.div`
 
 h1 {
     font-size: 30px;
-    white-space: pre-line;
 }
 
 .ask-button{
@@ -76,13 +72,12 @@ h2 {
 
 function Questions({title, body, view}) {
   const currentDate = new Date().toLocaleDateString();
-  
   return (
     <Content>
       <div>
         <div>
           <div className="head-line">
-            <h1>제목 : {title}</h1>
+            <h1>질문 제목</h1>
             <Link to="/ask"><AskButton>Ask Question</AskButton></Link>
           </div>
         </div>
@@ -95,13 +90,12 @@ function Questions({title, body, view}) {
             <div className="question-container">
               <Vote />
               <div className="question-section">
-                <p>내용 : {body}</p>
-                <UserInfo />
+                <p>질문 내용</p>
+                <QuestionUsers />
               </div>
             </div>
-            <AnswerForm />
-      <Answers />
-      {/* Answers 컴포넌트 완성되면 지울것 */}
+             <Answers />
+      {/* 완성되면 지울것 */}
     </Content>
   );
 }

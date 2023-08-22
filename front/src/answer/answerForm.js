@@ -1,8 +1,15 @@
-
-import { postAnswer } from "../util/answerApi";
+import { useState } from "react";
 import { styled } from "styled-components";
+import { fetchQuestionById } from "../util/fetchquestion";
 
 const AnswerFormBody = styled.div`
+
+h1 {
+    font-size: 25px;
+    border-top: solid 1px hsl(210,8%,90%);
+    padding: 20px 0;
+}
+
 
 textarea {
   height: 200px;
@@ -41,33 +48,45 @@ textarea {
 `;
 
 
-function AnswerForm ({body, setAnswerBody}) {
-    const handlePostButton = async () => {
+function AnswerForm({ questionId, onAnswerSubmit }) {
+    const [answer, setAnswer] = useState("");
+  
+    const handleAnswerPost = (newAnswer) => {
+      setAnswer((prevAnswer) => prevAnswer + '\n' + newAnswer);
+    };
+  
+    const handleAnswerChange = (event) => {
+      setAnswer(event.target.value);
+    };
+  
+    const handlePostAnswer = async () => {
       try {
-        await postAnswer(body); // 답변 게시 API 호출
-        console.log('답변이 성공적으로 게시되었습니다');
-        alert('답변이 성공적으로 게시되었습니다');
-        setAnswerBody("");
+        const response = await fetchQuestionById(questionId);
+        alert("답변이 작성되었습니다:", response);
+  
+        handleAnswerPost(response.answer);
+  
+        setAnswer("");
+        
+        // 전달받은 콜백 함수를 호출하여 답변 내용을 전달
+        onAnswerSubmit(response.answer);
       } catch (error) {
-        console.error('답변 게시 중 오류 발생', error);
-        alert('답변 게시 중 오류가 발생했습니다');
+        alert("답변 작성 중 오류 발생:", error);
       }
     };
   
-    const handlePostAnswer = event => {
-      setAnswerBody(event.target.value);
-    };
     return (
-<AnswerFormBody>
-    <textarea
-            value={body}
-            onChange={handlePostAnswer}
-          />
-          <button className="post-button" onClick={handlePostButton}>
-            Post Your Answer
-          </button>
-</AnswerFormBody>
-    )
-}
-
-export default AnswerForm;
+      <AnswerFormBody>
+        <h1>Your Answer</h1>
+        <textarea
+          value={answer}
+          onChange={handleAnswerChange}
+        />
+        <button className="post-button" onClick={handlePostAnswer}>
+          Post Your Answer
+        </button>
+      </AnswerFormBody>
+    );
+  }
+  
+  export default AnswerForm;

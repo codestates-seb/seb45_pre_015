@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { QuestionData } from '../type/types';
 
 export const PostSum = styled.div`
   display: flex;
@@ -11,12 +12,12 @@ export const PostSum = styled.div`
   font-size: 13px;
   `
 
-  function PostSummary() {
+function PostSummary(question:QuestionData) {
     return (
         <PostSum>
-            <span> votes</span>
+            <span>{question.vote} votes</span>
             <span> answers</span>
-            <span> views</span>
+            <span>{question.view} views</span>
         </PostSum>
     )
   }

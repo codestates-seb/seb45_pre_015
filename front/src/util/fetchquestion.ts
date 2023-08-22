@@ -1,52 +1,35 @@
 import axios from "axios";
 import { CreateQuestionData, QuestionData, UpdateQuestionData } from "../type/types";
 
+
+
 export const fetchQuestionList = async (
   page: number,
   filter: string,
-  searchText: string | null
+  searchText: string | null,
+  pageSize: number = 10
 ): Promise<QuestionData[]> => {
   
-    let url = 'http://localhost:8080/questions';
+  let url = 'https://659a-116-126-166-12.ngrok-free.app/questions/top10';
+  
+  const params = new URLSearchParams();
+  params.set('page', String(page));
+  params.set('size', String(pageSize));
+  
+  url += '?' + params.toString();
 
-    if (filter === 'vote') {
-      url += '/totalVote';
-    }
-    
-    const params = new URLSearchParams();
-    
-    if (filter === 'unanswered' && searchText) {
-      params.set('page', String(page));
-      params.set('size', '10');
-      params.set('sort', 'createdAt,desc');
-      params.set('keyword', searchText);
-    } else if (filter === 'unanswered') {
-      params.set('page', String(page));
-      params.set('size', '10');
-      params.set('sort', 'createdAt,desc');
-    } else if (filter === 'newest' && searchText) {
-      params.set('page', String(page));
-      params.set('size', '10');
-      params.set('sort', 'id,desc');
-      params.set('keyword', searchText);
-    } else if (filter === 'newest') {
-      params.set('page', String(page));
-      params.set('size', '10');
-      params.set('sort', 'createdAt,desc');
-    } else if (searchText) {
-      params.set('page', String(page));
-      params.set('size', '10');
-      params.set('keyword', searchText);
-    } else {
-      params.set('page', String(page));
-      params.set('size', '10');
-    }
-    
-    url += '?' + params.toString();
-
-  try {
-    const response = await fetch(url);
-
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+          Accept: 'application/json',
+          'ngrok-skip-browser-warning': '69420',
+          Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
+          Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? ''
+        }
+      });
     if (!response.ok) {
       throw new Error('유효하지 않은 요청입니다.');
     }
@@ -58,6 +41,35 @@ export const fetchQuestionList = async (
   }
 };
 
+// 질문 ID로 질문조회
+export const fetchQuestionById = async (questionId: number) => {
+  const url = `https://659a-116-126-166-12.ngrok-free.app/questions/${questionId}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Accept: 'application/json',
+        'ngrok-skip-browser-warning': '69420',
+        Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
+        Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? ''
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('유효하지 않은 요청입니다.');
+    }
+
+    const questionData = await response.json();
+    return questionData;
+  } catch (error:any) {
+    throw new Error(error.message);
+  }
+};
+
+
 export const fetchCreateQuestion = async (fetchData: CreateQuestionData): Promise<number> => {
   try {
     const response = await fetch(`https://659a-116-126-166-12.ngrok-free.app/questions`, {
@@ -65,8 +77,8 @@ export const fetchCreateQuestion = async (fetchData: CreateQuestionData): Promis
       headers: {
         'Content-Type': 'application/json',
         'ngrok-skip-browser-warning': '69420',
-        Authorization: sessionStorage.getItem('access_token') ?? '',
-        Refresh: sessionStorage.getItem('access_token') ?? '',
+        Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
+        Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? '',
       },
       body: JSON.stringify(fetchData),
     });
@@ -99,11 +111,13 @@ export const fetchUpdateQuestion = async (
     questionId: number
 ): Promise<any> => {
   try {
-    const response = await fetch(`http://localhost:8080/questions/${memberId}/${questionId}`, {
+    const response = await fetch(`https://659a-116-126-166-12.ngrok-free.app/questions/${memberId}/${questionId}`, {
+
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: sessionStorage.getItem('access_token') ?? '',
+        Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
+        Refresh: "Bearer " + sessionStorage.getItem('access_token') ?? '',
       },
       body: JSON.stringify(fetchData),
     });
@@ -126,10 +140,13 @@ export const fetchUpdateQuestion = async (
 
 export const fetchDeleteQuestion = async (questionId: number): Promise<any> => {
   try {
-    const response = await fetch(`http://localhost:8080/questions/${questionId}`, {
+
+    const response = await fetch(`https://659a-116-126-166-12.ngrok-free.app/questions/${questionId}`, {
+
       method: 'DELETE',
       headers: {
-        Authorization: sessionStorage.getItem('access_token') ?? '',
+        Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
+        Refresh: "Bearer " + sessionStorage.getItem('access_token') ?? '',
       },
     });
 
