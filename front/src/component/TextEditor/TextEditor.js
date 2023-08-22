@@ -72,8 +72,17 @@ function Myeditor( {username, onChangeUsername } ){
     e.preventDefault();
 
     try{
-      await axios.put("https://659a-116-126-166-12.ngrok-free.app/members/{member-id}" , {
-        name : newDisplayName
+      await axios.patch("https://659a-116-126-166-12.ngrok-free.app/members/{member-id}" , {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': '69420',
+          Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
+          Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? '',
+        },
+        body: {
+          name : newDisplayName
+        },
       })
       onChangeUsername(newDisplayName); // 변경된 username을 상위 컴포넌트로 전달
     } catch (error) {
