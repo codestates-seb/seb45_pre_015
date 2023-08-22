@@ -16,6 +16,7 @@ const PostSum = styled.div`
   text-align: left;
   font-size: 13px;
   `
+
 const AllQuestionPage = styled.div`
     display: flex;
     flex-direction: column;

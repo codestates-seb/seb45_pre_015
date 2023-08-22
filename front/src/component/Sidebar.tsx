@@ -9,7 +9,7 @@ const Aside = styled.aside`
 
 function Sidebar() {
   const location = useLocation();
-  const path = location.pathname.split('/')[1];
+  const path = location.pathname.split('/'||'/puestion')[1];
 
   const onClick = () => {
     sessionStorage.removeItem('searchText');

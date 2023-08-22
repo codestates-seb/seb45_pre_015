@@ -93,6 +93,34 @@ export const fetchQuestionById = async (questionId: number) => {
   }
 };
 
+//답변 조회
+export const fetchAnswerById = async (answerId: number) => {
+  const url = `https://659a-116-126-166-12.ngrok-free.app/answers/${answerId}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Accept: 'application/json',
+        'ngrok-skip-browser-warning': '69420',
+        Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
+        Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? ''
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('유효하지 않은 요청입니다.');
+    }
+
+    const answerData = await response.json();
+    return answerData;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+
 
 export const fetchCreateQuestion = async (fetchData: CreateQuestionData): Promise<number> => {
   try {

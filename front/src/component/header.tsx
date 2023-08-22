@@ -42,7 +42,6 @@ const Header: React.FC = () => {
       if (sessionStorage.getItem('access_token') && !isLoginPath) {
         setIsLogin(true);
         getUserProfile();
-        // setUserProfileImageLink(`/mypage/${sessionStorage.getItem('accountId')}`);
         setUserProfileImageLink(`/mypage/${sessionStorage.getItem('accountId')}`);
       } else {
         setIsLogin(false);
