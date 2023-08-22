@@ -65,3 +65,8 @@ header .logout_btn{
 header .logout_btn:hover{
   background-color: #eeeded;
 }
+
+header .user-img {
+  width: 2rem;
+  border-radius: 50%;
+}

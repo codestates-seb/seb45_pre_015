@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import getTimeAgo from '../component/getTimeAgo';
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { fetchQuestionById } from "../util/fetchquestion";
+import { fetchUserInfo } from '../util/fetchlogin'
+import { Link } from 'react-router-dom';
 
 
 const ButtonAndUser = styled.div`
@@ -44,26 +44,40 @@ const ButtonAndUser = styled.div`
   color: hsl(206,100%,40%);
   }
 
+  .user-img {
+    width: 2rem;
+    border-radius: 50%;
+  }
+
 `
 
 function QuestionUsers() {
+  const [userData, setUserData] = useState({});
+  const [userProfileImage, setUserProfileImage] = useState('');
   const timestamp = "2023-08-22T09:00:00";
   const elapsedTime = getTimeAgo(timestamp);
-  const { questionId } = useParams();
-  const [questionData, setQuestionData] = useState({});
+
 
   useEffect(() => {
-    const fetchQuestion = async () => {
+    const fetchUserData = async () => {
       try {
-        const data = await fetchQuestionById(Number(questionId));
-        setQuestionData(data);
+        const data = await fetchUserInfo();
+        setUserData(data);
+
+        if (data.profilePic) {
+          setUserProfileImage(data.profilePic);
+        }
+
+        sessionStorage.setItem('userEmail', data.email);
+        sessionStorage.setItem('accountId', data.accountId);
       } catch (error) {
-        console.error(error.message);
+        console.error('Error while getting user profile:', error);
       }
     };
 
-    fetchQuestion();
-  }, [questionId]);
+    fetchUserData();
+  }, []);
+
 
   return (
     <ButtonAndUser>
@@ -76,8 +90,8 @@ function QuestionUsers() {
               <div className='user-infomation'>
                 <div>asked {elapsedTime}</div>
                 <div className='user-info'>
-                  <div>유저사진</div>
-                  <div>유저이름: {questionData.user} </div>
+                <Link to={'/mypage'}><img src={userProfileImage} alt={userData.name} className='user-img' /></Link>
+                  <div>{userData.name}</div>
                 </div>
               </div>
           </div>

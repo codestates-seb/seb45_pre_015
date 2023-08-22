@@ -84,6 +84,7 @@ const Header: React.FC = () => {
         </button>
         <Link to='/mypage' className='mypage_btn'>
           <img
+            className='user-img'
             src={userProfileImage}
             alt="userProfile"
             width={25}
