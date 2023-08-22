@@ -11,15 +11,16 @@ const MainContainerWrap = styled.section`
 `
 
 const MainContainer = styled.div`
-`;
-
-const SidebarContainer = styled.div`
+  display: flex;
+  width: calc(100% - 200px);
 `;
 
 const QuestionListContainer = styled.div`
+  width: 70%;
 `;
 
 const AsideContainer = styled.div`
+  width: 30%;
 `;
 
 function Main() {
