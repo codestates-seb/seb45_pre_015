@@ -111,7 +111,7 @@ public class SecurityConfiguration {
 //        source.registerCorsConfiguration("/**", configuration);
 //        return source;
 //        configuration.addAllowedOriginPattern("*");
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://localhost:8080", "https://659a-116-126-166-12.ngrok-free.app"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://localhost:8080", "https://659a-116-126-166-12.ngrok-free.app","http://seb45-pre-015.s3-website.ap-northeast-2.amazonaws.com"));
         configuration.setAllowCredentials(true);
 //        configuration.addAllowedMethod("*");
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE","OPTION"));
