@@ -29,7 +29,7 @@ function Main() {
       <Sidebar />
       <MainContainer>
         <QuestionListContainer>
-          <QuestionList />
+          <TopQuestionList />
         </QuestionListContainer>
         <AsideContainer>
           <Aside />

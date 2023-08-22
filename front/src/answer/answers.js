@@ -1,56 +1,45 @@
 import AnswerUsers from "./answerUsers";
 import Vote from "../component/vote";
 import styled from 'styled-components';
+import { useState } from "react";
+import AnswerForm from "./answerForm";
 
 const Content = styled.div`
   display: flex;
-  padding: 20px;
   flex-direction: column;
 
-  .headline {
-  display: flex;
-  justify-content: space-between; 
-  }
-
-  h1 {
-  font-size: 30px;
-  white-space: pre-line;
-  }
-
-  .row {
+.question-container{
   display: flex;
   flex-direction: row;
-  padding: 20px 20px 20px 0;
-  gap: 60px;  
-  }
+  align-items: center;
+  border-top: solid 1px hsl(210,8%,90%);
+  margin: 20px 0;
+}
 
-  .answer-section {
+.question-section {
   display: flex;
-  flex-direction: row;
-  align-items: center; 
-  }
+  flex-direction: column;
+  
+}
 
 `;
 
-
 function Answers() {
+  const [submittedAnswer, setSubmittedAnswer] = useState("");
+
+  const handleAnswerSubmit = (newAnswer) => {
+    setSubmittedAnswer(newAnswer);
+  };
+
   return (
     <Content>
-      <div>
-        <div>
-          <div className="headline">
-            <h1>제목입니다.</h1>
-          </div>
+      <AnswerForm questionId={4} onAnswerSubmit={handleAnswerSubmit} />
+      <div className="question-container">
+        <Vote />
+        <div className="question-section">
+          <p>답변 내용{submittedAnswer}</p>
+          <AnswerUsers />
         </div>
-      </div>
-      <div className="row">
-          <div>
-            <div className="answer-section">
-              <Vote />
-              <p>답변글입니다.23324234324324234324324</p>
-            </div>
-            <AnswerUsers />
-          </div>
       </div>
     </Content>
   );

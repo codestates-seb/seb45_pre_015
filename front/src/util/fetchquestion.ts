@@ -1,7 +1,31 @@
 import axios from "axios";
 import { CreateQuestionData, QuestionData, UpdateQuestionData } from "../type/types";
 
+export const fetchTotalQuestions = async () => {
+  try {
+    const response = await fetch('https://659a-116-126-166-12.ngrok-free.app/questions/total', {
+      method: 'GET',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        Accept: 'application/json',
+        'ngrok-skip-browser-warning': '69420',
+        Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
+        Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? ''
+      }
+    });
 
+    if (!response.ok) {
+      throw new Error('유효하지 않은 요청입니다.');
+    }
+
+    const total = await response.json();
+    return total;
+  } catch (error:any) {
+    console.error(error.message);
+    throw error;
+  }
+};
 
 export const fetchQuestionList = async (
   page: number,
@@ -10,7 +34,7 @@ export const fetchQuestionList = async (
   pageSize: number = 10
 ): Promise<QuestionData[]> => {
   
-  let url = 'https://659a-116-126-166-12.ngrok-free.app/questions/top10';
+  let url = 'https://659a-116-126-166-12.ngrok-free.app/questions';
   
   const params = new URLSearchParams();
   params.set('page', String(page));

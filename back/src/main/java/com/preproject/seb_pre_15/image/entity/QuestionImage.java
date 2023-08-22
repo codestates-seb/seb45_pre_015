@@ -16,7 +16,7 @@ public class QuestionImage {
   
   @Lob
   private byte[] img;
-
+  
   @ManyToOne
   @JoinColumn(name = "question_id")
   private Question question;

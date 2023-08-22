@@ -15,3 +15,7 @@ export interface QuestionData {
     title?: string;
     body?: string;
   }
+
+  export interface TotalQuestionData {
+    totalQuestions: number;
+  }

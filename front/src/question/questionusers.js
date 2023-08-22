@@ -27,7 +27,7 @@ const ButtonAndUser = styled.div`
   width: 100%;
   padding: 7px 6px 7px 7px;
   border-radius: 3px;
-  background-color: rgb(217, 234, 247);
+
   color: hsl(210,8%,45%);
   font-size: 12px;
   }
@@ -41,7 +41,7 @@ const ButtonAndUser = styled.div`
 
 `
 
-function QuestionUsers({ name }) {
+function QuestionUsers() {
 
   const currentDate = new Date().toLocaleDateString();
 
@@ -57,7 +57,7 @@ function QuestionUsers({ name }) {
                 <div>asked {currentDate}</div>
                 <div className='user-info'>
                   <div>유저사진</div>
-                  <div>유저이름: { name }</div>
+                  <div>유저이름: </div>
                 </div>
               </div>
           </div>
