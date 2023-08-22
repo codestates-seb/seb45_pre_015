@@ -63,6 +63,9 @@ public class QuestionService {
       
       Cookie viewedCookie = new Cookie("viewed_question_" + findQuestion.getQuestionId(), "true");
       viewedCookie.setMaxAge(86400); // 쿠키 만료시간 하루로 설정
+      String cookieHeader = viewedCookie.getName() + "=" + viewedCookie.getValue() +
+              "; Secure; HttpOnly; SameSite=None"; // SameSite 설정 추가
+      response.setHeader("Set-Cookie", cookieHeader);
       response.addCookie(viewedCookie);
     }
     return findQuestion;
