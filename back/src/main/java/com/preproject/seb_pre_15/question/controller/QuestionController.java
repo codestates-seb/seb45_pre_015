@@ -109,8 +109,8 @@ public class QuestionController {
     Page<Question> pageOrders = questionService.findMemberQuestions(page, memberId);
     List<Question> questions = pageOrders.getContent();
     List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
-    QuestionResponsesDto questionResponsesDto = questionMapper.questionResponsesDtoWithQuantity(response, questionService.getQuestionQuantity());
-    return new ResponseEntity<>(questionResponsesDto,HttpStatus.OK);
+
+    return new ResponseEntity<>(response,HttpStatus.OK);
   }
   
   //선택 질문 글 삭제
@@ -164,5 +164,12 @@ public class QuestionController {
     question = questionService.updateQuestionVote(request, response, question, "down");
     QuestionResponseDto responseDto = questionMapper.questionToQuestionResponseDto(question);
     return new ResponseEntity<>(responseDto, HttpStatus.OK);
+  }
+
+  @GetMapping("/questions/total")
+  public ResponseEntity getTotalNumberOfQuestion(){
+
+   QuestionQuantityResponseDto questionQuantityResponseDto = questionMapper.totalNumToQuestionQuantityResponseDto(questionService.getQuestionQuantity());
+  return new ResponseEntity<>(questionQuantityResponseDto, HttpStatus.OK);
   }
 }

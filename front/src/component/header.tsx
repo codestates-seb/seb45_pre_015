@@ -64,10 +64,11 @@ const Header: React.FC = () => {
   const getUserProfile = async () => {
     try {
       const data = await fetchUserInfo(); // 나중에 받아와야되는거
-      setUserProfileImage(data.profile);
+      setUserProfileImage(data.profilePic);
 
       sessionStorage.setItem('userEmail', data.email);
       sessionStorage.setItem('accountId', data.accountId);
+      sessionStorage.setItem('profilePic', data.profilePic);
     } catch (error) {
       console.error('Error while getting user profile:', error);
     }

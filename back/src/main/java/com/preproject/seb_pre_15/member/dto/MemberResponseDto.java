@@ -19,4 +19,5 @@ public class MemberResponseDto {
     private List<AnswerResponseDto> answers;
     private List<AnswerCommentDto.Response> answerComments;
     private byte[] img;
+    private String profilePic;
 }
