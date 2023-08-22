@@ -37,7 +37,8 @@ export const fetchQuestionList = async (
   pageSize: number = 10
 ): Promise<QuestionData[]> => {
   
-  let url = 'https://659a-116-126-166-12.ngrok-free.app/questions';
+  // let url = 'https://659a-116-126-166-12.ngrok-free.app/questions';
+  let url = `http://localhost:8080/questions`;
   
   const params = new URLSearchParams();
   params.set('page', String(page));
@@ -70,7 +71,8 @@ export const fetchQuestionList = async (
 
 // 질문 ID로 질문조회
 export const fetchQuestionById = async (questionId: number) => {
-  const url = `https://659a-116-126-166-12.ngrok-free.app/questions/${questionId}`;
+  // const url = `https://659a-116-126-166-12.ngrok-free.app/questions/${questionId}`;
+  const url = `http://localhost:8080/questions/${questionId}`;
   try {
     const response = await fetch(url, {
       method: 'GET',
@@ -248,6 +250,7 @@ export const postAnswer = async (answerData: any) => {
     const data = await response.json();
     return data.id;
   } catch (error:any) {
+    console.error('postAnswer Error: ', error.message)
     throw new Error(error.message);
   }
 };

@@ -95,10 +95,12 @@ public class QuestionController {
   public ResponseEntity getQuestion(HttpServletRequest request, HttpServletResponse response,
                                     @PathVariable("question-id") @Positive long questionId ) {
     Question question = questionService.findQuestion(questionId, request, response);
+    System.out.println(question.getView()+"333333333333");
     QuestionResponseDto responseDto = questionMapper.questionToQuestionResponseDto(question);
+    System.out.println(responseDto.getView()+"444444444444");
     responseDto.setImg(questionImageService.getQuestionImage(questionId)
         .stream().map(m->m.getImg()).collect(Collectors.toList()));
-    
+    System.out.println(responseDto.getView()+"55555555555");
     return new ResponseEntity<>(responseDto,HttpStatus.OK);
   }
   
