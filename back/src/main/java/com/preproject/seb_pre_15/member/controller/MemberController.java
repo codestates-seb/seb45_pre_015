@@ -1,5 +1,6 @@
 package com.preproject.seb_pre_15.member.controller;
 
+import com.preproject.seb_pre_15.image.service.ProfileImageService;
 import com.preproject.seb_pre_15.member.dto.MemberPatchDto;
 import com.preproject.seb_pre_15.member.dto.MemberResponseDto;
 import com.preproject.seb_pre_15.member.entity.Member;
@@ -12,9 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,11 +26,13 @@ import javax.validation.constraints.Positive;
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper memberMapper;
+    private final ProfileImageService profileImageService;
 
     @GetMapping("{member-Id}")
     public ResponseEntity memberDetails(@PathVariable("member-Id") @Positive Long memberId){
         Member member = memberService.findMember(memberId);
         MemberResponseDto response = memberMapper.memberToMemberResponseDto(member);
+        response.setImg(profileImageService.getImage(memberId));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -49,7 +54,22 @@ public class MemberController {
         MemberResponseDto response = memberMapper.memberToMemberResponseDto(member);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
+    
+//    //프로필 이미지 수정 기능 추가
+//    @PatchMapping("{member-id}")
+//    public ResponseEntity memberUpdate(@RequestPart("image") MultipartFile image,
+//                                       @PathVariable("member-id") @Positive Long memberId,
+//                                       @Valid @RequestPart("json") MemberPatchDto memberPatchDto) throws IOException {
+//
+//        Member member = memberService.updateMember(memberMapper.memberPatchDtoToMember(memberPatchDto),memberId);
+//
+//        MemberResponseDto response = memberMapper.memberToMemberResponseDto(member);
+//        response.setImg(profileImageService.updateOrCreateProfileImage(image, memberId));
+//
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
+    
+    
     @DeleteMapping("{member-id}")
     public ResponseEntity memberDelete(@PathVariable("member-id") @Positive Long memberId){
         memberService.deleteMember(memberId);

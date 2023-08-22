@@ -6,8 +6,14 @@ import { Section } from './Mypage.styled'
 
 
 export default function Mypage() {
-  
+  // const [isLogin, setIsLogin] = useState(false);
   const [addClass, setAddClass] = useState(true);
+
+  const LogoutClick = () => {
+    sessionStorage.clear();
+    // setIsLogin(false);
+    document.location.href = '/'
+  }
 
   return (
     <Section>
@@ -18,7 +24,7 @@ export default function Mypage() {
         <div className="profile_info">
           <h2 className="profile_user_name">{sessionStorage.getItem('username')}</h2>
           <div className="profile_user_state">
-            <button className="logout-btn">Logout</button>
+            <button onClick={LogoutClick} className="logout-btn">Logout</button>
           </div>
         </div>
       </div>
