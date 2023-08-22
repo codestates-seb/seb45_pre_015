@@ -1,12 +1,9 @@
-import QuestionUsers from "./questionUsers"; 
+import QuestionUsers from "./questionusers";
 import Vote from "../component/vote";
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { AskButton } from "../component/buttons";
-import { useState } from "react";
-
 import Answers from "../answer/answers";
-
 
 
 const Content = styled.div`
@@ -22,7 +19,6 @@ const Content = styled.div`
 
 h1 {
     font-size: 30px;
-    white-space: pre-line;
 }
 
 .ask-button{
@@ -61,42 +57,6 @@ h1 {
 .question-section {
   display: flex;
   flex-direction: column;
-  
-}
-
-textarea {
-  height: 200px;
-  width: 100%;
-  border: 1px solid hsl(210,8%,80%);
-  border-radius: 3px;
-
-  &:focus {
-    box-shadow: 0px 0px 0px 4px hsl(206,96%,90%);
-    border-color: blue;
-  }
-}
-
-.post-button {
-  background-color: rgb(10, 149, 255);
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  padding: 5px;
-  cursor: pointer;
-  text-decoration: none;
-  width: 120px;
-  height: 35px;
-  font-size: 13px;
-  margin-top: 20px ;
-
-  &:hover {
-    background-color:hsl(206,100%,40%);
-  }
-
-  &:focus {
-    box-shadow: 0px 0px 0px 4px hsl(206,96%,90%);
-    border-color: hsl(206,85%,57.5%);
-  }
 }
 
 h2 {
@@ -110,46 +70,31 @@ h2 {
 
 `;
 
-function Questions() {
+function Questions({title, body, view}) {
   const currentDate = new Date().toLocaleDateString();
-  const [answerText, setAnswerText] = useState('');
-
-  const handlePostButton = () => {
-    alert(answerText);
-  }
-  
-  const handlePostAnswer = (event) => {
-    setAnswerText(event.target.value);
-  };
-
   return (
     <Content>
       <div>
         <div>
           <div className="head-line">
-            <h1>제목입니다.</h1>
+            <h1>질문 제목</h1>
             <Link to="/ask"><AskButton>Ask Question</AskButton></Link>
           </div>
         </div>
         <div className="activities">
           <span>Asked {currentDate}</span>
           <span> Modified</span>
-          <span> Viewed</span>
+          <span> Viewed {view}</span>
         </div>
       </div>
             <div className="question-container">
               <Vote />
               <div className="question-section">
-                <p>질문글입니다.23324234324324234324324</p>
+                <p>질문 내용</p>
                 <QuestionUsers />
               </div>
             </div>
-            
-      <h2>Your Answer</h2>
-      <textarea value={answerText}
-        onChange={handlePostAnswer} />
-      <Link to="/question"><button className="post-button" onClick={handlePostButton}>Post Your Answer</button></Link>
-      <Answers />
+             <Answers />
       {/* 완성되면 지울것 */}
     </Content>
   );
