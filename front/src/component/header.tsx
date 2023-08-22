@@ -66,7 +66,6 @@ const Header: React.FC = () => {
       setUserProfileImage(data.profilePic);
 
       sessionStorage.setItem('userEmail', data.email);
-      sessionStorage.setItem('accountId', data.accountId);
       sessionStorage.setItem('profilePic', data.profilePic);
     } catch (error) {
       console.error('Error while getting user profile:', error);

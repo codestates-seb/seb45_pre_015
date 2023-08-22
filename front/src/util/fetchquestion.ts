@@ -77,6 +77,7 @@ export const fetchQuestionById = async (questionId: number) => {
         'Content-Type': 'application/json;charset=UTF-8',
         Accept: 'application/json',
         'ngrok-skip-browser-warning': '69420',
+        // 'Cookie': `viewed_question_1=${sessionStorage.getItem('viewed_question_1')}`,
         Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
         Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? ''
       }

@@ -179,8 +179,6 @@ function QuestionList() {
           setUserProfileImage(data.profilePic);
         }
 
-        sessionStorage.setItem('userEmail', data.email);
-        sessionStorage.setItem('accountId', data.accountId);
       } catch (error) {
         console.error('Error while getting user profile:', error);
       }
