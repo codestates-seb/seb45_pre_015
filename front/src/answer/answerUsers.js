@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import getTimeAgo from '../component/getTimeAgo';
+
 
 const ButtonAndUser = styled.div`
   .space {
@@ -42,8 +44,8 @@ const ButtonAndUser = styled.div`
 `
 
 function AnswerUsers() {
-
-  const currentDate = new Date().toLocaleDateString();
+  const timestamp = "2023-08-22T09:00:00";
+  const elapsedTime = getTimeAgo(timestamp);
 
   return (
     <ButtonAndUser>
@@ -51,10 +53,10 @@ function AnswerUsers() {
           <div className='styled-Button'>
             Share Edit Follow
           </div> 
-           <div className='edited-date'>edited {currentDate}</div>
+           <div className='edited-date'>edited {elapsedTime}</div>
           <div className='asked-users'>
               <div className='user-infomation'>
-                <div>asked {currentDate}</div>
+                <div>asked {elapsedTime}</div>
                 <div className='user-info'>
                   <div>유저사진</div>
                   <div>유저이름: </div>

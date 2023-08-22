@@ -4,6 +4,9 @@ import { fetchQuestionById } from "../util/fetchquestion";
 import QuestionUsers from "./questionusers";
 import Answers from "../answer/answers";
 import styled from "styled-components";
+import Vote from "../component/vote";
+import getTimeAgo from "../component/getTimeAgo";
+
 
 const Content = styled.div`
   display: flex;
@@ -45,6 +48,9 @@ const Content = styled.div`
     font-size: 80%;
     padding: 15px 0 15px 0;
   }
+  span {
+    color: hsl(210,8%,45%);
+  }
 
   .question-container {
     display: flex;
@@ -70,6 +76,7 @@ const Content = styled.div`
 function Questions() {
   const { questionId } = useParams();
   const [questionData, setQuestionData] = useState({});
+  const currentDate = getTimeAgo(new Date());
 
   useEffect(() => {
     const fetchQuestion = async () => {
@@ -84,24 +91,27 @@ function Questions() {
     fetchQuestion();
   }, [questionId]);
 
-  const currentDate = new Date().toLocaleDateString();
-
   return (
     <Content>
       <div className="head-line">
-        <h1>질문 제목: {questionData.title}</h1>
+        <h1>{questionData.title}</h1>
         <Link to="/ask">
           <button className="ask-button">Ask Question</button>
         </Link>
       </div>
       <div className="activities">
-        <span>Asked {currentDate}</span>
+        <span>Asked </span>
+        {currentDate}
         <span> Modified</span>
-        <span> Viewed {questionData.view}</span>
+        <span> Viewed </span>
+        {questionData.view}
       </div>
       <div className="question-container">
-        <div>질문 내용: {questionData.body}</div>
-        <QuestionUsers />
+        <Vote />
+        <div className="question-section">
+          <p>{questionData.body}</p>
+          <QuestionUsers />
+        </div>
       </div>
       <Answers />
     </Content>
