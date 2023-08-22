@@ -14,7 +14,7 @@ import styled from "styled-components";
 import Question from './page/question';
 
 const MainSection = styled.main`
-  min-height: 90vh;
+  
   width: 100%;
 `
 

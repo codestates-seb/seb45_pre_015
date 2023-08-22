@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { styled } from "styled-components";
 import { fetchQuestionById } from "../util/fetchquestion";
+import AnswerEditor from "./answerEditor";
 
 const AnswerFormBody = styled.div`
 
@@ -78,7 +79,7 @@ function AnswerForm({ questionId, onAnswerSubmit }) {
     return (
       <AnswerFormBody>
         <h1>Your Answer</h1>
-        <textarea
+        <AnswerEditor
           value={answer}
           onChange={handleAnswerChange}
         />
@@ -88,5 +89,4 @@ function AnswerForm({ questionId, onAnswerSubmit }) {
       </AnswerFormBody>
     );
   }
-  
   export default AnswerForm;

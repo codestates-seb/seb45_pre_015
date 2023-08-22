@@ -67,6 +67,7 @@ const Header: React.FC = () => {
 
       sessionStorage.setItem('userEmail', data.email);
       sessionStorage.setItem('accountId', data.accountId);
+      sessionStorage.setItem('profilePic', data.profilePic);
     } catch (error) {
       console.error('Error while getting user profile:', error);
     }
@@ -77,20 +78,18 @@ const Header: React.FC = () => {
       <>
         <button
           onClick={onLogoutClick}
-          className="px-3 py-1 mx-1 text-gray hover:bg-[#eee] rounded"
+          className="logout_btn"
         >
         Logout
         </button>
-        <div className="items-center p-2 hover:bg-soGray-light">
-          <Link to='/mypage'>
-            <img
-              src={userProfileImage}
-              alt="userProfile"
-              width={25}
-              height={25}
-            ></img>
-          </Link>
-        </div>
+        <Link to='/mypage' className='mypage_btn'>
+          <img
+            src={userProfileImage}
+            alt="userProfile"
+            width={25}
+            height={25}
+          ></img>
+        </Link>
       </>
     );
   };

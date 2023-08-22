@@ -10,6 +10,7 @@ const MainContainerWrap = styled.section`
   margin: 0 auto;
 `
 
+
 const MainContainer = styled.div`
   display: flex;
   width: calc(100% - 200px);
@@ -17,6 +18,7 @@ const MainContainer = styled.div`
 
 const QuestionListContainer = styled.div`
   width: 70%;
+
 `;
 
 const AsideContainer = styled.div`

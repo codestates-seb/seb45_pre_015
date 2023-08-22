@@ -1,24 +1,36 @@
-import React from "react"
+import React , { useState } from "react"
 import Activity from '../../component/Mypage/Activity'
 import Settings from '../../component/Mypage/Settings'
-import { useState } from "react"
 import { Section } from './Mypage.styled'
 
 
 export default function Mypage() {
-  
   const [addClass, setAddClass] = useState(true);
+  const [username, setUsername] = useState(sessionStorage.getItem('username'));
+  
+  const onChangeUsername = (newUsername) => {
+    setUsername(newUsername);
+  }
+
+  const LogoutClick = () => {
+    sessionStorage.clear();
+    document.location.href = '/'
+  }
 
   return (
     <Section>
       <div className="profile">
         <article className="profile_img">
-          <span>이미지</span>
+          <span>
+            <img
+                src={sessionStorage.getItem('profilePic')}/>
+            </span>
         </article>
         <div className="profile_info">
-          <h2 className="profile_user_name">{sessionStorage.getItem('username')}</h2>
+          <h2 className="profile_user_name">{username}</h2>
+          <p className="profile_user_title"></p>
           <div className="profile_user_state">
-            <button className="logout-btn">Logout</button>
+            <button onClick={LogoutClick} className="logout-btn">Logout</button>
           </div>
         </div>
       </div>
@@ -28,7 +40,7 @@ export default function Mypage() {
           <button onClick={() => setAddClass(false)} className={addClass ? "" : "active"}>Settings</button>
         </div>
         <div className="state_main_wrap">
-          { addClass ? <Activity /> : <Settings />}
+          { addClass ? <Activity /> : <Settings  username={username} onChangeUsername={onChangeUsername}/>}
         </div>
       </div>
     </Section>

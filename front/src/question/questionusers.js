@@ -1,4 +1,9 @@
 import styled from 'styled-components';
+import getTimeAgo from '../component/getTimeAgo';
+import React, { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import { fetchQuestionById } from "../util/fetchquestion";
+
 
 const ButtonAndUser = styled.div`
   .space {
@@ -42,8 +47,23 @@ const ButtonAndUser = styled.div`
 `
 
 function QuestionUsers() {
+  const timestamp = "2023-08-22T09:00:00";
+  const elapsedTime = getTimeAgo(timestamp);
+  const { questionId } = useParams();
+  const [questionData, setQuestionData] = useState({});
 
-  const currentDate = new Date().toLocaleDateString();
+  useEffect(() => {
+    const fetchQuestion = async () => {
+      try {
+        const data = await fetchQuestionById(Number(questionId));
+        setQuestionData(data);
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+
+    fetchQuestion();
+  }, [questionId]);
 
   return (
     <ButtonAndUser>
@@ -51,13 +71,13 @@ function QuestionUsers() {
           <div className='styled-Button'>
             Share Edit Follow
           </div> 
-           <div className='edited-date'>edited {currentDate}</div>
+           <div className='edited-date'>edited {elapsedTime}</div>
           <div className='asked-users'>
               <div className='user-infomation'>
-                <div>asked {currentDate}</div>
+                <div>asked {elapsedTime}</div>
                 <div className='user-info'>
                   <div>유저사진</div>
-                  <div>유저이름: </div>
+                  <div>유저이름: {questionData.user} </div>
                 </div>
               </div>
           </div>

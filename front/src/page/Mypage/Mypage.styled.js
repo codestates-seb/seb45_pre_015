@@ -1,7 +1,8 @@
 import styled from "styled-components"
 
 export const Section = styled.section`
-  width: 80%;
+  max-width: 78.75rem;
+  margin: 0 auto;
   
   .profile{
     display: flex;
