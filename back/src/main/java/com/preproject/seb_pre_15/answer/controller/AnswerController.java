@@ -8,8 +8,8 @@ import com.preproject.seb_pre_15.answer.entity.Answer;
 import com.preproject.seb_pre_15.answer.mapper.AnswerMapper;
 import com.preproject.seb_pre_15.answer.service.AnswerService;
 import com.preproject.seb_pre_15.argumentresolver.LoginMemberId;
+import com.preproject.seb_pre_15.image.service.AnswerImageService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +23,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping
@@ -31,28 +32,29 @@ import java.util.List;
 public class AnswerController {
     private final AnswerService answerService;
     private final AnswerMapper answerMapper;
+    private final AnswerImageService answerImageService;
 
-    // 답변 생성
+     //답변 생성
     @PostMapping("/answers")
-    public ResponseEntity createAnswer(@RequestPart("json") AnswerPostDto answerPostDto,
-                                       @RequestPart("image") MultipartFile imageFile,
-                                       @LoginMemberId Long memberId) throws IOException {
+    public ResponseEntity createAnswer(@RequestBody  AnswerPostDto answerPostDto,
+                                       @LoginMemberId Long memberId) {
         Answer answer = answerService.createAnswer(answerMapper.answerPostDtoToAnswer(answerPostDto, memberId));
         AnswerResponseDto response = answerMapper.answerToAnswerResponseDto(answer);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+    
+//    //이미지를 포함한 질문 글 등록
 //    @PostMapping("/answers")
-//    public ResponseEntity createAnswer(@RequestPart("json") AnswerPostDto answerPostDto,
-//                                       @RequestPart("image") MultipartFile imageFile,
-//                                       @LoginMemberId Long memberId) throws IOException {
-//        Answer answer = answerService.createAnswer(answerMapper.answerPostDtoToAnswer(answerPostDto), memberId);
-//        if (!imageFile.isEmpty()) {imageService.saveImage(imageFile, memberId, answer);}
-//
+//    public ResponseEntity createPostWithImages(@Valid @RequestPart("json") AnswerPostDto answerPostDto,
+//                                               @RequestPart("images") List<MultipartFile> images,
+//                                               @LoginMemberId Long memberId) {
+//        Answer answer = answerService.createAnswer(answerMapper.answerPostDtoToAnswer(answerPostDto, memberId));
 //        AnswerResponseDto response = answerMapper.answerToAnswerResponseDto(answer);
-//        return new ResponseEntity<>(response,HttpStatus.CREATED);
+//        response.setImg(answerImageService.saveImages(images, answer));
+//        return new ResponseEntity<>(response, HttpStatus.CREATED);
 //    }
 
-    // 해당 답변 수정
+     //해당 답변 수정
     @PatchMapping("/answers/{answer-id}")
     public ResponseEntity updateAnswer(@RequestBody AnswerPatchDto answerPatchDto,
                                        @PathVariable("answer-id") @Positive Long answerId,
@@ -61,12 +63,29 @@ public class AnswerController {
         AnswerResponseDto response = answerMapper.answerToAnswerResponseDto(answer);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
+    
+    //이미지를 포함한 질문 글 수정
+//    @PatchMapping("/answers/{answer-id}")
+//    public ResponseEntity updateAnswer(@Valid @RequestPart("json") AnswerPatchDto answerPatchDto,
+//                                      @RequestPart("images") List<MultipartFile> images,
+//                                      @PathVariable("answer-id") @Positive long answerId,
+//                                      @LoginMemberId @Positive long memberId) throws IOException {
+//
+//        answerPatchDto.setAnswerId(answerId);
+//        Answer answer = answerService.updateAnswer(answerMapper.answerPatchDtoToAnswer(answerPatchDto), answerId, memberId);
+//        AnswerResponseDto response = answerMapper.answerToAnswerResponseDto(answer);
+//        response.setImg(answerImageService.updateImages(images, answerId));
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
+    
     // 해당 답변 조회
     @GetMapping("/answers/{answer-id}")
     public ResponseEntity getAnswer(@PathVariable("answer-id") @Positive Long answerId){
         Answer answer = answerService.findAnswer(answerId);
         AnswerResponseDto response = answerMapper.answerToAnswerResponseDto(answer);
+        response.setImg(answerImageService.getAnswerImage(answerId)
+            .stream().map(m->m.getImg()).collect(Collectors.toList()));
+        
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
