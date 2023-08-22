@@ -2,6 +2,9 @@ import styled from 'styled-components';
 import { fetchUserInfo } from '../util/fetchlogin'
 import { useEffect, useState } from 'react';
 import React from 'react';
+import { Link } from 'react-router-dom';
+import getTimeAgo from '../component/getTimeAgo';
+
 
 const ButtonAndUser = styled.div`
   .space {
@@ -42,11 +45,18 @@ const ButtonAndUser = styled.div`
   color: hsl(206,100%,40%);
   }
 
+  .user-img {
+    width: 2rem;
+    border-radius: 50%;
+  }
+
 `
 
 function AnswerUsers() {
   const [userData, setUserData] = useState<any>({});
   const [userProfileImage, setUserProfileImage] = useState<string>('');
+  const timestamp = "2023-08-22T09:00:00";
+  const elapsedTime = getTimeAgo(timestamp);
   
   useEffect(() => {
     const fetchUserData = async () => {
@@ -68,7 +78,7 @@ function AnswerUsers() {
     fetchUserData();
   }, []);
 
-  const currentDate = new Date().toLocaleDateString();
+  
 
   return (
     <ButtonAndUser>
@@ -76,12 +86,12 @@ function AnswerUsers() {
           <div className='styled-Button'>
             Share Edit Follow
           </div> 
-          <div className='edited-date'>edited {currentDate}</div>
+          <div className='edited-date'>edited {elapsedTime}</div>
           <div className='asked-users'>
             <div className='user-infomation'>
-              <div>asked {currentDate}</div>
+              <div>asked {elapsedTime}</div>
               <div className='user-info'>
-              <img src={userProfileImage} alt={userData.name} />
+              <Link to={'/mypage'}><img src={userProfileImage} alt={userData.name} className='user-img' /></Link>
                 <div>{userData.name}</div>
               </div>
             </div>
