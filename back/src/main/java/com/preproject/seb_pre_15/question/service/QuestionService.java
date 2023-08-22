@@ -73,7 +73,7 @@ public class QuestionService {
     Cookie[] cookies = request.getCookies();
     if (cookies != null) {
       for (Cookie cookie : cookies) {
-        if (cookie.getName().equals("viewed_question_" + question.getQuestionId())) {
+        if (cookie.getName().equals("viewed_question_" + question.getQuestionId())&& cookie.getValue().equals("true")) {
           return false; //배열 값 중에 질문글 쿠키가 있다면 조회수 로직을 올리지 않습니다
         }
       }
