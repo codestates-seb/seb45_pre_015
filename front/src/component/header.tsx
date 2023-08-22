@@ -42,7 +42,6 @@ const Header: React.FC = () => {
       if (sessionStorage.getItem('access_token') && !isLoginPath) {
         setIsLogin(true);
         getUserProfile();
-        // setUserProfileImageLink(`/mypage/${sessionStorage.getItem('accountId')}`);
         setUserProfileImageLink(`/mypage/${sessionStorage.getItem('accountId')}`);
       } else {
         setIsLogin(false);
@@ -64,7 +63,7 @@ const Header: React.FC = () => {
   const getUserProfile = async () => {
     try {
       const data = await fetchUserInfo(); // 나중에 받아와야되는거
-      setUserProfileImage(data.profile);
+      setUserProfileImage(data.profilePic);
 
       sessionStorage.setItem('userEmail', data.email);
       sessionStorage.setItem('accountId', data.accountId);

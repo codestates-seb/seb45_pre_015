@@ -19,3 +19,8 @@ export interface QuestionData {
   export interface TotalQuestionData {
     totalQuestions: number;
   }
+
+  export interface answers {
+    answerId: number;
+    body: string;
+  }
