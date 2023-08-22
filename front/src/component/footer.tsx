@@ -27,7 +27,7 @@ const FooterSection = styled.footer`
     height: 1.875rem;
   }
   .ft_info h3{
-    font-size: 1.3125rem;
+    font-size: 1.125rem;
     font-weight: 700;
   }
   .ft_content p{

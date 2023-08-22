@@ -39,10 +39,13 @@ public class OAuth2memberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         var oAuth2User = (OAuth2User) authentication.getPrincipal();
+
         String email = String.valueOf(oAuth2User.getAttributes().get("email"));
+        String profilePic = String.valueOf(oAuth2User.getAttributes().get("picture"));
         List<String> authorities = authorityUtils.createRoles(email);
+        System.out.println("++++++++++++profile:+++++++++++++++++++++++++  "+ profilePic + "  +++++++++++++++++++++++++++++++++++++++");
         System.out.println("++++++++++++++++++++++++++++++++++++++"+authorities+"++++++++++++++++++++++++++++++++++++++");
-        saveMember(email, authorities);
+        saveMember(email, authorities, profilePic);
         redirect(request,response,email,authorities);
     }
 
@@ -95,11 +98,12 @@ public class OAuth2memberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         return refreshToken;
     }
 
-    private void saveMember(String email, List<String> authorities) {
+    private void saveMember(String email, List<String> authorities, String pic) {
         if (!memberService.existsEmail(email)) {
             Member member = new Member();
             member.setEmail(email);
             member.setRoles(authorities);
+            member.setProfilePic(pic);
             memberService.createMember(member);
         }
     }

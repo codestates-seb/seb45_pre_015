@@ -2,10 +2,7 @@ package com.preproject.seb_pre_15.question.controller;
 
 import com.preproject.seb_pre_15.argumentresolver.LoginMemberId;
 import com.preproject.seb_pre_15.image.service.QuestionImageService;
-import com.preproject.seb_pre_15.question.dto.QuestionPatchDto;
-import com.preproject.seb_pre_15.question.dto.QuestionPostDto;
-import com.preproject.seb_pre_15.question.dto.QuestionResponseDto;
-import com.preproject.seb_pre_15.question.dto.QuestionVotePatchDto;
+import com.preproject.seb_pre_15.question.dto.*;
 import com.preproject.seb_pre_15.question.entity.Question;
 import com.preproject.seb_pre_15.question.mapper.QuestionMapper;
 import com.preproject.seb_pre_15.question.service.QuestionService;
@@ -167,5 +164,12 @@ public class QuestionController {
     question = questionService.updateQuestionVote(request, response, question, "down");
     QuestionResponseDto responseDto = questionMapper.questionToQuestionResponseDto(question);
     return new ResponseEntity<>(responseDto, HttpStatus.OK);
+  }
+
+  @GetMapping("/questions/total")
+  public ResponseEntity getTotalNumberOfQuestion(){
+
+   QuestionQuantityResponseDto questionQuantityResponseDto = questionMapper.totalNumToQuestionQuantityResponseDto(questionService.getQuestionQuantity());
+  return new ResponseEntity<>(questionQuantityResponseDto, HttpStatus.OK);
   }
 }

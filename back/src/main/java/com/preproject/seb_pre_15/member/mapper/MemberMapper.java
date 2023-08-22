@@ -45,6 +45,7 @@ public interface MemberMapper {
                    return response;
                }
        ).collect(Collectors.toList()));
+       responseDto.setProfilePic(member.getProfilePic());
        return responseDto;
    }
     Member memberPatchDtoToMember(MemberPatchDto memberPatchDto);
