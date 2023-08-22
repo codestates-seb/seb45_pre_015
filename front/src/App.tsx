@@ -6,30 +6,25 @@ import Footer from './component/footer';
 import Login from './page/Login';
 import Ask from './page/ask';
 import AllQuestion from './page/Allquestion';
-
 import Mypage from './page/Mypage/Mypage'
-
 import Signup from './page/Signup';
 import Main from './page/main';
 import MyTokens from "./util/MyTokens";
+import styled from "styled-components";
 import Question from './page/question';
+
+const MainSection = styled.main`
+  min-height: 90vh;
+  width: 100%;
+`
 
 
 const App: React.FC = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
 
   return (
     <BrowserRouter>
-      <Header onSidebarToggle={toggleSidebar} />
-      <main
-        className={`flex flex-col flex-grow transition-all w-full h-full ${
-          isSidebarOpen ? 'ml-64' : 'ml-0'
-        }`}
-      >
+      <Header />
+      <MainSection>
         <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
@@ -40,7 +35,7 @@ const App: React.FC = () => {
             <Route path='/question/:questionId' element={<Question/>}/>
             <Route path="/mytokens" element={<MyTokens />} />
         </Routes>
-      </main>
+      </MainSection>
       <Footer />
     </BrowserRouter>
   );
