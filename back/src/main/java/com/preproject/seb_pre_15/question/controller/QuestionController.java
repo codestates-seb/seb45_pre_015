@@ -3,10 +3,7 @@ package com.preproject.seb_pre_15.question.controller;
 import com.preproject.seb_pre_15.argumentresolver.LoginMemberId;
 
 import com.preproject.seb_pre_15.image.service.QuestionImageService;
-import com.preproject.seb_pre_15.question.dto.QuestionPatchDto;
-import com.preproject.seb_pre_15.question.dto.QuestionPostDto;
-import com.preproject.seb_pre_15.question.dto.QuestionResponseDto;
-import com.preproject.seb_pre_15.question.dto.QuestionVotePatchDto;
+import com.preproject.seb_pre_15.question.dto.*;
 import com.preproject.seb_pre_15.question.entity.Question;
 import com.preproject.seb_pre_15.question.mapper.QuestionMapper;
 import com.preproject.seb_pre_15.question.service.QuestionService;
@@ -114,8 +111,8 @@ public class QuestionController {
     Page<Question> pageOrders = questionService.findMemberQuestions(page, memberId);
     List<Question> questions = pageOrders.getContent();
     List<QuestionResponseDto> response = questionMapper.questionToQuestionResponseDtos(questions);
-
-    return new ResponseEntity<>(response,HttpStatus.OK);
+    QuestionResponsesDto questionResponsesDto = questionMapper.questionResponsesDtoWithQuantity(response, questionService.getQuestionQuantity());
+    return new ResponseEntity<>(questionResponsesDto,HttpStatus.OK);
   }
   
   //선택 질문 글 삭제

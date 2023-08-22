@@ -2,10 +2,7 @@ package com.preproject.seb_pre_15.question.mapper;
 
 import com.preproject.seb_pre_15.answer.dto.AnswerResponseDto;
 import com.preproject.seb_pre_15.comment.questionComment.dto.QuestionCommentDto;
-import com.preproject.seb_pre_15.question.dto.QuestionPatchDto;
-import com.preproject.seb_pre_15.question.dto.QuestionPostDto;
-import com.preproject.seb_pre_15.question.dto.QuestionResponseDto;
-import com.preproject.seb_pre_15.question.dto.QuestionVotePatchDto;
+import com.preproject.seb_pre_15.question.dto.*;
 import com.preproject.seb_pre_15.question.entity.Question;
 import org.mapstruct.Mapper;
 
@@ -57,4 +54,12 @@ public interface QuestionMapper {
   Question questionVotePatchDtoToQuestion(QuestionVotePatchDto questionVotePatchDto);
   Question questionPostDtoToQuestion(QuestionPostDto questionPatchDto);
   List<QuestionResponseDto> questionToQuestionResponseDtos(List<Question> questions);
+
+  default QuestionResponsesDto questionResponsesDtoWithQuantity(List<QuestionResponseDto> questions, long quantity){
+      QuestionResponsesDto questionResponsesDto = new QuestionResponsesDto();
+      questionResponsesDto.setAllQuestions(questions);
+      questionResponsesDto.setQuantity(quantity);
+      return questionResponsesDto;
+
+  }
 }
