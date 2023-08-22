@@ -8,6 +8,7 @@ import com.preproject.seb_pre_15.image.entity.ProfileImage;
 import com.preproject.seb_pre_15.question.entity.Question;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.PageRequest;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ public class Member extends Auditable {
         if (questionComment.getMember() != this) questionComment.setMember(this);
         questionComments.add(questionComment);
     }
+    private String profilePic;
 
 //    @OneToMany
 //    private List<Answer> answers = new ArrayList<>();

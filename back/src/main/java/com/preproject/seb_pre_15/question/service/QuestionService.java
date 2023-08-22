@@ -175,6 +175,10 @@ public class QuestionService {
     }
     return true;
   }
-  
+
+  public long getQuestionQuantity(){
+    return questionRepository.count();
+  }
+
 }
 
