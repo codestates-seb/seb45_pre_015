@@ -6,6 +6,7 @@ const AnswerFormBody = styled.div`
   .answer-container {
     display: flex;
     width: 100%;
+    height: 5em;
   }
 
   h1 {
@@ -77,16 +78,22 @@ function AnswerForm({ questionId, onAnswerSubmit }) {
   return (
     <AnswerFormBody>
       <h1>귀하의 답변</h1>
-      <textarea
-        className="answer-container"
-        rows="5"
-        placeholder="답변을 입력하세요..."
-        value={answer}
-        onChange={handleAnswerChange}
-      ></textarea>
-      <button className="post-button" onClick={handlePostAnswer}>
-        답변 게시
-      </button>
+      <form onSubmit={handlePostAnswer}>
+        <textarea
+          type="text"
+          className="answer-container"
+          placeholder="답변을 입력하세요..."
+          value={answer}
+          onChange={handleAnswerChange}
+          onKeyPress={(event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              handlePostAnswer();
+            }
+          }}
+        />
+        <input type="submit" className="post-button" value="답변 게시" />
+      </form>
     </AnswerFormBody>
   );
 }
