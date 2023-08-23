@@ -1,7 +1,5 @@
 package com.preproject.seb_pre_15.response;
 
-
-
 import com.preproject.seb_pre_15.exception.ExceptionCode;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

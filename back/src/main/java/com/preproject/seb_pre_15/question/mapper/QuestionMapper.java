@@ -54,15 +54,7 @@ public interface QuestionMapper {
   Question questionVotePatchDtoToQuestion(QuestionVotePatchDto questionVotePatchDto);
   Question questionPostDtoToQuestion(QuestionPostDto questionPatchDto);
   List<QuestionResponseDto> questionToQuestionResponseDtos(List<Question> questions);
-
-//  default QuestionResponsesDto questionResponsesDtoWithQuantity(List<QuestionResponseDto> questions, long quantity){
-//      QuestionResponsesDto questionResponsesDto = new QuestionResponsesDto();
-//      questionResponsesDto.setAllQuestions(questions);
-//      questionResponsesDto.setQuantity(quantity);
-//      return questionResponsesDto;
-//
-//  }
-    default QuestionQuantityResponseDto totalNumToQuestionQuantityResponseDto(long totalNum){
+  default QuestionQuantityResponseDto totalNumToQuestionQuantityResponseDto(long totalNum){
         QuestionQuantityResponseDto questionQuantityResponseDto = new QuestionQuantityResponseDto();
         questionQuantityResponseDto.setTotalQuestions(totalNum);
         return questionQuantityResponseDto;

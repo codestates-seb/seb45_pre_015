@@ -13,6 +13,4 @@ public class QuestionPostDto {
   private String title;
   
   private String body;
-
-
 }

@@ -63,7 +63,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request,response);
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" );
         System.out.println("Authentication Process 1. Authentication successful! Hello User:: " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        System.out.println("Authorities::  "+ SecurityContextHolder.getContext().getAuthentication().getAuthorities()  );
+        System.out.println("Authorities::  "+ SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" );
     }
 

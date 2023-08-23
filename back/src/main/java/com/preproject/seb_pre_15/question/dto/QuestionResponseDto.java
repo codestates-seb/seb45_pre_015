@@ -1,11 +1,10 @@
 package com.preproject.seb_pre_15.question.dto;
 
 import com.preproject.seb_pre_15.answer.dto.AnswerResponseDto;
-import com.preproject.seb_pre_15.answer.entity.Answer;
 import com.preproject.seb_pre_15.comment.questionComment.dto.QuestionCommentDto;
-import com.preproject.seb_pre_15.comment.questionComment.entity.QuestionComment;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.util.List;
 
 
