@@ -3,6 +3,11 @@ import { styled } from "styled-components";
 import { postAnswer, fetchQuestionById } from "../util/fetchquestion";
 
 const AnswerFormBody = styled.div`
+  .answer-container {
+    display: flex;
+    width: 100%;
+  }
+
   h1 {
     font-size: 25px;
     border-top: solid 1px hsl(210, 8%, 90%);
@@ -73,6 +78,7 @@ function AnswerForm({ questionId, onAnswerSubmit }) {
     <AnswerFormBody>
       <h1>귀하의 답변</h1>
       <textarea
+        className="answer-container"
         rows="5"
         placeholder="답변을 입력하세요..."
         value={answer}
