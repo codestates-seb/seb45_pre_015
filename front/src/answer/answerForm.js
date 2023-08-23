@@ -85,8 +85,8 @@ function AnswerForm({ questionId, onAnswerSubmit }) {
           placeholder="답변을 입력하세요..."
           value={answer}
           onChange={handleAnswerChange}
-          onKeyPress={(event) => {
-            if (event.key === "Enter") {
+          onKeyDown={(event) => {
+            if (event.key === "Enter" && !event.shiftKey) {
               event.preventDefault();
               handlePostAnswer();
             }
