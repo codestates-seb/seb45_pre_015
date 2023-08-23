@@ -3,7 +3,7 @@ import { useRef } from "react";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "@toast-ui/editor/dist/i18n/ko-kr";
 
-function AnswerEditor({ onChange }) {
+function AnswerEditor({ onChange, value }) {
   const editorRef = useRef();
 
   const handleEditorChange = () => {
@@ -26,6 +26,7 @@ function AnswerEditor({ onChange }) {
               initialEditType="wysiwyg"
               useCommandShortcut={false}
               language="ko-KR"
+              value={value} // value 전달
               onChange={handleEditorChange}
             />
           </div>

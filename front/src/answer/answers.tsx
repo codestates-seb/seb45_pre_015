@@ -72,9 +72,9 @@ function Answers() {
         <div className="question-section">
           <p className="answer-content">답변 내용: {answer.body}</p>
           {index < answerData.length - 1 && <div className="answer-divider" />}
+          <AnswerUsers />
         </div>
       </div>
-      <AnswerUsers />
     </div>
   ))}
       </Content>
