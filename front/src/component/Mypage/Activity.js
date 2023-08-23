@@ -14,10 +14,12 @@ const Cate = styled.article`
 
   button{
     width: 7.5rem;
-    padding: .3125rem .625rem;
+    padding: .625rem;
     border-radius: 15px;
     text-align: left;
+    transition: .3s;
   }
+  button:hover,
   button.active{
     background-color: #f1f2f3;
   }
@@ -25,9 +27,9 @@ const Cate = styled.article`
 
 const StatusContainer = styled.div`
     display: flex;
-  width: calc(100% - 120px);
-  margin: 0 1.25rem;
-  gap: 9.375rem;
+    width: calc(100% - 120px);
+    margin: 0 1.25rem;
+    gap: 9.375rem;
 
   .status_title{
     font-size: 2rem;
@@ -97,7 +99,7 @@ const Summary = ({activityData}) => {
           activityData.answers.map((answers, index) => (
             <div className="text_box" key={index}>
               <span className="num">{index + 1 || 0}</span>
-              <Link to={`/question/${answers.answersId}`} className="title">{answers.body || "등록된 답변이 없습니다"}</Link>
+              <Link to={`/question/${answers.answerId}`} className="title">{answers.body || "등록된 답변이 없습니다"}</Link>
             </div>
           ))}
           </div>
@@ -217,6 +219,7 @@ const Activity = () => {
               onClick={handleClickButton}
               name={data.name}
               key={data.id}
+              className={content === data.name ? "active" : ""}
             >
             {data.text}
             </button>
