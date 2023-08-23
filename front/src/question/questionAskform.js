@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import axios from 'axios';
 import {fetchCreateQuestion} from "../util/fetchquestion";
+import { Link } from 'react-router-dom';
 
 const AskFormAll = styled.div`
   display: flex;
@@ -213,9 +214,11 @@ function QuestionAskForm() {
           {/*<button className="post-button" onClick={QuestionAskForm}>*/}
           {/*  Post Your Question*/}
           {/*</button>*/}
-          <button className="post-button" onClick={handlePostQuestion}>
-            Post Your Question
-          </button>
+          <Link to='/question'>
+            <button className="post-button" onClick={handlePostQuestion}>
+              Post Your Question
+            </button>
+          </Link>
         </div>
       </QuestionsEditor>
     </div>

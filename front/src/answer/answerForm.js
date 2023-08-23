@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { styled } from "styled-components";
 import { postAnswer, fetchQuestionById } from "../util/fetchquestion";
+import AnswerEditor from "./answerEditor";
 
 const AnswerFormBody = styled.div`
   .answer-container {
@@ -77,23 +78,12 @@ function AnswerForm({ questionId, onAnswerSubmit }) {
 
   return (
     <AnswerFormBody>
-      <h1>귀하의 답변</h1>
-      <form onSubmit={handlePostAnswer}>
-        <textarea
-          type="text"
-          className="answer-container"
-          placeholder="답변을 입력하세요..."
-          value={answer}
-          onChange={handleAnswerChange}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" && !event.shiftKey) {
-              event.preventDefault();
-              handlePostAnswer();
-            }
-          }}
-        />
-        <input type="submit" className="post-button" value="답변 게시" />
-      </form>
+      <h1>Your Answer</h1>
+      <AnswerEditor // AnswerEditor 컴포넌트로 교체
+        onChange={setAnswer} // AnswerEditor 내에서 사용할 onChange 함수 전달
+        value={answer} // AnswerEditor 내에서 사용할 value 전달
+      />
+      <input type="submit" className="post-button" value="Post Your Answer" onClick={handlePostAnswer} />
     </AnswerFormBody>
   );
 }
