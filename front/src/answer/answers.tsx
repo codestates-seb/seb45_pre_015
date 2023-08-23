@@ -63,26 +63,21 @@ function Answers() {
   };
 
   return (
-    <>
-      <Content>
-        <AnswerForm questionId={questionId} onAnswerSubmit={handleAnswerSubmit} />
-        <div className="question-container">
-          <Vote />
-          <div className="question-section">
-            {answerData.map((answer: any, index: number) => (
-              <div key={answer.id} className="answer-container">
-                <p className="answer-content">답변 내용: {answer.body}</p>
-                {index < answerData.length - 1 && <div className="answer-divider" />}
-              </div>
-            ))}
-            <AnswerUsers />
-          </div>
+    <Content>
+      <AnswerForm questionId={questionId} onAnswerSubmit={handleAnswerSubmit} />
+      {answerData.map((answer: any, index: number) => (
+    <div key={answer.id} className="answer-container">
+      <div className="question-container">
+        <Vote />
+        <div className="question-section">
+          <p className="answer-content">답변 내용: {answer.body}</p>
+          {index < answerData.length - 1 && <div className="answer-divider" />}
         </div>
+      </div>
+      <AnswerUsers />
+    </div>
+  ))}
       </Content>
-      <Content>
-        {/* 새로운 답변이 추가될 때 여기에 나타날 내용 */}
-      </Content>
-    </>
   );
 }
 
