@@ -72,7 +72,7 @@ function Myeditor( {username, onChangeUsername } ){
     e.preventDefault();
 
     // // try{
-    // //   await axios.patch("https://659a-116-126-166-12.ngrok-free.app/members/{member-id}" , {
+    // //   await axios.patch("http://ec2-3-35-10-64.ap-northeast-2.compute.amazonaws.com:8080/members/{member-id}" , {
     // //     method: 'POST',
     // //     headers: {
     // //       'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ function Myeditor( {username, onChangeUsername } ){
     
 
     try {
-      const response = await axios.patch(`https://659a-116-126-166-12.ngrok-free.app/members/{member-id}`, {
+      const response = await axios.patch(`http://ec2-3-35-10-64.ap-northeast-2.compute.amazonaws.com:8080/members/{member-id}`, {
         name: newDisplayName
       });
 

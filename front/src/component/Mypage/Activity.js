@@ -165,7 +165,7 @@ const Activity = () => {
   const [activityData, setActivityData] = useState(null);
 
   useEffect(() => {
-    axios.get("https://659a-116-126-166-12.ngrok-free.app/members/mypage", {
+    axios.get("http://ec2-3-35-10-64.ap-northeast-2.compute.amazonaws.com:8080/members/mypage", {
       headers: {
         'Content-Type': 'application/json',
         'ngrok-skip-browser-warning': '69420',
