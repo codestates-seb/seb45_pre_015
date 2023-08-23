@@ -35,7 +35,9 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String authorization = request.getHeader("Authorization");
-        System.out.println("+++++++++++++++++++AccessToken+++++++++++++++++++"+authorization+"++++++++++++++++++++++++++++++++++++++");
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" );
+        System.out.println("Authentication Process 2. AccessToken is detected: ");
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" );
 
         return authorization == null || !authorization.startsWith("Bearer");
     }
@@ -47,7 +49,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         try {
             Map<String, Object> claims = verifyJws(request);
             setAuthenticationToContext(claims);
-        System.out.println("+++++++++++++++++++++++++++internal+++++++++++"+claims+"++++++++++++++++++++++++++++++++++++++");
+
         } catch (SignatureException se) {
             request.setAttribute("exception", se);
         } catch (ExpiredJwtException ee) {
@@ -59,8 +61,10 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
 
         filterChain.doFilter(request,response);
-        System.out.println("doFilterInternal user::"+SecurityContextHolder.getContext().getAuthentication());
-
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" );
+        System.out.println("Authentication Process 1. Authentication successful! Hello User:: " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        System.out.println("Authorities::  "+ SecurityContextHolder.getContext().getAuthentication().getAuthorities()  );
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" );
     }
 
     private void setAuthenticationToContext(Map<String, Object> claims) {

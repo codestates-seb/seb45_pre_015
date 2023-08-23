@@ -43,9 +43,14 @@ public class OAuth2memberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         String email = String.valueOf(oAuth2User.getAttributes().get("email"));
         String profilePic = String.valueOf(oAuth2User.getAttributes().get("picture"));
         List<String> authorities = authorityUtils.createRoles(email);
-        System.out.println("++++++++++++profile:+++++++++++++++++++++++++  "+ profilePic + "  +++++++++++++++++++++++++++++++++++++++");
-        System.out.println("++++++++++++++++++++++++++++++++++++++"+authorities+"++++++++++++++++++++++++++++++++++++++");
         saveMember(email, authorities, profilePic);
+
+
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" );
+        System.out.println("Member Sign Up Process 1 :: Member is created!:: "+email );
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" );
+
+
         redirect(request,response,email,authorities);
     }
 
@@ -56,7 +61,13 @@ public class OAuth2memberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         String uri = createURI(accessToken,refreshToken).toString();
 
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" );
+        System.out.println("Login Process 0. AccessToken & RefreshToken is created!::");
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" );
+
         getRedirectStrategy().sendRedirect(request,response,uri);
+
+
     }
 
     private URI createURI(String accessToken, String refreshToken) {

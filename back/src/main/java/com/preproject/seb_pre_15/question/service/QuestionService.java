@@ -49,6 +49,7 @@ public class QuestionService {
   //질문글 조회(게시판 -> 본문), 해당 질문글 조회수 증가
   public Question findQuestion(long questionId, HttpServletRequest request, HttpServletResponse response) {
     Question findQuestion = findVerifiedQuestionByQuery(questionId);
+    
     return questionRepository.save(addQuestionView(request, response, findQuestion));
   }
   
