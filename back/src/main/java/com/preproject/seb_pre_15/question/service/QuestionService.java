@@ -52,7 +52,7 @@ public class QuestionService {
   //질문글 조회(게시판 -> 본문), 해당 질문글 조회수 증가
   public Question findQuestion(long questionId, HttpServletRequest request, HttpServletResponse response) {
     Question findQuestion = findVerifiedQuestionByQuery(questionId);
-    
+
     return questionRepository.save(addQuestionView(request, response, findQuestion));
   }
   
@@ -63,6 +63,9 @@ public class QuestionService {
       
       Cookie viewedCookie = new Cookie("viewed_question_" + findQuestion.getQuestionId(), "true");
       viewedCookie.setMaxAge(86400); // 쿠키 만료시간 하루로 설정
+      String cookieHeader = viewedCookie.getName() + "=" + viewedCookie.getValue() +
+              "; Secure; HttpOnly; SameSite=None"; // SameSite 설정 추가
+      response.setHeader("Set-Cookie", cookieHeader);
       response.addCookie(viewedCookie);
     }
     return findQuestion;
@@ -73,7 +76,7 @@ public class QuestionService {
     Cookie[] cookies = request.getCookies();
     if (cookies != null) {
       for (Cookie cookie : cookies) {
-        if (cookie.getName().equals("viewed_question_" + question.getQuestionId())) {
+        if (cookie.getName().equals("viewed_question_" + question.getQuestionId())&& cookie.getValue().equals("true")) {
           return false; //배열 값 중에 질문글 쿠키가 있다면 조회수 로직을 올리지 않습니다
         }
       }

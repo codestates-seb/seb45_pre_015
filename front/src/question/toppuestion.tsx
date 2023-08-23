@@ -6,6 +6,7 @@ import { fetchQuestionList } from "../util/fetchquestion";
 import { QuestionData } from "../type/types"
 import PostSummary from './postsummary'
 import getTimeAgo from "../component/getTimeAgo";
+import { fetchUserInfo } from '../util/fetchlogin'
 
 const PostSum = styled.div`
   display: flex;
@@ -112,6 +113,11 @@ span {
 .border-left {
   border-radius: 0 6px 6px 0;
 }
+
+.user-img {
+    width: 2rem;
+    border-radius: 50%;
+  }
 `;
 
 
@@ -123,7 +129,8 @@ function TopQuestionList() {
   const [page, setPage] = useState<number>(1);
   const filter = "newest";
   const searchText = null;
-
+  const [userData, setUserData] = useState<any>({});
+  const [userProfileImage, setUserProfileImage] = useState<string>('');
 
 
   useEffect(() => {
@@ -133,12 +140,29 @@ function TopQuestionList() {
         const sortedData = data.sort((a, b) => b.vote - a.vote);
         const top10Questions = sortedData.slice(0, 10);
         setQuestions(top10Questions);
-      } catch (error: any) {
-        console.error(error.message);
+      } catch (error) {
+        console.error((error as Error).message);
       }
     };
-  
+
+    const fetchUserData = async () => {
+      try {
+        const data = await fetchUserInfo();
+        setUserData(data);
+
+        if (data.profilePic) {
+          setUserProfileImage(data.profilePic);
+        }
+
+        sessionStorage.setItem('userEmail', data.email);
+
+      } catch (error) {
+        console.error('Error while getting user profile:', error);
+      }
+    };
+
     fetchData();
+    fetchUserData();
   }, []);
 
   return (
@@ -171,7 +195,7 @@ function TopQuestionList() {
             </Link>
             <div className="question-contents">{question.body}</div>
             <div className="question-user-info-container">
-                          <Link to={'/mypage'}><div className="user">질문유저 이름</div></Link>
+            <Link to={'/mypage'}><img src={userProfileImage} alt={userData.name} className='user-img' /></Link>
                           <div className="asked-date">asked {elapsedTime}</div>
                         </div>
             </div>

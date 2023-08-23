@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {useNavigate, Link, redirect} from 'react-router-dom';
+import {useNavigate, Link} from 'react-router-dom';
 import { fetchUserInfo, checkIfLogined } from '../util/fetchlogin';
 import './header.css'
 import IconLogo from '../images/logo-stackoverflow.svg';
@@ -10,7 +10,6 @@ const Header: React.FC = () => {
   const [userProfileImageLink, setUserProfileImageLink] = useState<string>('');
   const [searchText, setSearchText] = useState<string>('');
   const search = useRef<HTMLInputElement | null>(null);
-  const [menu, setMenu] = useState<boolean>(false);
 
   const navigator = useNavigate();
 
@@ -66,7 +65,6 @@ const Header: React.FC = () => {
       setUserProfileImage(data.profilePic);
 
       sessionStorage.setItem('userEmail', data.email);
-      sessionStorage.setItem('accountId', data.accountId);
       sessionStorage.setItem('profilePic', data.profilePic);
     } catch (error) {
       console.error('Error while getting user profile:', error);
@@ -84,6 +82,7 @@ const Header: React.FC = () => {
         </button>
         <Link to='/mypage' className='mypage_btn'>
           <img
+            className='user-img'
             src={userProfileImage}
             alt="userProfile"
             width={25}

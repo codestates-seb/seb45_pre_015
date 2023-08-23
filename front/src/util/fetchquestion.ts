@@ -1,5 +1,7 @@
 import axios from "axios";
 import { CreateQuestionData, QuestionData, UpdateQuestionData } from "../type/types";
+// @ts-ignore
+import Cookies from 'js-cookie';
 
 export const fetchTotalQuestions = async () => {
   try {
@@ -11,7 +13,8 @@ export const fetchTotalQuestions = async () => {
         Accept: 'application/json',
         'ngrok-skip-browser-warning': '69420',
         Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
-        Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? ''
+        Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? '',
+
       }
     });
 
@@ -68,17 +71,18 @@ export const fetchQuestionList = async (
 // 질문 ID로 질문조회
 export const fetchQuestionById = async (questionId: number) => {
   const url = `https://659a-116-126-166-12.ngrok-free.app/questions/${questionId}`;
-
   try {
     const response = await fetch(url, {
       method: 'GET',
       mode: 'cors',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
         Accept: 'application/json',
         'ngrok-skip-browser-warning': '69420',
+        // 'Cookie': `viewed_question_1=${sessionStorage.getItem('viewed_question_1')}`,
         Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
-        Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? ''
+        Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? '',
       }
     });
 
@@ -214,6 +218,36 @@ export const fetchDeleteQuestion = async (questionId: number): Promise<any> => {
     const data = await response.json();
     return data.data;
   } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+
+//답변 등록
+export const postAnswer = async (answerData: any) => {
+  try {
+    const response = await fetch('https://659a-116-126-166-12.ngrok-free.app/answers', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': '69420',
+        Authorization: 'Bearer ' + sessionStorage.getItem('access_token') ?? '',
+        Refresh: 'Bearer ' + sessionStorage.getItem('refresh_token') ?? '',
+      },
+      body: JSON.stringify(answerData),
+    });
+
+    const accessToken = response.headers.get('Authorization');
+    if (accessToken !== null) {
+      sessionStorage.setItem('access_token', accessToken);
+    }
+
+    if (!response.ok) {
+      throw new Error('유효하지 않은 요청입니다.');
+    }
+
+    const data = await response.json();
+    return data.id;
+  } catch (error:any) {
     throw new Error(error.message);
   }
 };

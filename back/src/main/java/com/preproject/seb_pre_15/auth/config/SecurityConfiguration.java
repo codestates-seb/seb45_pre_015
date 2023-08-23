@@ -81,39 +81,11 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-//    @Bean//실제
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-//        http
-//
-//                .csrf().disable()
-//                .cors(withDefaults())
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .formLogin().disable()
-//                .httpBasic().disable()
-//                .exceptionHandling()
-//                .and()
-//                .apply(new CustomFilterConfigurer())
-//                .and()
-//                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
-//                .oauth2Login(oauth2 -> oauth2.successHandler(new OAuth2memberSuccessHandler(jwtTokenizer,authorityUtils)));
-//        return http.build();
-//    }
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-////        configuration.setAllowedOriginPatterns(Arrays.asList("{url}"));
-//        configuration.setAllowedOrigins(Arrays.asList("*"));
-//        configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE"));
-////        configuration.setAllowCredentials(Boolean.valueOf(true));
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//        configuration.addAllowedOriginPattern("*");
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://localhost:8080", "https://659a-116-126-166-12.ngrok-free.app"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000","http://localhost:8080", "https://659a-116-126-166-12.ngrok-free.app","http://seb45-pre-015.s3-website.ap-northeast-2.amazonaws.com"));
         configuration.setAllowCredentials(true);
-//        configuration.addAllowedMethod("*");
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE","OPTION"));
         configuration.addAllowedHeader("*");
         configuration.addExposedHeader("*");
@@ -127,8 +99,7 @@ public class SecurityConfiguration {
         @Override
         public void configure(HttpSecurity builder) throws Exception {
             JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer,authorityUtils);
-//            JwtExceptionFilter jwtExceptionFilter = new JwtExceptionFilter();
-//            builder.addFilterBefore(jwtExceptionFilter, jwtVerificationFilter.getClass());
+
             builder.addFilterAfter(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class);
         }
     }

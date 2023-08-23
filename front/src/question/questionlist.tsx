@@ -5,6 +5,8 @@ import { AskButton, PageButton, SortBtn } from "../component/buttons";
 import { fetchQuestionList, fetchTotalQuestions } from "../util/fetchquestion";
 import { QuestionData, TotalQuestionData } from "../type/types";
 import getTimeAgo from "../component/getTimeAgo";
+import { fetchUserInfo } from '../util/fetchlogin'
+
 
 const PostSum = styled.div`
   display: flex;
@@ -108,9 +110,15 @@ span {
 .border-right {
   border-radius: 6px 0 0 6px;
 }
+
 .border-left {
   border-radius: 0 6px 6px 0;
 }
+
+.user-img {
+    width: 2rem;
+    border-radius: 50%;
+  }
 `;
 
 function QuestionList() {
@@ -121,6 +129,9 @@ function QuestionList() {
   const [totalQuestions, setTotalQuestions] = useState<TotalQuestionData | null>(null);
   const filter = "newest";
   const searchText = null;
+  const [userData, setUserData] = useState<any>({});
+  const [userProfileImage, setUserProfileImage] = useState<string>('');
+
 
   const fetchTotalQuestionsData = async () => {
     try {
@@ -158,6 +169,25 @@ function QuestionList() {
     fetchTotal();
   }, []);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const data = await fetchUserInfo();
+        setUserData(data);
+
+        if (data.profilePic) {
+          setUserProfileImage(data.profilePic);
+        }
+
+      } catch (error) {
+        console.error('Error while getting user profile:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+
   const totalPages = Math.ceil(questions.length / 10);
   const questionId = questions.length > 0 ? questions[0].questionId : 0;
   const maxPages = Math.ceil(questionId / 10);
@@ -192,7 +222,7 @@ function QuestionList() {
               </Link>
               <div className="question-contents">{question.body}</div>
               <div className="question-user-info-container">
-                <Link to={'/mypage'}><div className="user">질문유저 이름</div></Link>
+              <Link to={'/mypage'}><img src={userProfileImage} alt={userData.name} className='user-img' /></Link>
                 <div className="asked-date">asked {elapsedTime}</div>
               </div>
             </div>

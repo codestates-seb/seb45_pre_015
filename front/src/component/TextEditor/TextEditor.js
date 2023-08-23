@@ -71,15 +71,38 @@ function Myeditor( {username, onChangeUsername } ){
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    try{
-      await axios.put("https://659a-116-126-166-12.ngrok-free.app/members/{member-id}" , {
-        name : newDisplayName
-      })
-      onChangeUsername(newDisplayName); // 변경된 username을 상위 컴포넌트로 전달
-    } catch (error) {
-      console.error("서버에 요청을 보낼 수 없습니다:", error)
-    }
+    // // try{
+    // //   await axios.patch("https://659a-116-126-166-12.ngrok-free.app/members/{member-id}" , {
+    // //     method: 'POST',
+    // //     headers: {
+    // //       'Content-Type': 'application/json',
+    // //       'ngrok-skip-browser-warning': '69420',
+    // //       Authorization: "Bearer " + sessionStorage.getItem('access_token') ?? '',
+    // //       Refresh: "Bearer " + sessionStorage.getItem('refresh_token') ?? '',
+    // //     },
+    // //     body: {
+    // //       name : newDisplayName
+    // //     },
+    // //   }, {withCredentials: true,})
+    // //   onChangeUsername(newDisplayName); // 변경된 username을 상위 컴포넌트로 전달
+    // // } catch (error) {
+    // //   console.error("서버에 요청을 보낼 수 없습니다:", error)
+    // // }
     
+
+    try {
+      const response = await axios.patch(`https://659a-116-126-166-12.ngrok-free.app/members/{member-id}`, {
+        name: newDisplayName
+      });
+
+      // 서버가 성공적으로 처리한 경우, 상위 컴포넌트로 변경된 username을 전달
+      if (response.status === 200) {
+        onChangeUsername(newDisplayName);
+      }
+    } catch (error) {
+      console.error("서버에 요청을 보낼 수 없습니다:", error);
+      // 오류 처리
+    }
   }
   return (
     <Section className='form_wrap'>

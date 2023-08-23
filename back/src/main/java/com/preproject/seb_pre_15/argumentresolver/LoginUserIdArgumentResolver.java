@@ -1,12 +1,7 @@
 package com.preproject.seb_pre_15.argumentresolver;
 
-import com.preproject.seb_pre_15.auth.dto.TokenPrincipalDto;
 import com.preproject.seb_pre_15.member.entity.Member;
-import com.preproject.seb_pre_15.member.repository.MemberRepository;
 import com.preproject.seb_pre_15.member.service.MemberService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
