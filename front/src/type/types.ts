@@ -24,3 +24,8 @@ export interface QuestionData {
     answerId: number;
     body: string;
   }
+
+  export interface AnswerFormProps {
+    questionId: number;
+    onAnswerSubmit: (answer: string) => void;
+  }

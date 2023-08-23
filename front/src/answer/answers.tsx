@@ -3,7 +3,7 @@ import Vote from "../component/vote";
 import styled from "styled-components";
 import { SetStateAction, useEffect, useState } from "react";
 import AnswerForm from "./answerForm";
-import {fetchAnswerById, fetchQuestionById} from "../util/fetchquestion";
+import { fetchQuestionById } from "../util/fetchquestion";
 import { useParams } from "react-router-dom";
 import { answers } from "../type/types";
 
@@ -23,6 +23,18 @@ const Content = styled.div`
     display: flex;
     flex-direction: column;
   }
+
+  /* 새로운 스타일 추가: 실선 구분선 */
+  .answer-divider {
+    border-top: 1px solid hsl(210, 8%, 90%);
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  /* 새로운 스타일 추가: 각 답변 컨테이너 */
+  .answer-container {
+    margin-top: 10px;
+  }
 `;
 
 function Answers() {
@@ -36,35 +48,36 @@ function Answers() {
       try {
         const data = await fetchQuestionById(Number(questionId));
         setAnswerData(data.answers);
-
       } catch (error) {
         console.error('Error fetching answer:', error);
       }
     };
 
     fetchAnswer();
-  }, [answerId]);
+  }, [questionId]);
 
   const handleAnswerSubmit = (newAnswer: SetStateAction<string>) => {
     setSubmittedAnswer(newAnswer);
+    
+    setAnswerData(prevAnswerData => [...prevAnswerData, { id: Date.now(), body: newAnswer }]);
   };
 
   return (
     <Content>
       <AnswerForm questionId={questionId} onAnswerSubmit={handleAnswerSubmit} />
+      {answerData.map((answer: any, index: number) => (
+    <div key={answer.id} className="answer-container">
       <div className="question-container">
         <Vote />
         <div className="question-section">
-          {answerData.map((answer: any) => (
-              <div key={answer.id}>
-                <p>답변 내용: {answer.body}</p>
-              </div>
-          ))}
-
-          <AnswerUsers />
+          <p className="answer-content">답변 내용: {answer.body}</p>
+          {index < answerData.length - 1 && <div className="answer-divider" />}
         </div>
       </div>
-    </Content>
+      <AnswerUsers />
+    </div>
+  ))}
+      </Content>
   );
 }
 

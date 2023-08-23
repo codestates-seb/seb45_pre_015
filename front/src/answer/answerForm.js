@@ -1,8 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { styled } from "styled-components";
-import { postAnswer } from "../util/fetchquestion";
+import { postAnswer, fetchQuestionById } from "../util/fetchquestion";
 
 const AnswerFormBody = styled.div`
+  .answer-container {
+    display: flex;
+    width: 100%;
+    height: 5em;
+  }
+
   h1 {
     font-size: 25px;
     border-top: solid 1px hsl(210, 8%, 90%);
@@ -35,6 +41,17 @@ const AnswerFormBody = styled.div`
 
 function AnswerForm({ questionId, onAnswerSubmit }) {
   const [answer, setAnswer] = useState("");
+  const [questionData, setQuestionData] = useState(null);
+
+  useEffect(() => {
+    fetchQuestionById(questionId)
+      .then((data) => {
+        setQuestionData(data);
+      })
+      .catch((error) => {
+        console.error("에러 발생: ", error);
+      });
+  }, [questionId]);
 
   const handleAnswerChange = (event) => {
     setAnswer(event.target.value);
@@ -47,9 +64,9 @@ function AnswerForm({ questionId, onAnswerSubmit }) {
         body: answer,
       };
 
-      const createdAnswerId = await postAnswer(data);
+      await postAnswer(data);
 
-      alert("답변이 성공적으로 게시되었습니다. ID: " + createdAnswerId);
+      alert("답변이 성공적으로 게시되었습니다.");
 
       setAnswer("");
       onAnswerSubmit(answer);
@@ -61,15 +78,22 @@ function AnswerForm({ questionId, onAnswerSubmit }) {
   return (
     <AnswerFormBody>
       <h1>귀하의 답변</h1>
-      <textarea
-        rows="5"
-        placeholder="답변을 입력하세요..."
-        value={answer}
-        onChange={handleAnswerChange}
-      ></textarea>
-      <button className="post-button" onClick={handlePostAnswer}>
-        답변 게시
-      </button>
+      <form onSubmit={handlePostAnswer}>
+        <textarea
+          type="text"
+          className="answer-container"
+          placeholder="답변을 입력하세요..."
+          value={answer}
+          onChange={handleAnswerChange}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" && !event.shiftKey) {
+              event.preventDefault();
+              handlePostAnswer();
+            }
+          }}
+        />
+        <input type="submit" className="post-button" value="답변 게시" />
+      </form>
     </AnswerFormBody>
   );
 }

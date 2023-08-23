@@ -13,15 +13,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.util.UriComponentsBuilder;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -57,19 +54,17 @@ public class MemberAuthenticationEntryPoint implements AuthenticationEntryPoint 
             Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
             String base64EncodedSecretKey = jwtTokenizer.encodedBasedSecretKey(jwtTokenizer.getSecretKey());
             String accessToken = jwtTokenizer.generateAccessToken(newClaims,username,expiration, base64EncodedSecretKey);
-            String newRefreshToken = refreshToken.replace("Bearer ", "");
+
 
             setAuthenticationToContext(newClaims);
 
-            System.out.println("++++++++++++Refreshed Token"+SecurityContextHolder.getContext().getAuthentication());
-//            URI redirectUri = createURI(accessToken, newRefreshToken);
+            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            System.out.println("new token generated with RefreshToken +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
-//            response.setHeader("Authorization", accessToken);
-//            response.setHeader("Refresh", newRefreshToken);
-//            response.setStatus(HttpServletResponse.SC_FOUND);
-//            response.setHeader("Location", redirectUri.toString());
-//            response.setHeader("Location", "http://localhost:3000/");
-            System.out.println("+++++++++++++++++++++++++++new token generated+++++++++++++++++++++++++++++");
+
+            //새로운 액세스 토큰 응답 헤더에 담아 전송
+
             response.setHeader("Authorization",accessToken);
 
 
@@ -87,28 +82,16 @@ public class MemberAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(username,null,authorities);
 
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("Login Success with new AccessToken! +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
-        System.out.println("username:"+username);
 
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
 
-
-    private URI createURI(String accessToken, String refreshToken) {
-        MultiValueMap<String,String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add("access_token", accessToken);
-        queryParams.add("refresh_token", refreshToken);
-
-        return UriComponentsBuilder.newInstance()
-                .scheme("http")
-                .host("localhost")
-                .port(3000)
-                .path("/mytokens")//redirect 받기 위한 주소
-                .queryParams(queryParams)
-                .build().toUri();
-    }
 
     private Map<String, Object> verifyJws(HttpServletRequest request) {
         String jws = request.getHeader("Refresh").replace("Bearer ", "");
