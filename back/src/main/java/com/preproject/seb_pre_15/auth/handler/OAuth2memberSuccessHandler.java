@@ -77,8 +77,7 @@ public class OAuth2memberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         return UriComponentsBuilder.newInstance()
                 .scheme("http")
-                .host("localhost")
-                .port(3000)
+                .host("seb45-pre-015.s3-website.ap-northeast-2.amazonaws.com")
                 .path("/mytokens")//redirect 받기 위한 주소
                 .queryParams(queryParams)
                 .build().toUri();

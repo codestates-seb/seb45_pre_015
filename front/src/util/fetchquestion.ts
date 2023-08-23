@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 
 export const fetchTotalQuestions = async () => {
   try {
-    const response = await fetch('https://659a-116-126-166-12.ngrok-free.app/questions/total', {
+    const response = await fetch('http://ec2-3-35-10-64.ap-northeast-2.compute.amazonaws.com:8080/questions/total', {
       method: 'GET',
       mode: 'cors',
       headers: {
@@ -37,7 +37,7 @@ export const fetchQuestionList = async (
   pageSize: number = 10
 ): Promise<QuestionData[]> => {
   
-  let url = 'https://659a-116-126-166-12.ngrok-free.app/questions';
+  let url = 'http://ec2-3-35-10-64.ap-northeast-2.compute.amazonaws.com:8080/questions';
   
   const params = new URLSearchParams();
   params.set('page', String(page));
@@ -70,7 +70,7 @@ export const fetchQuestionList = async (
 
 // 질문 ID로 질문조회
 export const fetchQuestionById = async (questionId: number) => {
-  const url = `https://659a-116-126-166-12.ngrok-free.app/questions/${questionId}`;
+  const url = `http://ec2-3-35-10-64.ap-northeast-2.compute.amazonaws.com:8080/questions/${questionId}`;
   try {
     const response = await fetch(url, {
       method: 'GET',
@@ -99,7 +99,7 @@ export const fetchQuestionById = async (questionId: number) => {
 
 //답변 조회
 export const fetchAnswerById = async (answerId: number) => {
-  const url = `https://659a-116-126-166-12.ngrok-free.app/answers/${answerId}`;
+  const url = `http://ec2-3-35-10-64.ap-northeast-2.compute.amazonaws.com:8080/answers/${answerId}`;
 
   try {
     const response = await fetch(url, {
@@ -128,7 +128,7 @@ export const fetchAnswerById = async (answerId: number) => {
 
 export const fetchCreateQuestion = async (fetchData: CreateQuestionData): Promise<number> => {
   try {
-    const response = await fetch(`https://659a-116-126-166-12.ngrok-free.app/questions`, {
+    const response = await fetch(`http://ec2-3-35-10-64.ap-northeast-2.compute.amazonaws.com:8080/questions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -167,7 +167,7 @@ export const fetchUpdateQuestion = async (
     questionId: number
 ): Promise<any> => {
   try {
-    const response = await fetch(`https://659a-116-126-166-12.ngrok-free.app/questions/${memberId}/${questionId}`, {
+    const response = await fetch(`http://ec2-3-35-10-64.ap-northeast-2.compute.amazonaws.com:8080/questions/${memberId}/${questionId}`, {
 
       method: 'PATCH',
       headers: {
@@ -197,7 +197,7 @@ export const fetchUpdateQuestion = async (
 export const fetchDeleteQuestion = async (questionId: number): Promise<any> => {
   try {
 
-    const response = await fetch(`https://659a-116-126-166-12.ngrok-free.app/questions/${questionId}`, {
+    const response = await fetch(`http://ec2-3-35-10-64.ap-northeast-2.compute.amazonaws.com:8080/questions/${questionId}`, {
 
       method: 'DELETE',
       headers: {
@@ -225,7 +225,7 @@ export const fetchDeleteQuestion = async (questionId: number): Promise<any> => {
 //답변 등록
 export const postAnswer = async (answerData: any) => {
   try {
-    const response = await fetch('https://659a-116-126-166-12.ngrok-free.app/answers', {
+    const response = await fetch('http://ec2-3-35-10-64.ap-northeast-2.compute.amazonaws.com:8080/answers', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

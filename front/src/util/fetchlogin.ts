@@ -42,7 +42,7 @@ export const fetchLogin = async (data: string): Promise<Response> => {
 
 export const fetchUserInfo = async (): Promise<any> => {
   try {
-    const response = await fetch(`https://659a-116-126-166-12.ngrok-free.app/members/mypage`, {
+    const response = await fetch(`http://ec2-3-35-10-64.ap-northeast-2.compute.amazonaws.com:8080/members/mypage`, {
       method: 'GET',
       mode: 'cors',
       headers: {
