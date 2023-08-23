@@ -11,9 +11,8 @@ public class QuestionPatchDto {
   private String title;
   
   private String body;
-
-//  private String images;
-//
-//  private Long vote;
   
+  private Long vote;
+  
+//  private String images;
 }
