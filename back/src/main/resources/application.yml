@@ -14,7 +14,7 @@ spring:
         password: ${RDS_Mysql_password}
         driver-class-name: com.mysql.cj.jdbc.Driver
   config:
-      domain: ${AWS_S3_Endpoint}
+    domain: ${AWS_S3_Endpoint}
   security:
     oauth2:
       client:
