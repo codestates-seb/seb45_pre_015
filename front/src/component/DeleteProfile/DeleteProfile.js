@@ -16,15 +16,19 @@ const Section = styled.section`
     padding: .9375rem 1.25rem;
     border-radius: 10px;
     border: 1px solid #fff;
-    background-color: #d0393e;
+    background-color: #de7477;
     color: #fff;
+    transition: .3;
+  }
+  .profile_btn:hover{
+    background-color: #d0393e;
   }
 `
 
 function Delete () {
   const handleDelete = async () => {
     try {
-      await axios.delete(`https://659a-116-126-166-12.ngrok-free.app/members/{member-id}`);
+      await axios.delete(`http://ec2-3-35-10-64.ap-northeast-2.compute.amazonaws.com:8080/members/{member-id}`);
       window.location.href = '/';
 
     } catch (error) {

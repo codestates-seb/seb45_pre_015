@@ -25,7 +25,7 @@ const ExLoginButtons: React.FC<ExLoginButtonsProps> = ({ onSubmit }) => {
     <button className='flex--item s-btn s-btn__icon s-btn__google bar-md ba bc-black-100 bg-blue-300' onClick={handleGoogleLogin}>
         <div className="flex items-center justify-center align-items-center">
         <img src="./googlelogo.jpg" alt="Logo" className="mr-1 h-5 w-5 items-center justify-center" />
-        <Link to={'https://659a-116-126-166-12.ngrok-free.app/oauth2/authorization/google'} className="ml-2 items-center justify-center align-items-center">Login with Google</Link>
+        <Link to={'http://ec2-3-35-10-64.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google'} className="ml-2 items-center justify-center align-items-center">Login with Google</Link>
       </div>
       </button>
   );

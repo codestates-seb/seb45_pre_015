@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://659a-116-126-166-12.ngrok-free.app/answers';
+const API_URL = 'http://ec2-3-35-10-64.ap-northeast-2.compute.amazonaws.com:8080/answers';
 
 export const postAnswer = async (body) => {
   const requestBody = {

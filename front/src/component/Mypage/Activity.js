@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import styled from "styled-components";
 import axios from "axios";
+import { Link } from 'react-router-dom';
 
 const Section = styled.section`
   display: flex;
@@ -13,10 +14,12 @@ const Cate = styled.article`
 
   button{
     width: 7.5rem;
-    padding: .3125rem .625rem;
+    padding: .625rem;
     border-radius: 15px;
     text-align: left;
+    transition: .3s;
   }
+  button:hover,
   button.active{
     background-color: #f1f2f3;
   }
@@ -24,34 +27,24 @@ const Cate = styled.article`
 
 const StatusContainer = styled.div`
     display: flex;
-  width: calc(100% - 120px);
-  margin: 0 1.25rem;
-  gap: 9.375rem;
+    width: calc(100% - 120px);
+    margin: 0 1.25rem;
+    gap: 9.375rem;
 
   .status_title{
-    font-size: 1.75rem;
+    font-size: 2rem;
     font-weight: 800;
-    margin: 0 0 .625rem ;
-  }
-  .info_stats > div{
-    width: 12.5rem;
-    border: 1px solid #eee;
-    padding: .9375rem;
-  }
-  .info_stats .view_box{
-    margin: .3125rem 0;
-  }
-  .info_stats .view_box p{
-    font-size: 1.125rem;
-    margin: 0 0 .3125rem;
-  }
-  .info_stats .view_box span{
-    font-size: .875rem;
+    margin: 0 0 1.875rem ;
   }
   .info_total{
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
+    flex-direction: row;
+    justify-content: center;
+    gap: 6.25rem;
+  }
+  .info_total > div{
+    width: 40%;
   }
   .qna{
     border: 1px solid #eee;
@@ -62,7 +55,7 @@ const StatusContainer = styled.div`
     align-items: center;
     gap: .9375rem;
     border-bottom: 1px solid #eee;
-    padding: .625rem 0;
+    padding: 1.25rem .625rem;
   }
   .qna .text_box:last-child{
     border-bottom: 0;
@@ -74,6 +67,7 @@ const StatusContainer = styled.div`
     border: 1px solid #eee;
   }
   .qna .title{
+    display : block;
     text-align: center;
     color: #5F9BCD;
     max-width: 300px;
@@ -81,35 +75,22 @@ const StatusContainer = styled.div`
     white-space: nowrap;
     text-overflow: ellipsis;
   }
-  .qna .date{
-    font-size: 14px;
-    align-self: flex-end;
-    color: #000011;
+  .info_questions,
+  .info_answers{
+    width: 50%;
   }
 `
 
 const Summary = ({activityData}) => {
-   const totalVotes = (activityData.answers.reduce((acc, answer) => acc + answer.vote, 0)) +
-                    (activityData.questions.reduce((acc, question) => acc + question.vote, 0));
+  if (!activityData) {
+    activityData = {
+      answers: [],
+      questions: [],
+    };
+  }
+
   return(
     <StatusContainer>
-      <div className="info_stats">
-        <h4 className="status_title">Stats</h4>
-        <div>
-          <div className="view_box">
-            <p>{totalVotes}</p>
-            <span>Total Votes</span>
-          </div>
-          <div className="view_box">
-            <p>{activityData.answers.vote}</p>
-            <span>Answers</span>
-          </div>
-          <div className="view_box">
-            <p>{activityData.questions.vote}</p>
-            <span>Questions</span>
-          </div>
-        </div>
-      </div>
       <div className="info_total">
         <div className="info_answers">
           <h4 className="status_title">Answers</h4>
@@ -117,9 +98,8 @@ const Summary = ({activityData}) => {
           {activityData &&
           activityData.answers.map((answers, index) => (
             <div className="text_box" key={index}>
-              <span className="num">{answers.vote}</span>
-              <p className="title">{answers.title}</p>
-              <span className="date">{answers.view}</span>
+              <span className="num">{index + 1 || 0}</span>
+              <Link to={`/question/${answers.answerId}`} className="title">{answers.body || "등록된 답변이 없습니다"}</Link>
             </div>
           ))}
           </div>
@@ -130,9 +110,8 @@ const Summary = ({activityData}) => {
           {activityData &&
           activityData.questions.map((question, index) => (
             <div className="text_box" key={index}>
-              <span className="num">{question.vote}</span>
-              <p className="title">{question.title}</p>
-              <span className="date">{question.view}</span>
+              <span className="num">{index + 1 || 0}</span>
+              <Link to={`/question/${question.questionId}`} className="title">{question.title || "등록된 질문이 없습니다"}</Link>
             </div>
           ))}
           </div>
@@ -151,9 +130,8 @@ const Answers = ({activityData}) => {
         {activityData &&
           activityData.answers.map((answers, index) => (
             <div className="text_box" key={index}>
-              <span className="num">{answers.vote}</span>
-              <p className="title">{answers.title}</p>
-              <span className="date">{answers.view}</span>
+              <span className="num">{index + 1 || 0}</span>
+              <Link to={`/question/${answers.answersId}`} className="title">{answers.body || "등록된 답변이 없습니다"}</Link>
             </div>
           ))}
         </div>
@@ -163,6 +141,7 @@ const Answers = ({activityData}) => {
 }
 
 const Questions = ({activityData}) => {
+
   return(
     <StatusContainer>
       <div className="info_questions">
@@ -171,9 +150,8 @@ const Questions = ({activityData}) => {
         {activityData &&
           activityData.questions.map((question, index) => (
             <div className="text_box" key={index}>
-              <span className="num">{question.vote}</span>
-              <p className="title">{question.title}</p>
-              <span className="date">{question.view}</span>
+              <span className="num">{index + 1 || 0}</span>
+              <Link to={`/question/${question.questionId}`} className="title">{question.title || "등록된 질문이 없습니다"}</Link>
             </div>
           ))}
         </div>
@@ -187,7 +165,7 @@ const Activity = () => {
   const [activityData, setActivityData] = useState(null);
 
   useEffect(() => {
-    axios.get("https://659a-116-126-166-12.ngrok-free.app/members/mypage", {
+    axios.get("http://ec2-3-35-10-64.ap-northeast-2.compute.amazonaws.com:8080/members/mypage", {
       headers: {
         'Content-Type': 'application/json',
         'ngrok-skip-browser-warning': '69420',
@@ -197,7 +175,7 @@ const Activity = () => {
     })
       .then((response) => {
         setActivityData(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       })
       .catch((error) => {
         console.error("API 호출 중 오류 발생:", error);
@@ -241,6 +219,7 @@ const Activity = () => {
               onClick={handleClickButton}
               name={data.name}
               key={data.id}
+              className={content === data.name ? "active" : ""}
             >
             {data.text}
             </button>

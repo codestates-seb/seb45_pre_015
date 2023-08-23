@@ -21,10 +21,13 @@ const Cate = styled.article`
   .edit-btn,
   .delete-btn{
     width: 7.5rem;
-    padding: .3125rem .625rem;
+    padding: .625rem;
     border-radius: 15px;
     text-align: left;
+    transition: .3s;
   }
+  .edit-btn:hover,
+  .delete-btn:hover,
   .edit-btn.active,
   .delete-btn.active{
     background-color: #f1f2f3;
