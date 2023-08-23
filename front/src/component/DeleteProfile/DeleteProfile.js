@@ -16,8 +16,12 @@ const Section = styled.section`
     padding: .9375rem 1.25rem;
     border-radius: 10px;
     border: 1px solid #fff;
-    background-color: #d0393e;
+    background-color: #de7477;
     color: #fff;
+    transition: .3;
+  }
+  .profile_btn:hover{
+    background-color: #d0393e;
   }
 `
 

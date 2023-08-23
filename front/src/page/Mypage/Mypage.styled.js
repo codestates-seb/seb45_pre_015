@@ -51,8 +51,10 @@ export const Section = styled.section`
   .status_button button{
     font-size: 1rem;
     border-radius: 20px;
-    padding: .375rem .9375rem;
+    padding: .625rem .9375rem;
+    transition: .3s;
   }
+  .status_button button:hover,
   .status_button button.active{
     background-color: #f48225;
     color: #fff;
