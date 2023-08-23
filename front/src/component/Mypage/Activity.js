@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import styled from "styled-components";
 import axios from "axios";
 
@@ -88,22 +88,24 @@ const StatusContainer = styled.div`
   }
 `
 
-const Summary = () => {
+const Summary = ({activityData}) => {
+   const totalVotes = (activityData.answers.reduce((acc, answer) => acc + answer.vote, 0)) +
+                    (activityData.questions.reduce((acc, question) => acc + question.vote, 0));
   return(
     <StatusContainer>
       <div className="info_stats">
         <h4 className="status_title">Stats</h4>
         <div>
           <div className="view_box">
-            <p>1</p>
+            <p>{totalVotes}</p>
             <span>Total Votes</span>
           </div>
           <div className="view_box">
-            <p>1</p>
+            <p>{activityData.answers.vote}</p>
             <span>Answers</span>
           </div>
           <div className="view_box">
-            <p>1</p>
+            <p>{activityData.questions.vote}</p>
             <span>Questions</span>
           </div>
         </div>
@@ -112,21 +114,27 @@ const Summary = () => {
         <div className="info_answers">
           <h4 className="status_title">Answers</h4>
           <div className="qna">
-            <div className="text_box">
-              <span className="num">0</span>
-              <p className="title">더미텍스asdasdasdasdasdasdsadasd트</p>
-              <span className="date">2222.03.20</span>
+          {activityData &&
+          activityData.answers.map((answers, index) => (
+            <div className="text_box" key={index}>
+              <span className="num">{answers.vote}</span>
+              <p className="title">{answers.title}</p>
+              <span className="date">{answers.view}</span>
             </div>
+          ))}
           </div>
         </div>
         <div className="info_questions">
           <h4 className="status_title">Questions</h4>
           <div className="qna">
-            <div className="text_box">
-              <span className="num">0</span>
-              <p className="title">더미텍스트</p>
-              <span className="date">2222.03.20</span>
+          {activityData &&
+          activityData.questions.map((question, index) => (
+            <div className="text_box" key={index}>
+              <span className="num">{question.vote}</span>
+              <p className="title">{question.title}</p>
+              <span className="date">{question.view}</span>
             </div>
+          ))}
           </div>
         </div>
       </div>
@@ -134,34 +142,40 @@ const Summary = () => {
   )
 }
 
-const Answers = () => {
+const Answers = ({activityData}) => {
   return(
     <StatusContainer>
       <div className="info_questions">
         <h4 className="status_title">Answers</h4>
         <div className="qna">
-          <div className="text_box">
-            <span className="num">0</span>
-            <p className="title">더미asdasdasdasdasdasdsa텍스트</p>
-            <span className="date">2222.03.20</span>
-          </div>
+        {activityData &&
+          activityData.answers.map((answers, index) => (
+            <div className="text_box" key={index}>
+              <span className="num">{answers.vote}</span>
+              <p className="title">{answers.title}</p>
+              <span className="date">{answers.view}</span>
+            </div>
+          ))}
         </div>
       </div>
     </StatusContainer>
   )
 }
 
-const Questions = () => {
+const Questions = ({activityData}) => {
   return(
     <StatusContainer>
       <div className="info_questions">
         <h4 className="status_title">Questions</h4>
         <div className="qna">
-          <div className="text_box">
-            <span className="num">0</span>
-            <p className="title">더미텍스트</p>
-            <span className="date">2222.03.20</span>
-          </div>
+        {activityData &&
+          activityData.questions.map((question, index) => (
+            <div className="text_box" key={index}>
+              <span className="num">{question.vote}</span>
+              <p className="title">{question.title}</p>
+              <span className="date">{question.view}</span>
+            </div>
+          ))}
         </div>
       </div>
     </StatusContainer>
@@ -169,7 +183,26 @@ const Questions = () => {
 }
 
 const Activity = () => {
-  const [content , setContent] = useState();
+  const [content , setContent] = useState("first");
+  const [activityData, setActivityData] = useState(null);
+
+  useEffect(() => {
+    axios.get("https://659a-116-126-166-12.ngrok-free.app/members/mypage", {
+      headers: {
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': '69420',
+        'Authorization': `Bearer ${sessionStorage.getItem('access_token') || ''}`,
+        'Refresh': `Bearer ${sessionStorage.getItem('refresh_token') || ''}`,
+      }
+    })
+      .then((response) => {
+        setActivityData(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("API 호출 중 오류 발생:", error);
+      });
+  }, []); 
 
   const BUTTON_DATA = [
     {
@@ -195,9 +228,9 @@ const Activity = () => {
   }
 
   const selectComponent = {
-    first : <Summary />,
-    second : <Answers />,
-    third : <Questions />
+    first : <Summary activityData={activityData} />,
+    second : <Answers activityData={activityData} />,
+    third : <Questions activityData={activityData} />
   }
   return(
     <Section>
