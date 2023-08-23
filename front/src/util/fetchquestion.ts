@@ -70,7 +70,7 @@ export const fetchQuestionList = async (
 
 // 질문 ID로 질문조회
 export const fetchQuestionById = async (questionId: number) => {
-  const url = `http://localhost:8080/questions/${questionId}`;
+  const url = `https://659a-116-126-166-12.ngrok-free.app/questions/${questionId}`;
   try {
     const response = await fetch(url, {
       method: 'GET',
